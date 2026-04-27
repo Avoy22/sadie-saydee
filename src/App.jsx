@@ -2193,6 +2193,1765 @@ function TestPage({ goToTopic }) {
   );
 }
 
+function BoardPracticePage() {
+  const [section, setSection] = useState(null);
+  const [task, setTask] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [checked, setChecked] = useState(false);
+
+  const prepositionItems = [
+    {
+      id: "prep-1",
+      sentence: "He is interested ___ learning English.",
+      answer: "in",
+      explanation: "Interested এর পরে সাধারণত in বসে: interested in something.",
+    },
+    {
+      id: "prep-2",
+      sentence: "She is good ___ Mathematics.",
+      answer: "at",
+      explanation: "Good at মানে কোনো কাজে ভালো। তাই good at Mathematics.",
+    },
+    {
+      id: "prep-3",
+      sentence: "We should be kind ___ the poor.",
+      answer: "to",
+      explanation: "Kind to someone = কারো প্রতি দয়ালু হওয়া।",
+    },
+    {
+      id: "prep-4",
+      sentence: "He died ___ cancer.",
+      answer: "of",
+      explanation: "রোগে মারা গেলে সাধারণত died of ব্যবহৃত হয়।",
+    },
+    {
+      id: "prep-5",
+      sentence: "The book is ___ the table.",
+      answer: "on",
+      explanation: "কোনো কিছুর ওপর থাকলে on ব্যবহৃত হয়।",
+    },
+  ];
+
+  const rightFormItems = [
+    {
+      id: "rf-1",
+      sentence: "She usually ___ (go) to college by bus.",
+      answer: "goes",
+      explanation: "Usually = Present Indefinite. She/he/it হলে verb-এর সাথে s/es হয়.",
+    },
+    {
+      id: "rf-2",
+      sentence: "They ___ (play) football yesterday.",
+      answer: "played",
+      explanation: "Yesterday = Past Indefinite. তাই verb-এর past form হবে.",
+    },
+    {
+      id: "rf-3",
+      sentence: "I ___ (read) a book now.",
+      answer: "am reading",
+      explanation: "Now = Present Continuous. Structure: am/is/are + verb-ing.",
+    },
+    {
+      id: "rf-4",
+      sentence: "He has already ___ (finish) his work.",
+      answer: "finished",
+      explanation: "Has/have + past participle. finish-এর past participle হলো finished.",
+    },
+    {
+      id: "rf-5",
+      sentence: "If I ___ (be) a bird, I would fly.",
+      answer: "were",
+      explanation: "Second conditional / imaginary sentence-এ If I were ব্যবহৃত হয়.",
+    },
+  ];
+
+  const connectorItems = [
+  {
+    id: "conn-1",
+    sentence: "He was ill. ___, he attended the class.",
+    answer: "nevertheless",
+    explanation: "দুইটি বিপরীত ভাব যুক্ত হলে nevertheless/however ব্যবহার করা যায়।",
+  },
+  {
+    id: "conn-2",
+    sentence: "Study regularly. ___, you will fail.",
+    answer: "otherwise",
+    explanation: "না হলে / অন্যথায় বোঝাতে otherwise ব্যবহার হয়।",
+  },
+  {
+    id: "conn-3",
+    sentence: "He worked hard. ___, he succeeded.",
+    answer: "therefore",
+    explanation: "কারণ-ফল বোঝাতে therefore ব্যবহার হয়।",
+  },
+  {
+    id: "conn-4",
+    sentence: "I like English. ___, I practice it every day.",
+    answer: "so",
+    explanation: "ফলাফল বোঝাতে so ব্যবহার করা যায়।",
+  },
+  {
+    id: "conn-5",
+    sentence: "The man is poor. ___, he is honest.",
+    answer: "but",
+    explanation: "বিপরীত ভাব বোঝাতে but ব্যবহার হয়।",
+  },
+];
+
+const synonymAntonymItems = [
+  {
+    id: "sa-1",
+    word: "brave",
+    type: "synonym",
+    question: "Synonym of 'brave' is:",
+    options: ["cowardly", "courageous", "weak", "lazy"],
+    answer: "courageous",
+    explanation: "Brave মানে সাহসী। এর synonym হলো courageous.",
+  },
+  {
+    id: "sa-2",
+    word: "ancient",
+    type: "antonym",
+    question: "Antonym of 'ancient' is:",
+    options: ["old", "modern", "past", "historic"],
+    answer: "modern",
+    explanation: "Ancient মানে প্রাচীন। এর antonym হলো modern.",
+  },
+  {
+    id: "sa-3",
+    word: "increase",
+    type: "antonym",
+    question: "Antonym of 'increase' is:",
+    options: ["grow", "rise", "decrease", "improve"],
+    answer: "decrease",
+    explanation: "Increase মানে বৃদ্ধি পাওয়া। এর বিপরীত decrease.",
+  },
+  {
+    id: "sa-4",
+    word: "honest",
+    type: "synonym",
+    question: "Synonym of 'honest' is:",
+    options: ["truthful", "false", "weak", "careless"],
+    answer: "truthful",
+    explanation: "Honest মানে সৎ। এর synonym হলো truthful.",
+  },
+  {
+    id: "sa-5",
+    word: "difficult",
+    type: "antonym",
+    question: "Antonym of 'difficult' is:",
+    options: ["hard", "easy", "complex", "serious"],
+    answer: "easy",
+    explanation: "Difficult মানে কঠিন। এর antonym হলো easy.",
+  },
+];
+
+const punctuationItems = [
+  {
+    id: "punct-1",
+    wrong: "rahim said i am busy now",
+    answer: "Rahim said, \"I am busy now.\"",
+    explanation: "Name capital হবে, said-এর পরে comma, direct speech quotation mark-এর ভিতরে, I capital হবে।",
+  },
+  {
+    id: "punct-2",
+    wrong: "where do you live",
+    answer: "Where do you live?",
+    explanation: "প্রশ্নবোধক বাক্যের শেষে question mark বসে এবং প্রথম অক্ষর capital হয়।",
+  },
+  {
+    id: "punct-3",
+    wrong: "dhaka is the capital of bangladesh",
+    answer: "Dhaka is the capital of Bangladesh.",
+    explanation: "Proper noun Dhaka এবং Bangladesh capital হবে। বাক্যের শেষে full stop বসবে।",
+  },
+  {
+    id: "punct-4",
+    wrong: "he bought rice fish and vegetables",
+    answer: "He bought rice, fish and vegetables.",
+    explanation: "List-এর item আলাদা করতে comma ব্যবহার হয়। বাক্যের শুরু capital এবং শেষে full stop।",
+  },
+  {
+    id: "punct-5",
+    wrong: "alas he is dead",
+    answer: "Alas! He is dead.",
+    explanation: "Alas-এর পরে exclamation mark বসে। এরপর নতুন বাক্য capital দিয়ে শুরু হয়।",
+  },
+];
+
+const completingSentenceItems = [
+  {
+    id: "cs-1",
+    sentence: "If I had enough money, ___.",
+    answer: "I would buy a laptop",
+    explanation: "Second conditional: If + past form, subject + would + base verb.",
+  },
+  {
+    id: "cs-2",
+    sentence: "Though he is poor, ___.",
+    answer: "he is honest",
+    explanation: "Though দিয়ে contrast বোঝায়। বাক্যের দ্বিতীয় অংশে বিপরীত ভাব আসবে।",
+  },
+  {
+    id: "cs-3",
+    sentence: "No sooner had the teacher entered the class than ___.",
+    answer: "the students stood up",
+    explanation: "No sooner ... than structure-এ than-এর পরে দ্বিতীয় ঘটনা বসে।",
+  },
+  {
+    id: "cs-4",
+    sentence: "It is high time ___.",
+    answer: "we changed our bad habits",
+    explanation: "It is high time-এর পরে past form ব্যবহার করা হয়।",
+  },
+  {
+    id: "cs-5",
+    sentence: "He studies hard so that ___.",
+    answer: "he can pass the exam",
+    explanation: "So that দিয়ে purpose বোঝায়। সাধারণত can/may/could/might ব্যবহার হয়।",
+  },
+];
+
+const wordsPhrasesItems = [
+  {
+    id: "wp-1",
+    sentence: "___ of his poverty, he is honest.",
+    answer: "in spite",
+    explanation: "In spite of = সত্ত্বেও। Structure: In spite of + noun/pronoun.",
+  },
+  {
+    id: "wp-2",
+    sentence: "He is ___ to help the poor.",
+    answer: "used",
+    explanation: "Used to + verb = আগে অভ্যাস ছিল। Be used to + noun/verb-ing = অভ্যস্ত। এখানে সহজ practice হিসেবে used বসবে।",
+  },
+  {
+    id: "wp-3",
+    sentence: "___ he is weak, he works hard.",
+    answer: "though",
+    explanation: "Though = যদিও। দুইটি বিপরীত ভাব যুক্ত করতে ব্যবহৃত হয়।",
+  },
+  {
+    id: "wp-4",
+    sentence: "He ran fast ___ he could catch the train.",
+    answer: "so that",
+    explanation: "So that = যাতে। উদ্দেশ্য বোঝাতে ব্যবহৃত হয়।",
+  },
+  {
+    id: "wp-5",
+    sentence: "You had better ___ the truth.",
+    answer: "tell",
+    explanation: "Had better-এর পরে verb-এর base form বসে। তাই tell হবে।",
+  },
+];
+
+const wordsPhrasesBox = [
+  "in spite",
+  "used",
+  "though",
+  "so that",
+  "tell",
+  "because",
+  "as if",
+];
+
+const modifierItems = [
+  {
+    id: "mod-1",
+    sentence: "___ students should be attentive in class.",
+    answer: "all",
+    explanation: "All students = সব শিক্ষার্থী। এখানে noun students-কে modify করছে।",
+  },
+  {
+    id: "mod-2",
+    sentence: "He is a ___ respected teacher.",
+    answer: "highly",
+    explanation: "Highly respected = অত্যন্ত সম্মানিত। Highly এখানে respected শব্দটিকে modify করছে।",
+  },
+  {
+    id: "mod-3",
+    sentence: "The man ___ in the field is a farmer.",
+    answer: "working",
+    explanation: "Working in the field = মাঠে কাজ করছে এমন ব্যক্তি। এটি man-কে describe করছে।",
+  },
+  {
+    id: "mod-4",
+    sentence: "___ by honesty, he became successful.",
+    answer: "guided",
+    explanation: "Guided by honesty = সততার দ্বারা পরিচালিত হয়ে। Past participle phrase modifier হিসেবে ব্যবহৃত হয়েছে।",
+  },
+  {
+    id: "mod-5",
+    sentence: "The girl ___ a red dress is my sister.",
+    answer: "wearing",
+    explanation: "Wearing a red dress = লাল পোশাক পরা। এটি girl-কে describe করছে।",
+  },
+];
+
+const narrationItems = [
+  {
+    id: "nar-1",
+    direct: 'He said, "I am busy."',
+    answer: "He said that he was busy.",
+    explanation: "Present am → past was. Direct speech থেকে indirect speech করলে reporting verb past হলে tense backshift হয়.",
+  },
+  {
+    id: "nar-2",
+    direct: 'She said, "I have finished my work."',
+    answer: "She said that she had finished her work.",
+    explanation: "Present Perfect have finished → Past Perfect had finished.",
+  },
+  {
+    id: "nar-3",
+    direct: 'Rahim said to me, "Are you ready?"',
+    answer: "Rahim asked me if I was ready.",
+    explanation: "Yes/no question হলে said to → asked, এবং if/whether ব্যবহার হয়.",
+  },
+  {
+    id: "nar-4",
+    direct: 'The teacher said, "Do not make noise."',
+    answer: "The teacher told us not to make noise.",
+    explanation: "Imperative negative sentence হলে told + object + not to + verb ব্যবহার হয়.",
+  },
+  {
+    id: "nar-5",
+    direct: 'He said to me, "Where do you live?"',
+    answer: "He asked me where I lived.",
+    explanation: "WH question indirect speech-এ question order বদলে statement order হয়: where I lived.",
+  },
+];
+
+const applicationTasks = [
+  {
+    id: "app-1",
+    title: "Application for setting up a computer club",
+    question:
+      "Write an application to the Principal of your college for setting up a computer club.",
+    marks: 10,
+    modelAnswer:
+      "To\nThe Principal\nABC College, Dhaka\n\nSubject: Prayer for setting up a computer club.\n\nSir,\nWith due respect, we, the students of your college, beg to state that our college does not have a computer club. In this age of information and communication technology, a computer club is very important for students. It will help us learn computer skills, programming, internet use and digital communication.\n\nWe, therefore, pray and hope that you would be kind enough to take necessary steps to set up a computer club in our college.\n\nYours obediently,\nThe students of ABC College",
+    keyPoints: [
+      "Correct format",
+      "Clear subject line",
+      "Reason for application",
+      "Polite request",
+      "Proper closing",
+    ],
+  },
+  {
+    id: "app-2",
+    title: "Application for increasing library facilities",
+    question:
+      "Write an application to the Principal of your college for increasing library facilities.",
+    marks: 10,
+    modelAnswer:
+      "To\nThe Principal\nABC College, Dhaka\n\nSubject: Prayer for increasing library facilities.\n\nSir,\nWith due respect, we, the students of your college, beg to state that our college library does not have enough books and reading space. Many students cannot get necessary textbooks, reference books and newspapers. A better library will help us improve our knowledge and academic results.\n\nWe, therefore, pray and hope that you would be kind enough to take necessary steps to increase the library facilities of our college.\n\nYours obediently,\nThe students of ABC College",
+    keyPoints: [
+      "Mention the problem",
+      "Explain why library facilities are needed",
+      "Use formal tone",
+      "Request politely",
+      "Keep paragraphs clear",
+    ],
+  },
+];
+
+  const cardStyle = {
+    padding: 16,
+    border: "1px solid #e2e8f0",
+    borderRadius: 12,
+    background: "#f8fafc",
+    cursor: "pointer",
+    textAlign: "left",
+    fontFamily: "inherit",
+  };
+
+  const backButtonStyle = {
+    marginBottom: 16,
+    padding: "8px 12px",
+    border: "1px solid #e2e8f0",
+    borderRadius: 10,
+    background: "#fff",
+    cursor: "pointer",
+    fontFamily: "inherit",
+  };
+
+  function normalizeAnswer(value) {
+    return value.trim().toLowerCase();
+  }
+
+  function updateAnswer(id, value) {
+    setAnswers({
+      ...answers,
+      [id]: value,
+    });
+  }
+
+  function resetPractice() {
+    setAnswers({});
+    setChecked(false);
+  }
+
+  function openTask(taskId) {
+    setTask(taskId);
+    resetPractice();
+  }
+
+  function getScore(items) {
+    var score = 0;
+
+    items.forEach(function (item) {
+      if (normalizeAnswer(answers[item.id] || "") === item.answer.toLowerCase()) {
+        score++;
+      }
+    });
+
+    return score;
+  }
+
+  function FillPractice({ title, subtitle, items }) {
+    var score = getScore(items);
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          ← Back
+        </button>
+
+        <h2>{title}</h2>
+        <p style={{ color: "#64748b", lineHeight: 1.6 }}>{subtitle}</p>
+
+        <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+          {items.map(function (item, index) {
+            const userAnswer = answers[item.id] || "";
+            const isCorrect =
+              normalizeAnswer(userAnswer) === item.answer.toLowerCase();
+
+            return (
+              <div
+                key={item.id}
+                style={{
+                  padding: 16,
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 12,
+                  background: "#fff",
+                }}
+              >
+                <p style={{ fontWeight: 700, marginBottom: 10 }}>
+                  {index + 1}. {item.sentence}
+                </p>
+
+                <input
+                  value={userAnswer}
+                  onChange={(e) => updateAnswer(item.id, e.target.value)}
+                  placeholder="Write answer here"
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    borderRadius: 10,
+                    border: "1px solid #cbd5e1",
+                    fontSize: 15,
+                    fontFamily: "inherit",
+                  }}
+                />
+
+                {checked && (
+                  <div
+                    style={{
+                      marginTop: 10,
+                      padding: 12,
+                      borderRadius: 10,
+                      background: isCorrect ? "#dcfce7" : "#fee2e2",
+                      color: isCorrect ? "#166534" : "#991b1b",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    <p style={{ fontWeight: 700 }}>
+                      {isCorrect ? "Correct" : "Wrong"}
+                    </p>
+                    <p>
+                      Correct answer: <strong>{item.answer}</strong>
+                    </p>
+                    <p>{item.explanation}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {!checked ? (
+          <button
+            onClick={() => setChecked(true)}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "14px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            Check Answers
+          </button>
+        ) : (
+          <div
+            style={{
+              marginTop: 16,
+              padding: 16,
+              borderRadius: 12,
+              background: "#eef2ff",
+              border: "1px solid #c7d2fe",
+              textAlign: "center",
+            }}
+          >
+            <h3>
+              Score: {score}/{items.length}
+            </h3>
+            <p style={{ color: "#475569" }}>
+              {score >= 4
+                ? "Good! এখন আরো board-style sentence practice করো."
+                : "আরো practice দরকার. নিয়ম দেখে আবার চেষ্টা করো."}
+            </p>
+
+            <button
+              onClick={resetPractice}
+              style={{
+                marginTop: 10,
+                padding: "10px 16px",
+                border: "none",
+                borderRadius: 10,
+                background: "#6366f1",
+                color: "#fff",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function OptionPractice({ title, subtitle, items }) {
+    var score = 0;
+
+    items.forEach(function (item) {
+      if ((answers[item.id] || "") === item.answer) {
+        score++;
+      }
+    });
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          ← Back
+        </button>
+
+        <h2>{title}</h2>
+        <p style={{ color: "#64748b", lineHeight: 1.6 }}>{subtitle}</p>
+
+        <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+          {items.map(function (item, index) {
+            var selected = answers[item.id] || "";
+            var isCorrect = selected === item.answer;
+
+            return (
+              <div
+                key={item.id}
+                style={{
+                  padding: 16,
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 12,
+                  background: "#fff",
+                }}
+              >
+                <p style={{ fontWeight: 700, marginBottom: 10 }}>
+                  {index + 1}. {item.question}
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {item.options.map(function (option) {
+                    var bg = "#f8fafc";
+
+                    if (checked) {
+                      if (option === item.answer) {
+                        bg = "#dcfce7";
+                      } else if (option === selected) {
+                        bg = "#fee2e2";
+                      }
+                    } else if (option === selected) {
+                      bg = "#e0e7ff";
+                    }
+
+                    return (
+                      <button
+                        key={option}
+                        onClick={() => updateAnswer(item.id, option)}
+                        style={{
+                          textAlign: "left",
+                          padding: "12px",
+                          borderRadius: 10,
+                          border: "1px solid #cbd5e1",
+                          background: bg,
+                          cursor: "pointer",
+                          fontFamily: "inherit",
+                        }}
+                      >
+                        {option}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {checked && (
+                  <div
+                    style={{
+                      marginTop: 10,
+                      padding: 12,
+                      borderRadius: 10,
+                      background: isCorrect ? "#dcfce7" : "#fee2e2",
+                      color: isCorrect ? "#166534" : "#991b1b",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    <p style={{ fontWeight: 700 }}>
+                      {isCorrect ? "Correct" : "Wrong"}
+                    </p>
+                    <p>
+                      Correct answer: <strong>{item.answer}</strong>
+                    </p>
+                    <p>{item.explanation}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {!checked ? (
+          <button
+            onClick={() => setChecked(true)}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "14px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            Check Answers
+          </button>
+        ) : (
+          <div
+            style={{
+              marginTop: 16,
+              padding: 16,
+              borderRadius: 12,
+              background: "#eef2ff",
+              border: "1px solid #c7d2fe",
+              textAlign: "center",
+            }}
+          >
+            <h3>
+              Score: {score}/{items.length}
+            </h3>
+            <p style={{ color: "#475569" }}>
+              {score >= 4
+                ? "Good! Vocabulary strong হচ্ছে."
+                : "আরো vocabulary practice দরকার."}
+            </p>
+
+            <button
+              onClick={resetPractice}
+              style={{
+                marginTop: 10,
+                padding: "10px 16px",
+                border: "none",
+                borderRadius: 10,
+                background: "#6366f1",
+                color: "#fff",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+function TextCorrectionPractice({ title, subtitle, items }) {
+  var score = 0;
+
+  items.forEach(function (item) {
+    if (normalizeAnswer(answers[item.id] || "") === normalizeAnswer(item.answer)) {
+      score++;
+    }
+  });
+
+  return (
+    <div style={{ padding: "10px 0" }}>
+      <button
+        style={backButtonStyle}
+        onClick={() => {
+          setTask(null);
+          resetPractice();
+        }}
+      >
+        ← Back
+      </button>
+
+      <h2>{title}</h2>
+      <p style={{ color: "#64748b", lineHeight: 1.6 }}>{subtitle}</p>
+
+      <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+        {items.map(function (item, index) {
+          var userAnswer = answers[item.id] || "";
+          var isCorrect =
+            normalizeAnswer(userAnswer) === normalizeAnswer(item.answer);
+
+          return (
+            <div
+              key={item.id}
+              style={{
+                padding: 16,
+                border: "1px solid #e2e8f0",
+                borderRadius: 12,
+                background: "#fff",
+              }}
+            >
+              <p style={{ fontWeight: 700, marginBottom: 8 }}>
+                {index + 1}. Correct the punctuation and capitalization:
+              </p>
+
+              <p
+                style={{
+                  padding: 12,
+                  background: "#f8fafc",
+                  borderRadius: 10,
+                  marginBottom: 10,
+                  color: "#334155",
+                }}
+              >
+                {item.wrong}
+              </p>
+
+              <input
+                value={userAnswer}
+                onChange={(e) => updateAnswer(item.id, e.target.value)}
+                placeholder="Write corrected sentence"
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: 10,
+                  border: "1px solid #cbd5e1",
+                  fontSize: 15,
+                  fontFamily: "inherit",
+                }}
+              />
+
+              {checked && (
+                <div
+                  style={{
+                    marginTop: 10,
+                    padding: 12,
+                    borderRadius: 10,
+                    background: isCorrect ? "#dcfce7" : "#fee2e2",
+                    color: isCorrect ? "#166534" : "#991b1b",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  <p style={{ fontWeight: 700 }}>
+                    {isCorrect ? "Correct" : "Check carefully"}
+                  </p>
+                  <p>
+                    Correct answer: <strong>{item.answer}</strong>
+                  </p>
+                  <p>{item.explanation}</p>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {!checked ? (
+        <button
+          onClick={() => setChecked(true)}
+          style={{
+            marginTop: 16,
+            width: "100%",
+            padding: "14px 20px",
+            border: "none",
+            borderRadius: 12,
+            background: "#6366f1",
+            color: "#fff",
+            fontWeight: 700,
+            cursor: "pointer",
+            fontFamily: "inherit",
+          }}
+        >
+          Check Answers
+        </button>
+      ) : (
+        <div
+          style={{
+            marginTop: 16,
+            padding: 16,
+            borderRadius: 12,
+            background: "#eef2ff",
+            border: "1px solid #c7d2fe",
+            textAlign: "center",
+          }}
+        >
+          <h3>
+            Score: {score}/{items.length}
+          </h3>
+          <p style={{ color: "#475569" }}>
+            {score >= 4
+              ? "Good! Punctuation ভালো হচ্ছে."
+              : "আরো practice দরকার. Capital letter, comma, question mark, full stop ভালোভাবে দেখো."}
+          </p>
+
+          <button
+            onClick={resetPractice}
+            style={{
+              marginTop: 10,
+              padding: "10px 16px",
+              border: "none",
+              borderRadius: 10,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FlexibleCompletionPractice({ title, subtitle, items }) {
+  return (
+    <div style={{ padding: "10px 0" }}>
+      <button
+        style={backButtonStyle}
+        onClick={() => {
+          setTask(null);
+          resetPractice();
+        }}
+      >
+        ← Back
+      </button>
+
+      <h2>{title}</h2>
+      <p style={{ color: "#64748b", lineHeight: 1.6 }}>{subtitle}</p>
+
+      <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+        {items.map(function (item, index) {
+          var userAnswer = answers[item.id] || "";
+
+          return (
+            <div
+              key={item.id}
+              style={{
+                padding: 16,
+                border: "1px solid #e2e8f0",
+                borderRadius: 12,
+                background: "#fff",
+              }}
+            >
+              <p style={{ fontWeight: 700, marginBottom: 10 }}>
+                {index + 1}. Complete the sentence:
+              </p>
+
+              <p
+                style={{
+                  padding: 12,
+                  background: "#f8fafc",
+                  borderRadius: 10,
+                  marginBottom: 10,
+                  color: "#334155",
+                  lineHeight: 1.6,
+                }}
+              >
+                {item.sentence}
+              </p>
+
+              <input
+                value={userAnswer}
+                onChange={(e) => updateAnswer(item.id, e.target.value)}
+                placeholder="Write your completion"
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: 10,
+                  border: "1px solid #cbd5e1",
+                  fontSize: 15,
+                  fontFamily: "inherit",
+                }}
+              />
+
+              {checked && (
+                <div
+                  style={{
+                    marginTop: 10,
+                    padding: 12,
+                    borderRadius: 10,
+                    background: "#eef2ff",
+                    border: "1px solid #c7d2fe",
+                    color: "#334155",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  <p style={{ fontWeight: 700 }}>Model answer:</p>
+                  <p>
+                    <strong>{item.answer}</strong>
+                  </p>
+                  <p>{item.explanation}</p>
+                  <p style={{ marginTop: 6, color: "#64748b", fontSize: 13 }}>
+                    Note: Completing sentence answers can vary. Match the grammar structure and meaning.
+                  </p>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {!checked ? (
+        <button
+          onClick={() => setChecked(true)}
+          style={{
+            marginTop: 16,
+            width: "100%",
+            padding: "14px 20px",
+            border: "none",
+            borderRadius: 12,
+            background: "#6366f1",
+            color: "#fff",
+            fontWeight: 700,
+            cursor: "pointer",
+            fontFamily: "inherit",
+          }}
+        >
+          Show Model Answers
+        </button>
+      ) : (
+        <div
+          style={{
+            marginTop: 16,
+            padding: 16,
+            borderRadius: 12,
+            background: "#eef2ff",
+            border: "1px solid #c7d2fe",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ color: "#475569", lineHeight: 1.6 }}>
+            নিজের উত্তর model answer-এর সাথে মিলাও। Structure ঠিক থাকলে উত্তর গ্রহণযোগ্য হতে পারে।
+          </p>
+
+          <button
+            onClick={resetPractice}
+            style={{
+              marginTop: 10,
+              padding: "10px 16px",
+              border: "none",
+              borderRadius: 10,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function NarrationPractice({ title, subtitle, items }) {
+  return (
+    <div style={{ padding: "10px 0" }}>
+      <button
+        style={backButtonStyle}
+        onClick={() => {
+          setTask(null);
+          resetPractice();
+        }}
+      >
+        ← Back
+      </button>
+
+      <h2>{title}</h2>
+      <p style={{ color: "#64748b", lineHeight: 1.6 }}>{subtitle}</p>
+
+      <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+        {items.map(function (item, index) {
+          var userAnswer = answers[item.id] || "";
+
+          return (
+            <div
+              key={item.id}
+              style={{
+                padding: 16,
+                border: "1px solid #e2e8f0",
+                borderRadius: 12,
+                background: "#fff",
+              }}
+            >
+              <p style={{ fontWeight: 700, marginBottom: 8 }}>
+                {index + 1}. Change the narration:
+              </p>
+
+              <p
+                style={{
+                  padding: 12,
+                  background: "#f8fafc",
+                  borderRadius: 10,
+                  marginBottom: 10,
+                  color: "#334155",
+                  lineHeight: 1.6,
+                }}
+              >
+                {item.direct}
+              </p>
+
+              <input
+                value={userAnswer}
+                onChange={(e) => updateAnswer(item.id, e.target.value)}
+                placeholder="Write indirect speech"
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: 10,
+                  border: "1px solid #cbd5e1",
+                  fontSize: 15,
+                  fontFamily: "inherit",
+                }}
+              />
+
+              {checked && (
+                <div
+                  style={{
+                    marginTop: 10,
+                    padding: 12,
+                    borderRadius: 10,
+                    background: "#eef2ff",
+                    border: "1px solid #c7d2fe",
+                    color: "#334155",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  <p style={{ fontWeight: 700 }}>Model answer:</p>
+                  <p>
+                    <strong>{item.answer}</strong>
+                  </p>
+                  <p>{item.explanation}</p>
+                  <p style={{ marginTop: 6, color: "#64748b", fontSize: 13 }}>
+                    Note: Narration answers can vary slightly, but tense, pronoun, reporting verb, and sentence order must be correct.
+                  </p>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {!checked ? (
+        <button
+          onClick={() => setChecked(true)}
+          style={{
+            marginTop: 16,
+            width: "100%",
+            padding: "14px 20px",
+            border: "none",
+            borderRadius: 12,
+            background: "#6366f1",
+            color: "#fff",
+            fontWeight: 700,
+            cursor: "pointer",
+            fontFamily: "inherit",
+          }}
+        >
+          Show Model Answers
+        </button>
+      ) : (
+        <div
+          style={{
+            marginTop: 16,
+            padding: 16,
+            borderRadius: 12,
+            background: "#eef2ff",
+            border: "1px solid #c7d2fe",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ color: "#475569", lineHeight: 1.6 }}>
+            নিজের উত্তর model answer-এর সাথে মিলাও। Pronoun, tense, reporting verb, এবং question order ঠিক আছে কিনা দেখো।
+          </p>
+
+          <button
+            onClick={resetPractice}
+            style={{
+              marginTop: 10,
+              padding: "10px 16px",
+              border: "none",
+              borderRadius: 10,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WritingPractice({ title, subtitle, tasks }) {
+  return (
+    <div style={{ padding: "10px 0" }}>
+      <button
+        style={backButtonStyle}
+        onClick={() => {
+          setTask(null);
+          resetPractice();
+        }}
+      >
+        ← Back
+      </button>
+
+      <h2>{title}</h2>
+      <p style={{ color: "#64748b", lineHeight: 1.6 }}>{subtitle}</p>
+
+      <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+        {tasks.map(function (item, index) {
+          var userAnswer = answers[item.id] || "";
+
+          return (
+            <div
+              key={item.id}
+              style={{
+                padding: 16,
+                border: "1px solid #e2e8f0",
+                borderRadius: 12,
+                background: "#fff",
+              }}
+            >
+              <p style={{ fontWeight: 700, marginBottom: 6 }}>
+                {index + 1}. {item.title}
+              </p>
+
+              <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 8 }}>
+                {item.question}
+              </p>
+
+              <p
+                style={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: "#6366f1",
+                  marginBottom: 8,
+                }}
+              >
+                Marks: {item.marks}
+              </p>
+
+              <textarea
+                value={userAnswer}
+                onChange={(e) => updateAnswer(item.id, e.target.value)}
+                placeholder="Write your answer here"
+                rows={8}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: 10,
+                  border: "1px solid #cbd5e1",
+                  fontSize: 15,
+                  fontFamily: "inherit",
+                  lineHeight: 1.6,
+                  resize: "vertical",
+                }}
+              />
+
+              {checked && (
+                <div
+                  style={{
+                    marginTop: 10,
+                    padding: 12,
+                    borderRadius: 10,
+                    background: "#eef2ff",
+                    border: "1px solid #c7d2fe",
+                    color: "#334155",
+                    lineHeight: 1.6,
+                    whiteSpace: "pre-line",
+                  }}
+                >
+                  <p style={{ fontWeight: 700, marginBottom: 8 }}>
+                    Model answer:
+                  </p>
+                  <p>{item.modelAnswer}</p>
+
+                  {item.keyPoints && (
+                    <div style={{ marginTop: 10 }}>
+                      <p style={{ fontWeight: 700 }}>Key points:</p>
+                      <ul style={{ paddingLeft: 18, marginTop: 6 }}>
+                        {item.keyPoints.map(function (point) {
+                          return <li key={point}>{point}</li>;
+                        })}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {!checked ? (
+        <button
+          onClick={() => setChecked(true)}
+          style={{
+            marginTop: 16,
+            width: "100%",
+            padding: "14px 20px",
+            border: "none",
+            borderRadius: 12,
+            background: "#6366f1",
+            color: "#fff",
+            fontWeight: 700,
+            cursor: "pointer",
+            fontFamily: "inherit",
+          }}
+        >
+          Show Model Answer
+        </button>
+      ) : (
+        <div
+          style={{
+            marginTop: 16,
+            padding: 16,
+            borderRadius: 12,
+            background: "#eef2ff",
+            border: "1px solid #c7d2fe",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ color: "#475569", lineHeight: 1.6 }}>
+            নিজের answer-এর format, subject line, body, request, closing model answer-এর সাথে মিলাও।
+          </p>
+
+          <button
+            onClick={resetPractice}
+            style={{
+              marginTop: 10,
+              padding: "10px 16px",
+              border: "none",
+              borderRadius: 10,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WordBoxPractice({ title, subtitle, items, wordBox }) {
+  var score = 0;
+
+  items.forEach(function (item) {
+    if (normalizeAnswer(answers[item.id] || "") === normalizeAnswer(item.answer)) {
+      score++;
+    }
+  });
+
+  return (
+    <div style={{ padding: "10px 0" }}>
+      <button
+        style={backButtonStyle}
+        onClick={() => {
+          setTask(null);
+          resetPractice();
+        }}
+      >
+        ← Back
+      </button>
+
+      <h2>{title}</h2>
+      <p style={{ color: "#64748b", lineHeight: 1.6 }}>{subtitle}</p>
+
+      <div
+        style={{
+          marginTop: 14,
+          padding: 12,
+          background: "#eef2ff",
+          border: "1px solid #c7d2fe",
+          borderRadius: 12,
+        }}
+      >
+        <p style={{ fontWeight: 700, marginBottom: 8 }}>Word/Phrase Box:</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {wordBox.map(function (word) {
+            return (
+              <span
+                key={word}
+                style={{
+                  padding: "6px 10px",
+                  background: "#fff",
+                  border: "1px solid #c7d2fe",
+                  borderRadius: 999,
+                  fontSize: 13,
+                  color: "#4338ca",
+                  fontWeight: 600,
+                }}
+              >
+                {word}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 12 }}>
+        {items.map(function (item, index) {
+          var userAnswer = answers[item.id] || "";
+          var isCorrect =
+            normalizeAnswer(userAnswer) === normalizeAnswer(item.answer);
+
+          return (
+            <div
+              key={item.id}
+              style={{
+                padding: 16,
+                border: "1px solid #e2e8f0",
+                borderRadius: 12,
+                background: "#fff",
+              }}
+            >
+              <p style={{ fontWeight: 700, marginBottom: 10 }}>
+                {index + 1}. {item.sentence}
+              </p>
+
+              <input
+                value={userAnswer}
+                onChange={(e) => updateAnswer(item.id, e.target.value)}
+                placeholder="Choose from box"
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: 10,
+                  border: "1px solid #cbd5e1",
+                  fontSize: 15,
+                  fontFamily: "inherit",
+                }}
+              />
+
+              {checked && (
+                <div
+                  style={{
+                    marginTop: 10,
+                    padding: 12,
+                    borderRadius: 10,
+                    background: isCorrect ? "#dcfce7" : "#fee2e2",
+                    color: isCorrect ? "#166534" : "#991b1b",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  <p style={{ fontWeight: 700 }}>
+                    {isCorrect ? "Correct" : "Wrong"}
+                  </p>
+                  <p>
+                    Correct answer: <strong>{item.answer}</strong>
+                  </p>
+                  <p>{item.explanation}</p>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {!checked ? (
+        <button
+          onClick={() => setChecked(true)}
+          style={{
+            marginTop: 16,
+            width: "100%",
+            padding: "14px 20px",
+            border: "none",
+            borderRadius: 12,
+            background: "#6366f1",
+            color: "#fff",
+            fontWeight: 700,
+            cursor: "pointer",
+            fontFamily: "inherit",
+          }}
+        >
+          Check Answers
+        </button>
+      ) : (
+        <div
+          style={{
+            marginTop: 16,
+            padding: 16,
+            borderRadius: 12,
+            background: "#eef2ff",
+            border: "1px solid #c7d2fe",
+            textAlign: "center",
+          }}
+        >
+          <h3>
+            Score: {score}/{items.length}
+          </h3>
+          <p style={{ color: "#475569" }}>
+            {score >= 4
+              ? "Good! Words/Phrases ভালো হচ্ছে."
+              : "আরো practice দরকার. Fixed expression মুখস্থ + বুঝে শিখতে হবে."}
+          </p>
+
+          <button
+            onClick={resetPractice}
+            style={{
+              marginTop: 10,
+              padding: "10px 16px",
+              border: "none",
+              borderRadius: 10,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+  if (task === "prepositions") {
+    return (
+      <FillPractice
+        title="Q1 Prepositions"
+        subtitle="Board pattern: 10 gaps × 0.5 = 5 marks. এখানে বাক্যের অর্থ ও fixed expression দেখে preposition বসাতে হবে।"
+        items={prepositionItems}
+      />
+    );
+  }
+
+  if (task === "rightForm") {
+    return (
+      <FillPractice
+        title="Q4 Right Form of Verbs"
+        subtitle="Board pattern: 14 gaps × 0.5 = 7 marks. এখানে আগে signal word চিনবে, তারপর verb-এর সঠিক form বসাবে।"
+        items={rightFormItems}
+      />
+    );
+  }
+
+  if (task === "modifiers") {
+  return (
+    <FillPractice
+      title="Q6 Modifiers"
+      subtitle="Board pattern: 10 gaps × 0.5 = 5 marks. এখানে noun, verb বা adjective-কে describe/modify করার সঠিক word বা phrase বসাতে হবে।"
+      items={modifierItems}
+    />
+  );
+}
+
+if (task === "narration") {
+  return (
+    <NarrationPractice
+      title="Q5 Narration / Indirect Speech"
+      subtitle="Board pattern: 7 marks. এখানে direct speech থেকে indirect speech করতে হবে। Tense, pronoun, reporting verb এবং sentence order ঠিক রাখতে হবে।"
+      items={narrationItems}
+    />
+  );
+}
+
+if (task === "application") {
+  return (
+    <WritingPractice
+      title="Q10 Application / Formal Letter"
+      subtitle="Board pattern: 10 marks. এখানে formal format, subject line, polite request এবং proper closing ঠিক রাখতে হবে।"
+      tasks={applicationTasks}
+    />
+  );
+}
+
+  if (task === "connectors") {
+  return (
+    <FillPractice
+      title="Q7 Sentence Connectors"
+      subtitle="Board pattern: 14 gaps × 0.5 = 7 marks. এখানে বাক্যের সম্পর্ক বুঝে connector বসাতে হবে।"
+      items={connectorItems}
+    />
+  );
+}
+
+if (task === "synonymAntonym") {
+  return (
+    <OptionPractice
+      title="Q8 Synonym / Antonym"
+      subtitle="Board pattern: 14 items × 0.5 = 7 marks. এখানে word meaning বুঝে synonym বা antonym বেছে নিতে হবে।"
+      items={synonymAntonymItems}
+    />
+  );
+}
+
+if (task === "punctuation") {
+  return (
+    <TextCorrectionPractice
+      title="Q9 Punctuation and Capitalization"
+      subtitle="Board pattern: 14 corrections × 0.5 = 7 marks. এখানে comma, full stop, question mark, quotation mark এবং capital letter ঠিক করতে হবে।"
+      items={punctuationItems}
+    />
+  );
+}
+
+if (task === "completingSentences") {
+  return (
+    <FlexibleCompletionPractice
+      title="Q3 Completing Sentences"
+      subtitle="Board pattern: 10 sentences × 1 = 10 marks. এখানে grammar structure বুঝে বাক্য সম্পূর্ণ করতে হবে।"
+      items={completingSentenceItems}
+    />
+  );
+}
+
+if (task === "wordsPhrases") {
+  return (
+    <WordBoxPractice
+      title="Q2 Words/Phrases from Box"
+      subtitle="Board pattern: 10 gaps × 0.5 = 5 marks. এখানে box থেকে সঠিক word/phrase বেছে gap পূরণ করতে হবে।"
+      items={wordsPhrasesItems}
+      wordBox={wordsPhrasesBox}
+    />
+  );
+}
+
+  if (section === "ict") {
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button style={backButtonStyle} onClick={() => setSection(null)}>
+          ← Back
+        </button>
+        <h2>ICT Board Practice</h2>
+        <p>Subject Code: 275</p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 16 }}>
+          <div style={cardStyle}>
+            <h3>MCQ Section</h3>
+            <p>25 questions × 1 = 25 marks</p>
+          </div>
+
+          <div style={cardStyle}>
+            <h3>Creative / Written Section</h3>
+            <p>Total: 50 marks</p>
+            <p>Pattern: ক = 1, খ = 2, গ = 3, ঘ = 8</p>
+            <p>Scenario-based questions from ICT chapters.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (section === "english1") {
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button style={backButtonStyle} onClick={() => setSection(null)}>
+          ← Back
+        </button>
+        <h2>English 1st Paper Practice</h2>
+        <p>Subject Code: 107 | Full Marks: 100 | Time: 3 hours</p>
+
+        <h3 style={{ marginTop: 18 }}>Part I — Reading Test: 60 marks</h3>
+        {[
+          "Q1A Passage MCQ — 5 marks",
+          "Q1B Broad Questions — 15 marks",
+          "Q2 Flow Chart — 5 marks",
+          "Q3 Summary Writing — 10 marks",
+          "Q4 Cloze Test with Clues — 5 marks",
+          "Q5 Cloze Test without Clues — 10 marks",
+          "Q6 Rearranging Sentences — 10 marks",
+        ].map((item) => (
+          <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
+            {item}
+          </div>
+        ))}
+
+        <h3 style={{ marginTop: 18 }}>Part II — Guided Writing: 40 marks</h3>
+        {[
+          "Q7 Graph / Chart Analysis — 15 marks",
+          "Q8 Story Completion — 15 marks",
+          "Q9 Informal Letter / Email — 10 marks",
+        ].map((item) => (
+          <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
+            {item}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (section === "english2") {
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button style={backButtonStyle} onClick={() => setSection(null)}>
+          ← Back
+        </button>
+        <h2>English 2nd Paper Practice</h2>
+        <p>Subject Code: 108 | Full Marks: 100 | Time: 3 hours</p>
+
+        <h3 style={{ marginTop: 18 }}>Part A — Grammar: 60 marks</h3>
+
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("prepositions")}
+        >
+          Q1 Prepositions — 5 marks
+        </button>
+
+        <button
+  style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+  onClick={() => openTask("wordsPhrases")}
+>
+  Q2 Words/Phrases from Box — 5 marks
+</button>
+
+<button
+  style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+  onClick={() => openTask("completingSentences")}
+>
+  Q3 Completing Sentences — 10 marks
+</button>
+
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("rightForm")}
+        >
+          Q4 Right Form of Verbs — 7 marks
+        </button>
+
+        <button
+  style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+  onClick={() => openTask("narration")}
+>
+  Q5 Narration / Indirect Speech — 7 marks
+</button>
+
+<button
+  style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+  onClick={() => openTask("modifiers")}
+>
+  Q6 Modifiers — 5 marks
+</button>
+
+<button
+  style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+  onClick={() => openTask("connectors")}
+>
+  Q7 Sentence Connectors — 7 marks
+</button>
+
+<button
+  style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+  onClick={() => openTask("synonymAntonym")}
+>
+  Q8 Synonym / Antonym — 7 marks
+</button>
+
+<button
+  style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+  onClick={() => openTask("punctuation")}
+>
+  Q9 Punctuation and Capitalization — 7 marks
+</button>
+
+        <h3 style={{ marginTop: 18 }}>Part B — Composition: 40 marks</h3>
+        {[
+          "Q10 Application / Formal Letter — 10 marks",
+          "Q11 Paragraph Writing — 15 marks",
+          "Q12 Paragraph / Composition — 15 marks",
+        ].map((item) => (
+          <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
+            {item}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ padding: "10px 0" }}>
+      <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 16 }}>
+        Board Practice
+      </h2>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <button style={cardStyle} onClick={() => setSection("ict")}>
+          <h3>ICT Board Practice</h3>
+          <p>MCQ + Creative written practice</p>
+        </button>
+
+        <button style={cardStyle} onClick={() => setSection("english1")}>
+          <h3>English 1st Paper</h3>
+          <p>Reading Test + Guided Writing</p>
+        </button>
+
+        <button style={cardStyle} onClick={() => setSection("english2")}>
+          <h3>English 2nd Paper</h3>
+          <p>Grammar + Composition</p>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   var _s = useState("dashboard");
   var page = _s[0];
@@ -2239,12 +3998,15 @@ export default function App() {
     { id: "english1", label: "Eng 1st" },
     { id: "english2", label: "Eng 2nd" },
     { id: "test", label: "Test" },
+    { id: "practice", label: "Board" },
   ];
 
   var content = null;
   if (page === "dashboard") {
     content = <Dashboard setPage={setPage} />;
-  } else if (page === "ict") {
+} else if (page === "practice") {
+    content = <BoardPracticePage />;
+} else if (page === "ict") {
     content = (
       <ICTPage jumpToTopicId={ictJumpId} clearJump={clearIctJump} />
     );
