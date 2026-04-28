@@ -2439,6 +2439,9 @@ function BoardPracticePage() {
   const [answers, setAnswers] = useState({});
   const [checked, setChecked] = useState(false);
   const [reviewVersion, setReviewVersion] = useState(0);
+  const [miniMockStage, setMiniMockStage] = useState("start");
+  const [miniMockQuestions, setMiniMockQuestions] = useState([]);
+  const [miniMockTimeLeft, setMiniMockTimeLeft] = useState(300);
 
   const ictCreativeItems = [
     {
@@ -3480,12 +3483,34 @@ const informalLetterTasks = [
   function resetPractice() {
     setAnswers({});
     setChecked(false);
+    setMiniMockStage("start");
+    setMiniMockQuestions([]);
+    setMiniMockTimeLeft(300);
   }
 
   function openTask(taskId) {
     setTask(taskId);
     resetPractice();
   }
+
+  useEffect(
+    function () {
+      if (task !== "timedMiniMock" || miniMockStage !== "running") return;
+      if (miniMockTimeLeft <= 0) {
+        submitMiniMock();
+        return;
+      }
+
+      var timerId = setTimeout(function () {
+        setMiniMockTimeLeft(miniMockTimeLeft - 1);
+      }, 1000);
+
+      return function () {
+        clearTimeout(timerId);
+      };
+    },
+    [task, miniMockStage, miniMockTimeLeft]
+  );
 
   function getScore(items) {
     var score = 0;
@@ -3589,6 +3614,52 @@ const informalLetterTasks = [
       }
     });
     return addWrongAnswerInfo(progressInfo, entries);
+  }
+
+  function getMiniMockScore() {
+    var score = 0;
+    miniMockQuestions.forEach(function (mcq) {
+      if (answers[mcq.id] === mcq.correctAnswer) {
+        score++;
+      }
+    });
+    return score;
+  }
+
+  function formatMiniMockTime(seconds) {
+    var minutes = Math.floor(seconds / 60);
+    var rest = seconds % 60;
+    return minutes + ":" + String(rest).padStart(2, "0");
+  }
+
+  function startMiniMock() {
+    var pool = collectAllMCQs().filter(function (mcq) {
+      return (
+        mcq.subjectKey === "ict" ||
+        (mcq.subjectKey === "english" && mcq.paperKey === "2nd")
+      );
+    });
+    var picked = shuffleAndPick(pool, Math.min(10, pool.length));
+    setAnswers({});
+    setChecked(false);
+    setMiniMockQuestions(picked);
+    setMiniMockTimeLeft(300);
+    setMiniMockStage("running");
+  }
+
+  function submitMiniMock() {
+    if (miniMockStage !== "running") return;
+    var score = getMiniMockScore();
+    saveScoredPractice(
+      {
+        id: "timed-mini-mock",
+        title: "Timed Mini Mock Test",
+      },
+      score,
+      miniMockQuestions.length
+    );
+    setChecked(true);
+    setMiniMockStage("done");
   }
 
   function checkPractice(progressInfo, score, total, wrongEntries) {
@@ -5335,6 +5406,253 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
     );
   }
 
+  function TimedMiniMockPage() {
+    var score = getMiniMockScore();
+
+    if (miniMockStage === "start") {
+      return (
+        <div style={{ padding: "10px 0" }}>
+          <button
+            style={backButtonStyle}
+            onClick={() => {
+              setTask(null);
+              resetPractice();
+            }}
+          >
+            Ã¢â€ Â Back
+          </button>
+
+          <div
+            style={{
+              padding: 18,
+              border: "1px solid #e2e8f0",
+              borderRadius: 12,
+              background: "#f8fafc",
+              textAlign: "center",
+            }}
+          >
+            <h2 style={{ marginBottom: 8 }}>Mini Mock Test</h2>
+            <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 16 }}>
+              10 questions • 5 minutes
+            </p>
+            <button
+              onClick={startMiniMock}
+              style={{
+                width: "100%",
+                padding: "12px 20px",
+                border: "none",
+                borderRadius: 12,
+                background: "#6366f1",
+                color: "#fff",
+                fontSize: 15,
+                fontWeight: 700,
+                fontFamily: "inherit",
+                cursor: "pointer",
+              }}
+            >
+              Start
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          Ã¢â€ Â Back
+        </button>
+
+        <h2>Mini Mock Test</h2>
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 16,
+            padding: 14,
+            borderRadius: 12,
+            background: miniMockStage === "running" ? "#eef2ff" : "#f0fdf4",
+            border:
+              miniMockStage === "running"
+                ? "1px solid #c7d2fe"
+                : "1px solid #bbf7d0",
+            color: miniMockStage === "running" ? "#3730a3" : "#166534",
+            fontWeight: 800,
+            textAlign: "center",
+          }}
+        >
+          {miniMockStage === "running"
+            ? "Time left: " + formatMiniMockTime(miniMockTimeLeft)
+            : "Score: " + score + " / " + miniMockQuestions.length}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {miniMockQuestions.map(function (mcq, index) {
+            var selected = answers[mcq.id];
+            var isDone = miniMockStage === "done";
+            var isCorrect = selected === mcq.correctAnswer;
+
+            return (
+              <div
+                key={mcq.id}
+                style={{
+                  padding: 16,
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 12,
+                  background: "#fff",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: "#6366f1",
+                    marginBottom: 6,
+                  }}
+                >
+                  {mcq.subject} • {mcq.source}
+                </p>
+                <p style={{ fontWeight: 700, marginBottom: 10, lineHeight: 1.6 }}>
+                  {index + 1}. {mcq.question}
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {mcq.options.map(function (option, optionIndex) {
+                    var bg = "#f8fafc";
+                    var border = "1px solid #e2e8f0";
+                    var color = "#334155";
+
+                    if (!isDone && selected === optionIndex) {
+                      bg = "#eef2ff";
+                      border = "2px solid #6366f1";
+                      color = "#3730a3";
+                    }
+
+                    if (isDone) {
+                      if (optionIndex === mcq.correctAnswer) {
+                        bg = "#dcfce7";
+                        border = "2px solid #22c55e";
+                        color = "#166534";
+                      } else if (optionIndex === selected) {
+                        bg = "#fee2e2";
+                        border = "2px solid #ef4444";
+                        color = "#991b1b";
+                      }
+                    }
+
+                    return (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          if (!isDone) updateAnswer(mcq.id, optionIndex);
+                        }}
+                        style={{
+                          textAlign: "left",
+                          padding: "12px 14px",
+                          borderRadius: 10,
+                          background: bg,
+                          border: border,
+                          color: color,
+                          fontSize: 14,
+                          fontFamily: "inherit",
+                          fontWeight: 500,
+                          cursor: isDone ? "default" : "pointer",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {String.fromCharCode(65 + optionIndex)}. {option}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {isDone && (
+                  <div
+                    style={{
+                      marginTop: 12,
+                      padding: "12px 14px",
+                      borderRadius: 10,
+                      background: isCorrect ? "#f0fdf4" : "#fef2f2",
+                      border: isCorrect
+                        ? "1px solid #bbf7d0"
+                        : "1px solid #fecaca",
+                      color: "#334155",
+                      fontSize: 13,
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    <p style={{ fontWeight: 700, marginBottom: 4 }}>
+                      {isCorrect ? "Correct" : "Wrong"}
+                    </p>
+                    {selected === undefined && (
+                      <p style={{ marginBottom: 4 }}>Student answer: No answer</p>
+                    )}
+                    <p style={{ marginBottom: 4 }}>
+                      Correct answer: {String.fromCharCode(65 + mcq.correctAnswer)}.{" "}
+                      {mcq.options[mcq.correctAnswer]}
+                    </p>
+                    <p>{mcq.explanation}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {miniMockStage === "running" ? (
+          <button
+            onClick={submitMiniMock}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Submit
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setAnswers({});
+              setChecked(false);
+              setMiniMockQuestions([]);
+              setMiniMockTimeLeft(300);
+              setMiniMockStage("start");
+            }}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        )}
+      </div>
+    );
+  }
+
   function BroadQuestionPractice({ taskData }) {
     return (
       <div style={{ padding: "10px 0" }}>
@@ -6501,6 +6819,10 @@ if (task === "reviewMistakes") {
   return <ReviewMistakesPage />;
 }
 
+if (task === "timedMiniMock") {
+  return <TimedMiniMockPage />;
+}
+
 if (task === "passageBroadQuestions") {
   return <BroadQuestionPractice taskData={passageBroadQuestionTask} />;
 }
@@ -6862,6 +7184,11 @@ if (task === "wordsPhrases") {
         <button style={cardStyle} onClick={() => openTask("fullMock")}>
           <h3>Full Mock Test</h3>
           <p>ICT + English full mock skeleton</p>
+        </button>
+
+        <button style={cardStyle} onClick={() => openTask("timedMiniMock")}>
+          <h3>Mini Mock Test</h3>
+          <p>10 questions • 5 minutes</p>
         </button>
 
         <button style={cardStyle} onClick={() => openTask("reviewMistakes")}>
