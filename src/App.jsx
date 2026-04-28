@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 var PROGRESS_KEY = "study_progress";
 var BOARD_PROGRESS_KEY = "board_practice_progress";
+var WRONG_ANSWER_KEY = "board_wrong_answers";
 
 function saveProgress(data) {
   try {
@@ -46,6 +47,50 @@ function saveBoardSectionProgress(entry) {
       BOARD_PROGRESS_KEY,
       JSON.stringify({ completedSections: completedSections })
     );
+  } catch (e) {
+    // ignore
+  }
+}
+
+function loadWrongAnswers() {
+  try {
+    var raw = localStorage.getItem(WRONG_ANSWER_KEY);
+    if (!raw) return { wrongAnswers: [] };
+    var parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.wrongAnswers)) {
+      return { wrongAnswers: [] };
+    }
+    return parsed;
+  } catch (e) {
+    return { wrongAnswers: [] };
+  }
+}
+
+function saveWrongAnswers(entries) {
+  try {
+    var progress = loadWrongAnswers();
+    var next = progress.wrongAnswers.slice();
+    entries.forEach(function (entry) {
+      next = next.filter(function (item) {
+        return !(
+          item.sectionId === entry.sectionId &&
+          item.question === entry.question
+        );
+      });
+      next.push(entry);
+    });
+    localStorage.setItem(
+      WRONG_ANSWER_KEY,
+      JSON.stringify({ wrongAnswers: next })
+    );
+  } catch (e) {
+    // ignore
+  }
+}
+
+function clearWrongAnswers() {
+  try {
+    localStorage.setItem(WRONG_ANSWER_KEY, JSON.stringify({ wrongAnswers: [] }));
   } catch (e) {
     // ignore
   }
@@ -2393,6 +2438,7 @@ function BoardPracticePage() {
   const [task, setTask] = useState(null);
   const [answers, setAnswers] = useState({});
   const [checked, setChecked] = useState(false);
+  const [reviewVersion, setReviewVersion] = useState(0);
 
   const ictCreativeItems = [
     {
@@ -3476,8 +3522,78 @@ const informalLetterTasks = [
     });
   }
 
-  function checkPractice(progressInfo, score, total) {
+  function addWrongAnswerInfo(progressInfo, entries) {
+    if (!progressInfo || !entries || entries.length === 0) return [];
+    var date = formatDateISO(new Date());
+    return entries.map(function (entry) {
+      return {
+        sectionId: progressInfo.id,
+        sectionTitle: progressInfo.title,
+        question: entry.question,
+        studentAnswer: entry.studentAnswer,
+        correctAnswer: entry.correctAnswer,
+        explanation: entry.explanation,
+        date: date,
+      };
+    });
+  }
+
+  function getTextWrongEntries(progressInfo, items, getQuestion) {
+    if (!progressInfo) return [];
+    var entries = [];
+    items.forEach(function (item) {
+      var studentAnswer = answers[item.id] || "";
+      var isCorrect =
+        normalizeAnswer(studentAnswer) === normalizeAnswer(item.answer);
+      if (!isCorrect) {
+        entries.push({
+          question: getQuestion(item),
+          studentAnswer: studentAnswer || "No answer",
+          correctAnswer: item.answer,
+          explanation: item.explanation || "",
+        });
+      }
+    });
+    return addWrongAnswerInfo(progressInfo, entries);
+  }
+
+  function getOptionWrongEntries(progressInfo, items) {
+    if (!progressInfo) return [];
+    var entries = [];
+    items.forEach(function (item) {
+      var studentAnswer = answers[item.id] || "";
+      if (studentAnswer !== item.answer) {
+        entries.push({
+          question: item.question,
+          studentAnswer: studentAnswer || "No answer",
+          correctAnswer: item.answer,
+          explanation: item.explanation || "",
+        });
+      }
+    });
+    return addWrongAnswerInfo(progressInfo, entries);
+  }
+
+  function getICTMCQWrongEntries(progressInfo) {
+    var entries = [];
+    ictMcqItems.forEach(function (mcq) {
+      var selected = answers[mcq.id];
+      if (selected !== mcq.correctAnswer) {
+        entries.push({
+          question: mcq.question,
+          studentAnswer:
+            selected === undefined ? "No answer" : mcq.options[selected],
+          correctAnswer: mcq.options[mcq.correctAnswer],
+          explanation: mcq.explanation,
+        });
+      }
+    });
+    return addWrongAnswerInfo(progressInfo, entries);
+  }
+
+  function checkPractice(progressInfo, score, total, wrongEntries) {
     saveScoredPractice(progressInfo, score, total);
+    saveWrongAnswers(wrongEntries || []);
     setChecked(true);
   }
 
@@ -3565,7 +3681,16 @@ const informalLetterTasks = [
 
         {!checked ? (
           <button
-            onClick={() => checkPractice(progressInfo, score, items.length)}
+            onClick={() =>
+              checkPractice(
+                progressInfo,
+                score,
+                items.length,
+                getTextWrongEntries(progressInfo, items, function (item) {
+                  return item.sentence;
+                })
+              )
+            }
             style={{
               marginTop: 16,
               width: "100%",
@@ -3726,7 +3851,14 @@ const informalLetterTasks = [
 
         {!checked ? (
           <button
-            onClick={() => checkPractice(progressInfo, score, items.length)}
+            onClick={() =>
+              checkPractice(
+                progressInfo,
+                score,
+                items.length,
+                getOptionWrongEntries(progressInfo, items)
+              )
+            }
             style={{
               marginTop: 16,
               width: "100%",
@@ -3880,7 +4012,16 @@ function TextCorrectionPractice({ title, subtitle, items, progressInfo }) {
 
       {!checked ? (
         <button
-          onClick={() => checkPractice(progressInfo, score, items.length)}
+          onClick={() =>
+            checkPractice(
+              progressInfo,
+              score,
+              items.length,
+              getTextWrongEntries(progressInfo, items, function (item) {
+                return item.wrong;
+              })
+            )
+          }
           style={{
             marginTop: 16,
             width: "100%",
@@ -4778,7 +4919,11 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
                   title: "ICT Board Practice - MCQ Section",
                 },
                 score,
-                ictMcqItems.length
+                ictMcqItems.length,
+                getICTMCQWrongEntries({
+                  id: "ict-mcq",
+                  title: "ICT Board Practice - MCQ Section",
+                })
               )
             }
             style={{
@@ -5081,6 +5226,111 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
             );
           })}
         </div>
+      </div>
+    );
+  }
+
+  function ReviewMistakesPage() {
+    var wrongAnswers = loadWrongAnswers().wrongAnswers;
+    var mistakeCount = wrongAnswers.length + reviewVersion * 0;
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          Ã¢â€ Â Back
+        </button>
+
+        <h2>Review Mistakes</h2>
+        <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 16 }}>
+          Saved wrong answers from auto-graded Board Practice sections.
+        </p>
+
+        {mistakeCount === 0 ? (
+          <div
+            style={{
+              padding: 16,
+              border: "1px solid #e2e8f0",
+              borderRadius: 12,
+              background: "#f8fafc",
+              color: "#64748b",
+              lineHeight: 1.6,
+            }}
+          >
+            No saved mistakes yet.
+          </div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {wrongAnswers.map(function (item, index) {
+              return (
+                <div
+                  key={item.sectionId + "-" + index}
+                  style={{
+                    padding: 16,
+                    border: "1px solid #e2e8f0",
+                    borderRadius: 12,
+                    background: "#fff",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: "#6366f1",
+                      marginBottom: 6,
+                    }}
+                  >
+                    {item.sectionTitle}
+                  </p>
+                  <p style={{ fontWeight: 700, lineHeight: 1.6, marginBottom: 8 }}>
+                    {index + 1}. {item.question}
+                  </p>
+                  <p style={{ color: "#991b1b", lineHeight: 1.6, marginBottom: 4 }}>
+                    Student answer: <strong>{item.studentAnswer}</strong>
+                  </p>
+                  <p style={{ color: "#166534", lineHeight: 1.6, marginBottom: 4 }}>
+                    Correct answer: <strong>{item.correctAnswer}</strong>
+                  </p>
+                  <p style={{ color: "#334155", lineHeight: 1.7 }}>
+                    {item.explanation}
+                  </p>
+                  <p style={{ color: "#94a3b8", fontSize: 12, marginTop: 8 }}>
+                    {item.date}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {mistakeCount > 0 && (
+          <button
+            onClick={() => {
+              clearWrongAnswers();
+              setReviewVersion(reviewVersion + 1);
+            }}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Clear Mistakes
+          </button>
+        )}
       </div>
     );
   }
@@ -6061,7 +6311,16 @@ function WordBoxPractice({ title, subtitle, items, wordBox, progressInfo }) {
 
       {!checked ? (
         <button
-          onClick={() => checkPractice(progressInfo, score, items.length)}
+          onClick={() =>
+            checkPractice(
+              progressInfo,
+              score,
+              items.length,
+              getTextWrongEntries(progressInfo, items, function (item) {
+                return item.sentence;
+              })
+            )
+          }
           style={{
             marginTop: 16,
             width: "100%",
@@ -6236,6 +6495,10 @@ if (task === "ictCreative") {
 
 if (task === "fullMock") {
   return <FullMockTestPage />;
+}
+
+if (task === "reviewMistakes") {
+  return <ReviewMistakesPage />;
 }
 
 if (task === "passageBroadQuestions") {
@@ -6599,6 +6862,11 @@ if (task === "wordsPhrases") {
         <button style={cardStyle} onClick={() => openTask("fullMock")}>
           <h3>Full Mock Test</h3>
           <p>ICT + English full mock skeleton</p>
+        </button>
+
+        <button style={cardStyle} onClick={() => openTask("reviewMistakes")}>
+          <h3>Review Mistakes</h3>
+          <p>{loadWrongAnswers().wrongAnswers.length} saved wrong answers</p>
         </button>
       </div>
     </div>
