@@ -2556,6 +2556,39 @@ const applicationTasks = [
   },
 ];
 
+const paragraphTasks = [
+  {
+    id: "para-1",
+    title: "The Importance of Moral Values",
+    question: "Write a paragraph on the importance of moral values.",
+    marks: 15,
+    modelAnswer:
+      "Moral values are the good qualities that help us become honest, kind and responsible. They teach us to respect others, speak the truth and do our duties properly. A person with moral values can choose right from wrong. These values are first learned from family and later developed in school and society. Without moral values, people become selfish and society becomes unsafe. So, every student should practise moral values in daily life.",
+    keyPoints: [
+      "Meaning of moral values",
+      "Honesty, kindness and responsibility",
+      "Role of family and school",
+      "Importance for society",
+      "Simple concluding sentence",
+    ],
+  },
+  {
+    id: "para-2",
+    title: "Frequent Road Accidents in Bangladesh",
+    question: "Write a paragraph on frequent road accidents in Bangladesh.",
+    marks: 15,
+    modelAnswer:
+      "Road accidents are a serious problem in Bangladesh. Every day many people are injured or killed on roads. The main causes are careless driving, over-speeding, unfit vehicles, weak traffic rules and lack of awareness among drivers and pedestrians. Road accidents bring great suffering to families and damage the country. To reduce accidents, traffic laws must be followed strictly. Drivers should be trained, roads should be improved and everyone should be careful while using roads.",
+    keyPoints: [
+      "Road accidents as a serious problem",
+      "Main causes",
+      "Effects on people and families",
+      "Traffic law and driver training",
+      "Awareness and careful road use",
+    ],
+  },
+];
+
   const cardStyle = {
     padding: 16,
     border: "1px solid #e2e8f0",
@@ -3723,6 +3756,16 @@ if (task === "application") {
   );
 }
 
+if (task === "paragraph") {
+  return (
+    <WritingPractice
+      title="Q11 Paragraph Writing"
+      subtitle="Board pattern: 15 marks. Topic sentence, supporting details এবং clear conclusion ঠিক রাখতে হবে।"
+      tasks={paragraphTasks}
+    />
+  );
+}
+
   if (task === "connectors") {
   return (
     <FillPractice
@@ -3913,9 +3956,21 @@ if (task === "wordsPhrases") {
 </button>
 
         <h3 style={{ marginTop: 18 }}>Part B — Composition: 40 marks</h3>
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("application")}
+        >
+          Q10 Application / Formal Letter — 10 marks
+        </button>
+
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("paragraph")}
+        >
+          Q11 Paragraph Writing — 15 marks
+        </button>
+
         {[
-          "Q10 Application / Formal Letter — 10 marks",
-          "Q11 Paragraph Writing — 15 marks",
           "Q12 Paragraph / Composition — 15 marks",
         ].map((item) => (
           <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
