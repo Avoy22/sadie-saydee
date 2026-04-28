@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 var PROGRESS_KEY = "study_progress";
+var BOARD_PROGRESS_KEY = "board_practice_progress";
 
 function saveProgress(data) {
   try {
@@ -20,6 +21,36 @@ function loadProgress() {
   }
 }
 
+function loadBoardProgress() {
+  try {
+    var raw = localStorage.getItem(BOARD_PROGRESS_KEY);
+    if (!raw) return { completedSections: [] };
+    var parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.completedSections)) {
+      return { completedSections: [] };
+    }
+    return parsed;
+  } catch (e) {
+    return { completedSections: [] };
+  }
+}
+
+function saveBoardSectionProgress(entry) {
+  try {
+    var progress = loadBoardProgress();
+    var completedSections = progress.completedSections.filter(function (item) {
+      return item.id !== entry.id;
+    });
+    completedSections.push(entry);
+    localStorage.setItem(
+      BOARD_PROGRESS_KEY,
+      JSON.stringify({ completedSections: completedSections })
+    );
+  } catch (e) {
+    // ignore
+  }
+}
+
 function formatDateISO(d) {
   var year = d.getFullYear();
   var month = String(d.getMonth() + 1).padStart(2, "0");
@@ -33,6 +64,12 @@ function Dashboard({ setPage }) {
   var daysLeft = Math.max(0, Math.ceil((examDate - today) / 86400000));
 
   var progress = loadProgress();
+  var boardProgress = loadBoardProgress();
+  var completedBoardSections = boardProgress.completedSections || [];
+  var lastBoardSection =
+    completedBoardSections.length > 0
+      ? completedBoardSections[completedBoardSections.length - 1]
+      : null;
   var weakTopics =
     progress && progress.weakTopics ? progress.weakTopics : [];
   var recommendation = {
@@ -229,6 +266,77 @@ function Dashboard({ setPage }) {
         >
           Practice Now
         </button>
+      </div>
+
+      <div
+        style={{
+          background: "#f8fafc",
+          border: "1px solid #e2e8f0",
+          borderRadius: 12,
+          padding: "14px 16px",
+          marginBottom: 20,
+        }}
+      >
+        <p
+          style={{
+            fontSize: 12,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 8,
+            letterSpacing: 0.3,
+          }}
+        >
+          Board Practice Progress
+        </p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 6,
+          }}
+        >
+          <span style={{ fontSize: 13, color: "#64748b" }}>
+            Completed/reviewed
+          </span>
+          <span style={{ fontSize: 15, fontWeight: 700, color: "#1e293b" }}>
+            {completedBoardSections.length}
+          </span>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 12,
+            marginBottom: 6,
+          }}
+        >
+          <span style={{ fontSize: 13, color: "#64748b", flexShrink: 0 }}>
+            Last section
+          </span>
+          <span
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: "#475569",
+              textAlign: "right",
+            }}
+          >
+            {lastBoardSection ? lastBoardSection.title : "None yet"}
+          </span>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <span style={{ fontSize: 13, color: "#64748b" }}>Last date</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: "#475569" }}>
+            {lastBoardSection ? lastBoardSection.date : "-"}
+          </span>
+        </div>
       </div>
 
       <p
@@ -3345,7 +3453,40 @@ const informalLetterTasks = [
     return score;
   }
 
-  function FillPractice({ title, subtitle, items }) {
+  function saveScoredPractice(progressInfo, score, total) {
+    if (!progressInfo) return;
+    saveBoardSectionProgress({
+      id: progressInfo.id,
+      title: progressInfo.title,
+      score: score,
+      total: total,
+      date: formatDateISO(new Date()),
+    });
+  }
+
+  function saveReviewedPractice(progressInfo) {
+    if (!progressInfo) return;
+    saveBoardSectionProgress({
+      id: progressInfo.id,
+      title: progressInfo.title,
+      score: null,
+      total: null,
+      status: "reviewed",
+      date: formatDateISO(new Date()),
+    });
+  }
+
+  function checkPractice(progressInfo, score, total) {
+    saveScoredPractice(progressInfo, score, total);
+    setChecked(true);
+  }
+
+  function reviewPractice(progressInfo) {
+    saveReviewedPractice(progressInfo);
+    setChecked(true);
+  }
+
+  function FillPractice({ title, subtitle, items, progressInfo }) {
     var score = getScore(items);
 
     return (
@@ -3424,7 +3565,7 @@ const informalLetterTasks = [
 
         {!checked ? (
           <button
-            onClick={() => setChecked(true)}
+            onClick={() => checkPractice(progressInfo, score, items.length)}
             style={{
               marginTop: 16,
               width: "100%",
@@ -3481,7 +3622,7 @@ const informalLetterTasks = [
     );
   }
 
-  function OptionPractice({ title, subtitle, items }) {
+  function OptionPractice({ title, subtitle, items, progressInfo }) {
     var score = 0;
 
     items.forEach(function (item) {
@@ -3585,7 +3726,7 @@ const informalLetterTasks = [
 
         {!checked ? (
           <button
-            onClick={() => setChecked(true)}
+            onClick={() => checkPractice(progressInfo, score, items.length)}
             style={{
               marginTop: 16,
               width: "100%",
@@ -3642,7 +3783,7 @@ const informalLetterTasks = [
     );
   }
 
-function TextCorrectionPractice({ title, subtitle, items }) {
+function TextCorrectionPractice({ title, subtitle, items, progressInfo }) {
   var score = 0;
 
   items.forEach(function (item) {
@@ -3739,7 +3880,7 @@ function TextCorrectionPractice({ title, subtitle, items }) {
 
       {!checked ? (
         <button
-          onClick={() => setChecked(true)}
+          onClick={() => checkPractice(progressInfo, score, items.length)}
           style={{
             marginTop: 16,
             width: "100%",
@@ -4080,7 +4221,7 @@ function NarrationPractice({ title, subtitle, items }) {
   );
 }
 
-function WritingPractice({ title, subtitle, tasks }) {
+function WritingPractice({ title, subtitle, tasks, progressInfo }) {
   return (
     <div style={{ padding: "10px 0" }}>
       <button
@@ -4271,7 +4412,7 @@ function WritingPractice({ title, subtitle, tasks }) {
 
       {!checked ? (
         <button
-          onClick={() => setChecked(true)}
+          onClick={() => reviewPractice(progressInfo)}
           style={{
             marginTop: 16,
             width: "100%",
@@ -4630,7 +4771,16 @@ function WritingPractice({ title, subtitle, tasks }) {
 
         {!checked ? (
           <button
-            onClick={() => setChecked(true)}
+            onClick={() =>
+              checkPractice(
+                {
+                  id: "ict-mcq",
+                  title: "ICT Board Practice - MCQ Section",
+                },
+                score,
+                ictMcqItems.length
+              )
+            }
             style={{
               marginTop: 16,
               width: "100%",
@@ -4793,7 +4943,13 @@ function WritingPractice({ title, subtitle, tasks }) {
                 </div>
 
                 <button
-                  onClick={() => updateAnswer(item.id + "-showModel", true)}
+                  onClick={() => {
+                    saveReviewedPractice({
+                      id: item.id,
+                      title: "ICT Creative - " + item.title,
+                    });
+                    updateAnswer(item.id + "-showModel", true);
+                  }}
                   style={{
                     marginTop: 14,
                     width: "100%",
@@ -5788,7 +5944,7 @@ function WritingPractice({ title, subtitle, tasks }) {
     );
   }
 
-function WordBoxPractice({ title, subtitle, items, wordBox }) {
+function WordBoxPractice({ title, subtitle, items, wordBox, progressInfo }) {
   var score = 0;
 
   items.forEach(function (item) {
@@ -5905,7 +6061,7 @@ function WordBoxPractice({ title, subtitle, items, wordBox }) {
 
       {!checked ? (
         <button
-          onClick={() => setChecked(true)}
+          onClick={() => checkPractice(progressInfo, score, items.length)}
           style={{
             marginTop: 16,
             width: "100%",
@@ -5968,6 +6124,10 @@ function WordBoxPractice({ title, subtitle, items, wordBox }) {
         title="Q1 Prepositions"
         subtitle="Board pattern: 10 gaps × 0.5 = 5 marks. এখানে বাক্যের অর্থ ও fixed expression দেখে preposition বসাতে হবে।"
         items={prepositionItems}
+        progressInfo={{
+          id: "english2-prepositions",
+          title: "English 2nd Paper - Q1 Prepositions",
+        }}
       />
     );
   }
@@ -5978,6 +6138,10 @@ function WordBoxPractice({ title, subtitle, items, wordBox }) {
         title="Q4 Right Form of Verbs"
         subtitle="Board pattern: 14 gaps × 0.5 = 7 marks. এখানে আগে signal word চিনবে, তারপর verb-এর সঠিক form বসাবে।"
         items={rightFormItems}
+        progressInfo={{
+          id: "english2-right-form",
+          title: "English 2nd Paper - Q4 Right Form",
+        }}
       />
     );
   }
@@ -5988,6 +6152,10 @@ function WordBoxPractice({ title, subtitle, items, wordBox }) {
       title="Q6 Modifiers"
       subtitle="Board pattern: 10 gaps × 0.5 = 5 marks. এখানে noun, verb বা adjective-কে describe/modify করার সঠিক word বা phrase বসাতে হবে।"
       items={modifierItems}
+      progressInfo={{
+        id: "english2-modifiers",
+        title: "English 2nd Paper - Q6 Modifiers",
+      }}
     />
   );
 }
@@ -6008,6 +6176,10 @@ if (task === "application") {
       title="Q10 Application / Formal Letter"
       subtitle="Board pattern: 10 marks. এখানে formal format, subject line, polite request এবং proper closing ঠিক রাখতে হবে।"
       tasks={applicationTasks}
+      progressInfo={{
+        id: "english2-application",
+        title: "English 2nd Paper - Q10 Application",
+      }}
     />
   );
 }
@@ -6018,6 +6190,10 @@ if (task === "paragraph") {
       title="Q11 Paragraph Writing"
       subtitle="Board pattern: 15 marks. Topic sentence, supporting details এবং clear conclusion ঠিক রাখতে হবে।"
       tasks={paragraphTasks}
+      progressInfo={{
+        id: "english2-paragraph",
+        title: "English 2nd Paper - Q11 Paragraph",
+      }}
     />
   );
 }
@@ -6038,6 +6214,10 @@ if (task === "summary") {
       title="Q3 Summary Writing"
       subtitle="Board pattern: 10 marks. Main ideas নিজের ভাষায় ছোট করে লিখতে হবে।"
       tasks={summaryTasks}
+      progressInfo={{
+        id: "english1-summary",
+        title: "English 1st Paper - Q3 Summary Writing",
+      }}
     />
   );
 }
@@ -6094,6 +6274,10 @@ if (task === "storyCompletion") {
       title="Q8 Story Completion"
       subtitle="Board pattern: 15 marks. Given beginning থেকে logical story complete করতে হবে।"
       tasks={storyCompletionTasks}
+      progressInfo={{
+        id: "english1-story-completion",
+        title: "English 1st Paper - Q8 Story Completion",
+      }}
     />
   );
 }
@@ -6114,6 +6298,10 @@ if (task === "informalLetter") {
       title="Q7 Sentence Connectors"
       subtitle="Board pattern: 14 gaps × 0.5 = 7 marks. এখানে বাক্যের সম্পর্ক বুঝে connector বসাতে হবে।"
       items={connectorItems}
+      progressInfo={{
+        id: "english2-connectors",
+        title: "English 2nd Paper - Q7 Connectors",
+      }}
     />
   );
 }
@@ -6124,6 +6312,10 @@ if (task === "synonymAntonym") {
       title="Q8 Synonym / Antonym"
       subtitle="Board pattern: 14 items × 0.5 = 7 marks. এখানে word meaning বুঝে synonym বা antonym বেছে নিতে হবে।"
       items={synonymAntonymItems}
+      progressInfo={{
+        id: "english2-synonym-antonym",
+        title: "English 2nd Paper - Q8 Synonym/Antonym",
+      }}
     />
   );
 }
@@ -6134,6 +6326,10 @@ if (task === "punctuation") {
       title="Q9 Punctuation and Capitalization"
       subtitle="Board pattern: 14 corrections × 0.5 = 7 marks. এখানে comma, full stop, question mark, quotation mark এবং capital letter ঠিক করতে হবে।"
       items={punctuationItems}
+      progressInfo={{
+        id: "english2-punctuation",
+        title: "English 2nd Paper - Q9 Punctuation",
+      }}
     />
   );
 }
@@ -6155,6 +6351,10 @@ if (task === "wordsPhrases") {
       subtitle="Board pattern: 10 gaps × 0.5 = 5 marks. এখানে box থেকে সঠিক word/phrase বেছে gap পূরণ করতে হবে।"
       items={wordsPhrasesItems}
       wordBox={wordsPhrasesBox}
+      progressInfo={{
+        id: "english2-words-phrases",
+        title: "English 2nd Paper - Q2 Words/Phrases",
+      }}
     />
   );
 }
