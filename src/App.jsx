@@ -2630,6 +2630,54 @@ const passageMCQTask = {
   ],
 };
 
+const clozeWithCluesTask = {
+  title: "Cloze Test with Clues",
+  marks: 5,
+  wordBox: [
+    "environment",
+    "oxygen",
+    "cutting",
+    "forests",
+    "protect",
+    "balance",
+    "rapidly",
+  ],
+  text:
+    "Trees are very important for our (1) ___. They give us (2) ___ and help keep nature in (3) ___. But people are (4) ___ trees quickly. We should plant more trees and (5) ___ our forests.",
+  blanks: [
+    {
+      id: "cloze-clues-1",
+      number: 1,
+      answer: "environment",
+      explanation: "Trees are important for our environment.",
+    },
+    {
+      id: "cloze-clues-2",
+      number: 2,
+      answer: "oxygen",
+      explanation: "Trees give us oxygen.",
+    },
+    {
+      id: "cloze-clues-3",
+      number: 3,
+      answer: "balance",
+      explanation: "Trees help keep nature in balance.",
+    },
+    {
+      id: "cloze-clues-4",
+      number: 4,
+      answer: "cutting",
+      explanation: "People are cutting trees quickly.",
+    },
+    {
+      id: "cloze-clues-5",
+      number: 5,
+      answer: "protect",
+      explanation: "We should protect our forests.",
+    },
+  ],
+};
+
 const paragraphTasks = [
   {
     id: "para-1",
@@ -3923,6 +3971,195 @@ function WritingPractice({ title, subtitle, tasks }) {
     );
   }
 
+  function ClozeWithCluesPractice({ taskData }) {
+    var score = 0;
+
+    taskData.blanks.forEach(function (blank) {
+      if (normalizeAnswer(answers[blank.id] || "") === blank.answer) {
+        score++;
+      }
+    });
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          â† Back
+        </button>
+
+        <h2>Q4 {taskData.title}</h2>
+        <p
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 10,
+          }}
+        >
+          Marks: {taskData.marks}
+        </p>
+
+        <div
+          style={{
+            marginBottom: 14,
+            padding: 12,
+            background: "#eef2ff",
+            border: "1px solid #c7d2fe",
+            borderRadius: 12,
+          }}
+        >
+          <p style={{ fontWeight: 700, marginBottom: 8 }}>Word Box:</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {taskData.wordBox.map(function (word) {
+              return (
+                <span
+                  key={word}
+                  style={{
+                    padding: "6px 10px",
+                    background: "#fff",
+                    border: "1px solid #c7d2fe",
+                    borderRadius: 999,
+                    fontSize: 13,
+                    color: "#4338ca",
+                    fontWeight: 600,
+                  }}
+                >
+                  {word}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+
+        <div
+          style={{
+            padding: 16,
+            border: "1px solid #e2e8f0",
+            borderRadius: 12,
+            background: "#fff",
+          }}
+        >
+          <p style={{ color: "#334155", lineHeight: 1.7, marginBottom: 14 }}>
+            {taskData.text}
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {taskData.blanks.map(function (blank) {
+              var userAnswer = answers[blank.id] || "";
+              var isCorrect =
+                normalizeAnswer(userAnswer) === blank.answer;
+
+              return (
+                <div key={blank.id}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontWeight: 700,
+                      marginBottom: 6,
+                    }}
+                  >
+                    Blank {blank.number}
+                  </label>
+
+                  <input
+                    value={userAnswer}
+                    onChange={(e) => updateAnswer(blank.id, e.target.value)}
+                    placeholder="Choose from word box"
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      borderRadius: 10,
+                      border: "1px solid #cbd5e1",
+                      fontSize: 15,
+                      fontFamily: "inherit",
+                    }}
+                  />
+
+                  {checked && (
+                    <div
+                      style={{
+                        marginTop: 8,
+                        padding: 10,
+                        borderRadius: 10,
+                        background: isCorrect ? "#dcfce7" : "#fee2e2",
+                        color: isCorrect ? "#166534" : "#991b1b",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <p style={{ fontWeight: 700 }}>
+                        {isCorrect ? "Correct" : "Wrong"}
+                      </p>
+                      <p>
+                        Correct answer: <strong>{blank.answer}</strong>
+                      </p>
+                      <p>{blank.explanation}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {!checked ? (
+          <button
+            onClick={() => setChecked(true)}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "14px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            Check Answers
+          </button>
+        ) : (
+          <div
+            style={{
+              marginTop: 16,
+              padding: 16,
+              borderRadius: 12,
+              background: "#eef2ff",
+              border: "1px solid #c7d2fe",
+              textAlign: "center",
+            }}
+          >
+            <h3>
+              Score: {score}/{taskData.blanks.length}
+            </h3>
+
+            <button
+              onClick={resetPractice}
+              style={{
+                marginTop: 10,
+                padding: "10px 16px",
+                border: "none",
+                borderRadius: 10,
+                background: "#6366f1",
+                color: "#fff",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
 function WordBoxPractice({ title, subtitle, items, wordBox }) {
   var score = 0;
 
@@ -4181,6 +4418,10 @@ if (task === "passageMCQ") {
   return <PassageMCQPractice taskData={passageMCQTask} />;
 }
 
+if (task === "clozeWithClues") {
+  return <ClozeWithCluesPractice taskData={clozeWithCluesTask} />;
+}
+
 if (task === "graphAnalysis") {
   return (
     <WritingPractice
@@ -4311,8 +4552,14 @@ if (task === "wordsPhrases") {
           Q3 Summary Writing — 10 marks
         </button>
 
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("clozeWithClues")}
+        >
+          Q4 Cloze Test with Clues — 5 marks
+        </button>
+
         {[
-          "Q4 Cloze Test with Clues — 5 marks",
           "Q5 Cloze Test without Clues — 10 marks",
           "Q6 Rearranging Sentences — 10 marks",
         ].map((item) => (
