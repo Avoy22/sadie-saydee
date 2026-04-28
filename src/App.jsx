@@ -2630,6 +2630,53 @@ const passageMCQTask = {
   ],
 };
 
+const passageBroadQuestionTask = {
+  title: "Passage Broad Questions",
+  marks: 15,
+  passage:
+    "Trees are essential for our environment. They provide oxygen, food, and shelter. Without trees, life on earth would be impossible. However, people are cutting trees rapidly, which is causing environmental imbalance. We should plant more trees and protect our forests.",
+  questions: [
+    {
+      id: "broad-1",
+      question: "Why are trees essential for our environment?",
+      marks: 3,
+      modelAnswer:
+        "Trees are essential because they help keep the environment healthy and support life on earth.",
+      keyPoints: ["healthy environment", "support life", "natural balance"],
+    },
+    {
+      id: "broad-2",
+      question: "What do trees provide us?",
+      marks: 3,
+      modelAnswer: "Trees provide us with oxygen, food, and shelter.",
+      keyPoints: ["oxygen", "food", "shelter"],
+    },
+    {
+      id: "broad-3",
+      question: "What would happen without trees?",
+      marks: 3,
+      modelAnswer: "Without trees, life on earth would be impossible.",
+      keyPoints: ["life impossible", "no proper oxygen", "environment harmed"],
+    },
+    {
+      id: "broad-4",
+      question: "What is causing environmental imbalance?",
+      marks: 3,
+      modelAnswer:
+        "People are cutting trees rapidly, and this is causing environmental imbalance.",
+      keyPoints: ["rapid tree cutting", "human activity", "imbalance"],
+    },
+    {
+      id: "broad-5",
+      question: "What should we do to protect nature?",
+      marks: 3,
+      modelAnswer:
+        "We should plant more trees and protect our forests to protect nature.",
+      keyPoints: ["plant trees", "protect forests", "stop cutting trees"],
+    },
+  ],
+};
+
 const clozeWithCluesTask = {
   title: "Cloze Test with Clues",
   marks: 5,
@@ -4034,6 +4081,174 @@ function WritingPractice({ title, subtitle, tasks }) {
     );
   }
 
+  function BroadQuestionPractice({ taskData }) {
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          â† Back
+        </button>
+
+        <h2>Q1B {taskData.title}</h2>
+        <p
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 10,
+          }}
+        >
+          Marks: {taskData.marks}
+        </p>
+
+        <div
+          style={{
+            padding: 16,
+            border: "1px solid #e2e8f0",
+            borderRadius: 12,
+            background: "#f8fafc",
+            color: "#334155",
+            lineHeight: 1.7,
+            marginBottom: 16,
+          }}
+        >
+          <p style={{ fontWeight: 700, marginBottom: 6 }}>Passage:</p>
+          <p>{taskData.passage}</p>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {taskData.questions.map(function (item, index) {
+            var userAnswer = answers[item.id] || "";
+
+            return (
+              <div
+                key={item.id}
+                style={{
+                  padding: 16,
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 12,
+                  background: "#fff",
+                }}
+              >
+                <p style={{ fontWeight: 700, marginBottom: 6 }}>
+                  {index + 1}. {item.question}
+                </p>
+                <p
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: "#6366f1",
+                    marginBottom: 8,
+                  }}
+                >
+                  Marks: {item.marks}
+                </p>
+
+                <textarea
+                  value={userAnswer}
+                  onChange={(e) => updateAnswer(item.id, e.target.value)}
+                  placeholder="Write your answer here"
+                  rows={4}
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    borderRadius: 10,
+                    border: "1px solid #cbd5e1",
+                    fontSize: 15,
+                    fontFamily: "inherit",
+                    lineHeight: 1.6,
+                    resize: "vertical",
+                  }}
+                />
+
+                {checked && (
+                  <div
+                    style={{
+                      marginTop: 10,
+                      padding: 12,
+                      borderRadius: 10,
+                      background: "#eef2ff",
+                      border: "1px solid #c7d2fe",
+                      color: "#334155",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    <p style={{ fontWeight: 700, marginBottom: 6 }}>
+                      Model answer:
+                    </p>
+                    <p>{item.modelAnswer}</p>
+
+                    {item.keyPoints && (
+                      <div style={{ marginTop: 10 }}>
+                        <p style={{ fontWeight: 700 }}>Key points:</p>
+                        <ul style={{ paddingLeft: 18, marginTop: 6 }}>
+                          {item.keyPoints.map(function (point) {
+                            return <li key={point}>{point}</li>;
+                          })}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {!checked ? (
+          <button
+            onClick={() => setChecked(true)}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "14px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            Show Model Answers
+          </button>
+        ) : (
+          <div
+            style={{
+              marginTop: 16,
+              padding: 16,
+              borderRadius: 12,
+              background: "#eef2ff",
+              border: "1px solid #c7d2fe",
+              textAlign: "center",
+            }}
+          >
+            <button
+              onClick={resetPractice}
+              style={{
+                padding: "10px 16px",
+                border: "none",
+                borderRadius: 10,
+                background: "#6366f1",
+                color: "#fff",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   function ClozeWithCluesPractice({ taskData }) {
     var score = 0;
 
@@ -4804,6 +5019,10 @@ if (task === "passageMCQ") {
   return <PassageMCQPractice taskData={passageMCQTask} />;
 }
 
+if (task === "passageBroadQuestions") {
+  return <BroadQuestionPractice taskData={passageBroadQuestionTask} />;
+}
+
 if (task === "clozeWithClues") {
   return <ClozeWithCluesPractice taskData={clozeWithCluesTask} />;
 }
@@ -4930,8 +5149,14 @@ if (task === "wordsPhrases") {
           Q1A Passage MCQ — 5 marks
         </button>
 
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("passageBroadQuestions")}
+        >
+          Q1B Broad Questions — 15 marks
+        </button>
+
         {[
-          "Q1B Broad Questions — 15 marks",
           "Q2 Flow Chart — 5 marks",
         ].map((item) => (
           <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
