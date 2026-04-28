@@ -6,6 +6,7 @@ import English1Page from "./components/English1Page.jsx";
 import English2Page from "./components/English2Page.jsx";
 import TestPage from "./components/TestPage.jsx";
 import BoardPracticePage from "./pages/BoardPracticePage.jsx";
+import VocabStudyPage from "./pages/VocabStudyPage.jsx";
 
 export default function App() {
   var _s = useState("dashboard");
@@ -52,6 +53,7 @@ export default function App() {
     { id: "ict", label: "ICT" },
     { id: "english1", label: "Eng 1st" },
     { id: "english2", label: "Eng 2nd" },
+    { id: "vocab", label: "Vocab" },
     { id: "test", label: "Test" },
     { id: "practice", label: "Board" },
   ];
@@ -61,6 +63,8 @@ export default function App() {
     content = <Dashboard setPage={setPage} />;
 } else if (page === "practice") {
     content = <BoardPracticePage />;
+} else if (page === "vocab") {
+    content = <VocabStudyPage />;
 } else if (page === "ict") {
     content = (
       <ICTPage jumpToTopicId={ictJumpId} clearJump={clearIctJump} />
