@@ -33,6 +33,28 @@ function Dashboard({ setPage }) {
   var daysLeft = Math.max(0, Math.ceil((examDate - today) / 86400000));
 
   var progress = loadProgress();
+  var weakTopics =
+    progress && progress.weakTopics ? progress.weakTopics : [];
+  var recommendation = {
+    paper: "English 2nd Paper",
+    section: "Q1 Prepositions",
+    reason: "Start with small grammar practice.",
+  };
+
+  if (progress && weakTopics.length > 0) {
+    var firstWeakTopic = weakTopics[0];
+    recommendation = {
+      paper: firstWeakTopic.subject || "Recommended section",
+      section: firstWeakTopic.source || "First weak topic",
+      reason: "Practice your first weak topic from the last test.",
+    };
+  } else if (progress) {
+    recommendation = {
+      paper: "English 1st Paper",
+      section: "Q3 Summary Writing",
+      reason: "Good for writing improvement.",
+    };
+  }
 
   return (
     <div style={{ padding: "20px 0" }}>
@@ -142,6 +164,71 @@ function Dashboard({ setPage }) {
             No test taken yet
           </p>
         )}
+      </div>
+
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #e2e8f0",
+          borderRadius: 12,
+          padding: "14px 16px",
+          marginBottom: 20,
+        }}
+      >
+        <p
+          style={{
+            fontSize: 12,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 8,
+            letterSpacing: 0.3,
+          }}
+        >
+          Recommended Practice
+        </p>
+        <h3 style={{ fontSize: 17, marginBottom: 4 }}>
+          {recommendation.paper}
+        </h3>
+        <p
+          style={{
+            fontSize: 14,
+            fontWeight: 700,
+            color: "#334155",
+            marginBottom: 6,
+            lineHeight: 1.5,
+          }}
+        >
+          {recommendation.section}
+        </p>
+        <p
+          style={{
+            fontSize: 13,
+            color: "#64748b",
+            lineHeight: 1.6,
+            marginBottom: 12,
+          }}
+        >
+          {recommendation.reason}
+        </p>
+        <button
+          onClick={function () {
+            setPage("practice");
+          }}
+          style={{
+            padding: "10px 14px",
+            border: "none",
+            borderRadius: 10,
+            background: "#6366f1",
+            color: "#fff",
+            fontSize: 14,
+            fontWeight: 700,
+            fontFamily: "inherit",
+            cursor: "pointer",
+            width: "100%",
+          }}
+        >
+          Practice Now
+        </button>
       </div>
 
       <p
