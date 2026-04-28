@@ -2678,6 +2678,46 @@ const clozeWithCluesTask = {
   ],
 };
 
+const clozeWithoutCluesTask = {
+  title: "Cloze Test without Clues",
+  marks: 10,
+  pattern: "Board pattern: 10 gaps x 1 = 10 marks.",
+  text:
+    "Education is the backbone of a nation. It helps people become (1) ___ and responsible. A good student should be regular, attentive and (2) ___. Without education, no nation can (3) ___. So, every child should get the opportunity to go to (4) ___ and learn properly. Education removes darkness and brings (5) ___.",
+  blanks: [
+    {
+      id: "cloze-no-clues-1",
+      number: 1,
+      answer: "skilled",
+      explanation: "Education helps people become skilled and responsible.",
+    },
+    {
+      id: "cloze-no-clues-2",
+      number: 2,
+      answer: "disciplined",
+      explanation: "A good student should be disciplined.",
+    },
+    {
+      id: "cloze-no-clues-3",
+      number: 3,
+      answer: "prosper",
+      explanation: "No nation can prosper without education.",
+    },
+    {
+      id: "cloze-no-clues-4",
+      number: 4,
+      answer: "school",
+      explanation: "Every child should get the opportunity to go to school.",
+    },
+    {
+      id: "cloze-no-clues-5",
+      number: 5,
+      answer: "light",
+      explanation: "Education removes darkness and brings light.",
+    },
+  ],
+};
+
 const paragraphTasks = [
   {
     id: "para-1",
@@ -4160,6 +4200,166 @@ function WritingPractice({ title, subtitle, tasks }) {
     );
   }
 
+  function ClozeWithoutCluesPractice({ taskData }) {
+    var score = 0;
+
+    taskData.blanks.forEach(function (blank) {
+      if (normalizeAnswer(answers[blank.id] || "") === blank.answer) {
+        score++;
+      }
+    });
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          â† Back
+        </button>
+
+        <h2>Q5 {taskData.title}</h2>
+        <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 8 }}>
+          {taskData.pattern}
+        </p>
+        <p
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 10,
+          }}
+        >
+          Marks: {taskData.marks}
+        </p>
+
+        <div
+          style={{
+            padding: 16,
+            border: "1px solid #e2e8f0",
+            borderRadius: 12,
+            background: "#fff",
+          }}
+        >
+          <p style={{ color: "#334155", lineHeight: 1.7, marginBottom: 14 }}>
+            {taskData.text}
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {taskData.blanks.map(function (blank) {
+              var userAnswer = answers[blank.id] || "";
+              var isCorrect =
+                normalizeAnswer(userAnswer) === blank.answer;
+
+              return (
+                <div key={blank.id}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontWeight: 700,
+                      marginBottom: 6,
+                    }}
+                  >
+                    Blank {blank.number}
+                  </label>
+
+                  <input
+                    value={userAnswer}
+                    onChange={(e) => updateAnswer(blank.id, e.target.value)}
+                    placeholder="Write answer here"
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      borderRadius: 10,
+                      border: "1px solid #cbd5e1",
+                      fontSize: 15,
+                      fontFamily: "inherit",
+                    }}
+                  />
+
+                  {checked && (
+                    <div
+                      style={{
+                        marginTop: 8,
+                        padding: 10,
+                        borderRadius: 10,
+                        background: isCorrect ? "#dcfce7" : "#fee2e2",
+                        color: isCorrect ? "#166534" : "#991b1b",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <p style={{ fontWeight: 700 }}>
+                        {isCorrect ? "Correct" : "Wrong"}
+                      </p>
+                      <p>
+                        Correct answer: <strong>{blank.answer}</strong>
+                      </p>
+                      <p>{blank.explanation}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {!checked ? (
+          <button
+            onClick={() => setChecked(true)}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "14px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            Check Answers
+          </button>
+        ) : (
+          <div
+            style={{
+              marginTop: 16,
+              padding: 16,
+              borderRadius: 12,
+              background: "#eef2ff",
+              border: "1px solid #c7d2fe",
+              textAlign: "center",
+            }}
+          >
+            <h3>
+              Score: {score}/{taskData.blanks.length}
+            </h3>
+
+            <button
+              onClick={resetPractice}
+              style={{
+                marginTop: 10,
+                padding: "10px 16px",
+                border: "none",
+                borderRadius: 10,
+                background: "#6366f1",
+                color: "#fff",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
 function WordBoxPractice({ title, subtitle, items, wordBox }) {
   var score = 0;
 
@@ -4422,6 +4622,10 @@ if (task === "clozeWithClues") {
   return <ClozeWithCluesPractice taskData={clozeWithCluesTask} />;
 }
 
+if (task === "clozeWithoutClues") {
+  return <ClozeWithoutCluesPractice taskData={clozeWithoutCluesTask} />;
+}
+
 if (task === "graphAnalysis") {
   return (
     <WritingPractice
@@ -4559,8 +4763,14 @@ if (task === "wordsPhrases") {
           Q4 Cloze Test with Clues — 5 marks
         </button>
 
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("clozeWithoutClues")}
+        >
+          Q5 Cloze Test without Clues — 10 marks
+        </button>
+
         {[
-          "Q5 Cloze Test without Clues — 10 marks",
           "Q6 Rearranging Sentences — 10 marks",
         ].map((item) => (
           <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
