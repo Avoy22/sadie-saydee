@@ -2285,6 +2285,27 @@ function BoardPracticePage() {
     },
   ];
 
+  const fullMockItems = [
+    {
+      id: "mock-ict",
+      title: "ICT Full Mock",
+      sections: ["MCQ: 25 marks", "Creative/Written: 50 marks"],
+      status: "Coming soon",
+    },
+    {
+      id: "mock-english1",
+      title: "English 1st Paper Full Mock",
+      sections: ["Reading Test: 60 marks", "Guided Writing: 40 marks"],
+      status: "Coming soon",
+    },
+    {
+      id: "mock-english2",
+      title: "English 2nd Paper Full Mock",
+      sections: ["Grammar: 60 marks", "Composition: 40 marks"],
+      status: "Coming soon",
+    },
+  ];
+
   const prepositionItems = [
     {
       id: "prep-1",
@@ -4754,6 +4775,73 @@ function WritingPractice({ title, subtitle, tasks }) {
     );
   }
 
+  function FullMockTestPage() {
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          Ã¢â€ Â Back
+        </button>
+
+        <h2>Full Mock Test</h2>
+        <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 16 }}>
+          Full mock tests will be added after all practice sections are stable.
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {fullMockItems.map(function (mock) {
+            return (
+              <div
+                key={mock.id}
+                style={{
+                  padding: 16,
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 12,
+                  background: "#fff",
+                }}
+              >
+                <h3 style={{ marginBottom: 10 }}>{mock.title}</h3>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 6,
+                    color: "#334155",
+                    lineHeight: 1.6,
+                    marginBottom: 12,
+                  }}
+                >
+                  {mock.sections.map(function (sectionText) {
+                    return <p key={sectionText}>{sectionText}</p>;
+                  })}
+                </div>
+                <p
+                  style={{
+                    display: "inline-block",
+                    padding: "6px 10px",
+                    borderRadius: 999,
+                    background: "#eef2ff",
+                    border: "1px solid #c7d2fe",
+                    color: "#3730a3",
+                    fontSize: 13,
+                    fontWeight: 700,
+                  }}
+                >
+                  Status: {mock.status}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   function BroadQuestionPractice({ taskData }) {
     return (
       <div style={{ padding: "10px 0" }}>
@@ -5879,6 +5967,10 @@ if (task === "ictCreative") {
   return <ICTCreativePractice />;
 }
 
+if (task === "fullMock") {
+  return <FullMockTestPage />;
+}
+
 if (task === "passageBroadQuestions") {
   return <BroadQuestionPractice taskData={passageBroadQuestionTask} />;
 }
@@ -6215,6 +6307,11 @@ if (task === "wordsPhrases") {
         <button style={cardStyle} onClick={() => setSection("english2")}>
           <h3>English 2nd Paper</h3>
           <p>Grammar + Composition</p>
+        </button>
+
+        <button style={cardStyle} onClick={() => openTask("fullMock")}>
+          <h3>Full Mock Test</h3>
+          <p>ICT + English full mock skeleton</p>
         </button>
       </div>
     </div>
