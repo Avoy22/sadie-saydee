@@ -2622,6 +2622,26 @@ const compositionTasks = [
   },
 ];
 
+const summaryTasks = [
+  {
+    id: "summary-1",
+    title: "Summary Writing",
+    question: "Write a summary of the given text in your own words.",
+    passage:
+      "Money is useful, but it should be spent wisely. Many students spend money on things they do not really need. They may buy extra snacks, costly clothes or unnecessary mobile data. This habit can create problems later. A wise person makes a plan before spending money. We should first spend on necessary things such as food, books, education and health. We should also save a little money for future needs. Spending wisely teaches us discipline and helps us live a better life.",
+    marks: 10,
+    modelAnswer:
+      "Money should be used carefully. We should avoid spending on unnecessary things and make a plan before buying anything. Necessary needs like food, education, books and health should come first. Saving some money is also important. Wise spending makes us disciplined and helps us in future.",
+    keyPoints: [
+      "Use your own words",
+      "Keep only the main ideas",
+      "Avoid examples and extra details",
+      "Make it shorter than the passage",
+      "Write in clear sentences",
+    ],
+  },
+];
+
   const cardStyle = {
     padding: 16,
     border: "1px solid #e2e8f0",
@@ -3448,6 +3468,23 @@ function WritingPractice({ title, subtitle, tasks }) {
                 {item.question}
               </p>
 
+              {item.passage && (
+                <div
+                  style={{
+                    marginBottom: 10,
+                    padding: 12,
+                    borderRadius: 10,
+                    background: "#f8fafc",
+                    border: "1px solid #e2e8f0",
+                    color: "#334155",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  <p style={{ fontWeight: 700, marginBottom: 6 }}>Passage:</p>
+                  <p>{item.passage}</p>
+                </div>
+              )}
+
               <p
                 style={{
                   fontSize: 13,
@@ -3809,6 +3846,16 @@ if (task === "composition") {
   );
 }
 
+if (task === "summary") {
+  return (
+    <WritingPractice
+      title="Q3 Summary Writing"
+      subtitle="Board pattern: 10 marks. Main ideas নিজের ভাষায় ছোট করে লিখতে হবে।"
+      tasks={summaryTasks}
+    />
+  );
+}
+
   if (task === "connectors") {
   return (
     <FillPractice
@@ -3900,7 +3947,20 @@ if (task === "wordsPhrases") {
           "Q1A Passage MCQ — 5 marks",
           "Q1B Broad Questions — 15 marks",
           "Q2 Flow Chart — 5 marks",
-          "Q3 Summary Writing — 10 marks",
+        ].map((item) => (
+          <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
+            {item}
+          </div>
+        ))}
+
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("summary")}
+        >
+          Q3 Summary Writing — 10 marks
+        </button>
+
+        {[
           "Q4 Cloze Test with Clues — 5 marks",
           "Q5 Cloze Test without Clues — 10 marks",
           "Q6 Rearranging Sentences — 10 marks",
