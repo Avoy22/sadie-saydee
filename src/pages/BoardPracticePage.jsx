@@ -49,6 +49,7 @@ export default function BoardPracticePage() {
   const [ictFullExamQuestionsPicked, setIctFullExamQuestionsPicked] = useState([]);
   const [ictFullExamTimeLeft, setIctFullExamTimeLeft] = useState(1500);
   const [ictFullExamCurrentIndex, setIctFullExamCurrentIndex] = useState(0);
+  const [ictFullExamShowWrongOnly, setIctFullExamShowWrongOnly] = useState(false);
   const [readingTestStage, setReadingTestStage] = useState("start");
   const [readingTestTimeLeft, setReadingTestTimeLeft] = useState(3600);
   const [eng2FullExamStage, setEng2FullExamStage] = useState("start");
@@ -477,6 +478,7 @@ export default function BoardPracticePage() {
     setIctFullExamQuestionsPicked([]);
     setIctFullExamTimeLeft(1500);
     setIctFullExamCurrentIndex(0);
+    setIctFullExamShowWrongOnly(false);
     setReadingTestStage("start");
     setReadingTestTimeLeft(3600);
     setEng2FullExamStage("start");
@@ -755,6 +757,7 @@ export default function BoardPracticePage() {
     setIctFullExamQuestionsPicked(picked);
     setIctFullExamTimeLeft(1500);
     setIctFullExamCurrentIndex(0);
+    setIctFullExamShowWrongOnly(false);
     setIctFullExamStage("running");
   }
 
@@ -4046,6 +4049,35 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
     var total = ictFullExamQuestionsPicked.length;
     var percentage = total > 0 ? Math.round((score / total) * 100) : 0;
     var currentQuestion = ictFullExamQuestionsPicked[ictFullExamCurrentIndex];
+    var ictFullExamWrongQuestions = ictFullExamQuestionsPicked.filter(function (mcq) {
+      return answers[mcq.id] !== mcq.correctAnswer;
+    });
+    var ictFullExamReviewQuestions = ictFullExamShowWrongOnly
+      ? ictFullExamWrongQuestions
+      : ictFullExamQuestionsPicked;
+    var ictFullExamTopicMap = {};
+
+    ictFullExamQuestionsPicked.forEach(function (mcq) {
+      var topic = mcq.topic || "General ICT";
+      if (!ictFullExamTopicMap[topic]) {
+        ictFullExamTopicMap[topic] = { topic: topic, correct: 0, total: 0 };
+      }
+      ictFullExamTopicMap[topic].total++;
+      if (answers[mcq.id] === mcq.correctAnswer) {
+        ictFullExamTopicMap[topic].correct++;
+      }
+    });
+
+    var ictFullExamTopicBreakdown = Object.keys(ictFullExamTopicMap).map(
+      function (topic) {
+        return ictFullExamTopicMap[topic];
+      }
+    );
+    var ictFullExamMessage =
+      percentage >= 70
+        ? "Passed. Strong ICT preparation."
+        : "Needs improvement. Review the wrong answers and retake.";
+    var ictFullExamTimeUsed = 1500 - ictFullExamTimeLeft;
 
     if (ictFullExamStage === "start") {
       return (
@@ -4119,25 +4151,104 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
             style={{
               marginTop: 12,
               marginBottom: 16,
-              padding: 16,
-              borderRadius: 12,
-              background: "#eef2ff",
-              border: "1px solid #c7d2fe",
+              padding: 18,
+              borderRadius: 24,
+              background: "linear-gradient(135deg, #7c3aed, #ec4899)",
+              border: "1px solid #eadcff",
               textAlign: "center",
-              color: "#334155",
+              color: "#fff",
+              boxShadow: "0 18px 38px rgba(124, 58, 237, 0.24)",
             }}
           >
-            <p style={{ fontSize: 13, fontWeight: 700, color: "#6366f1" }}>
+            <p style={{ fontSize: 13, fontWeight: 800, opacity: 0.88 }}>
               Score
             </p>
-            <p style={{ fontSize: 30, fontWeight: 800, margin: "4px 0" }}>
+            <p style={{ fontSize: 38, fontWeight: 900, margin: "4px 0" }}>
               {score}/{total}
             </p>
-            <p style={{ fontWeight: 700 }}>{percentage}%</p>
+            <p style={{ fontWeight: 800 }}>{percentage}%</p>
+            <p style={{ fontSize: 13, opacity: 0.9, marginTop: 8 }}>
+              Time used: {formatMiniMockTime(ictFullExamTimeUsed)}
+            </p>
           </div>
 
+          <div
+            style={{
+              marginBottom: 16,
+              padding: "14px 16px",
+              borderRadius: 18,
+              background: percentage >= 70 ? "#dcfce7" : "#fef3c7",
+              border: percentage >= 70 ? "1px solid #bbf7d0" : "1px solid #fde68a",
+              color: percentage >= 70 ? "#166534" : "#92400e",
+              textAlign: "center",
+              fontWeight: 800,
+            }}
+          >
+            {ictFullExamMessage}
+          </div>
+
+          {ictFullExamTopicBreakdown.length > 0 && (
+            <div
+              style={{
+                marginBottom: 16,
+                padding: 16,
+                borderRadius: 20,
+                background: "#fff",
+                border: "1px solid #eadcff",
+                boxShadow: "0 12px 30px rgba(124, 58, 237, 0.08)",
+              }}
+            >
+              <p style={{ fontWeight: 900, color: "#27103f", marginBottom: 10 }}>
+                Topic breakdown
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {ictFullExamTopicBreakdown.map(function (item) {
+                  var itemPercentage = Math.round((item.correct / item.total) * 100);
+                  return (
+                    <div
+                      key={item.topic}
+                      style={{
+                        padding: "10px 12px",
+                        borderRadius: 14,
+                        background: "#f5edff",
+                        border: "1px solid #eadcff",
+                      }}
+                    >
+                      <p style={{ fontSize: 13, fontWeight: 800, color: "#334155" }}>
+                        {item.topic}
+                      </p>
+                      <p style={{ fontSize: 12, color: "#64748b", fontWeight: 700 }}>
+                        {item.correct}/{item.total} correct - {itemPercentage}%
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {ictFullExamWrongQuestions.length > 0 && (
+            <button
+              onClick={() => setIctFullExamShowWrongOnly(!ictFullExamShowWrongOnly)}
+              style={{
+                marginBottom: 14,
+                width: "100%",
+                padding: "12px 16px",
+                border: "1px solid #eadcff",
+                borderRadius: 16,
+                background: ictFullExamShowWrongOnly ? "#7c3aed" : "#fff",
+                color: ictFullExamShowWrongOnly ? "#fff" : "#7c3aed",
+                fontWeight: 800,
+                fontFamily: "inherit",
+                cursor: "pointer",
+              }}
+            >
+              {ictFullExamShowWrongOnly ? "Show All Questions" : "Review Wrong Answers"}
+            </button>
+          )}
+
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {ictFullExamQuestionsPicked.map(function (mcq, index) {
+            {ictFullExamReviewQuestions.map(function (mcq, index) {
               var selected = answers[mcq.id];
               var isCorrect = selected === mcq.correctAnswer;
 
@@ -4146,9 +4257,10 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
                   key={mcq.id}
                   style={{
                     padding: 16,
-                    border: "1px solid #e2e8f0",
-                    borderRadius: 12,
+                    border: isCorrect ? "1px solid #bbf7d0" : "1px solid #fecaca",
+                    borderRadius: 18,
                     background: "#fff",
+                    boxShadow: "0 10px 24px rgba(124, 58, 237, 0.06)",
                   }}
                 >
                   <p
@@ -4158,7 +4270,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
                       marginBottom: 10,
                     }}
                   >
-                    Q{index + 1}. {mcq.question}
+                    {ictFullExamShowWrongOnly ? "Wrong " + (index + 1) : "Q" + (index + 1)}. {mcq.question}
                   </p>
                   <p
                     style={{
@@ -4196,6 +4308,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
               setIctFullExamQuestionsPicked([]);
               setIctFullExamTimeLeft(1500);
               setIctFullExamCurrentIndex(0);
+              setIctFullExamShowWrongOnly(false);
               setIctFullExamStage("start");
             }}
             style={{
@@ -4212,7 +4325,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
               cursor: "pointer",
             }}
           >
-            Try Again
+            Retake Exam
           </button>
         </div>
       );

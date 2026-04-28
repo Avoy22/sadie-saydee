@@ -16,11 +16,26 @@ export default function TestPage({ goToTopic }) {
   var answers = _a[0];
   var setAnswers = _a[1];
 
+  var _time = useState(null);
+  var testStartedAt = _time[0];
+  var setTestStartedAt = _time[1];
+
+  var _used = useState(null);
+  var timeUsedSeconds = _used[0];
+  var setTimeUsedSeconds = _used[1];
+
+  var _review = useState(false);
+  var showWrongOnly = _review[0];
+  var setShowWrongOnly = _review[1];
+
   function startTest() {
     var all = collectAllMCQs();
     var picked = shuffleAndPick(all, Math.min(10, all.length));
     setQuestions(picked);
     setAnswers({});
+    setShowWrongOnly(false);
+    setTimeUsedSeconds(null);
+    setTestStartedAt(Date.now());
     setStage("running");
   }
 
@@ -63,11 +78,18 @@ export default function TestPage({ goToTopic }) {
       if (answers[q.id] === q.correctAnswer) correctCount++;
     });
 
+    var finishedAt = Date.now();
+    var nextTimeUsedSeconds = testStartedAt
+      ? Math.max(0, Math.round((finishedAt - testStartedAt) / 1000))
+      : null;
+    setTimeUsedSeconds(nextTimeUsedSeconds);
+
     // Save to localStorage
     saveProgress({
       score: correctCount,
       total: questions.length,
       weakTopics: weakTopicList,
+      timeUsedSeconds: nextTimeUsedSeconds,
       date: formatDateISO(new Date()),
     });
 
@@ -78,6 +100,16 @@ export default function TestPage({ goToTopic }) {
     setStage("intro");
     setQuestions([]);
     setAnswers({});
+    setShowWrongOnly(false);
+    setTimeUsedSeconds(null);
+    setTestStartedAt(null);
+  }
+
+  function formatTime(seconds) {
+    if (seconds === null || seconds === undefined) return "Not available";
+    var minutes = Math.floor(seconds / 60);
+    var rest = seconds % 60;
+    return minutes + "m " + String(rest).padStart(2, "0") + "s";
   }
 
   if (stage === "intro") {
@@ -253,20 +285,45 @@ export default function TestPage({ goToTopic }) {
   });
   var total = questions.length;
   var percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+  var wrongQuestions = questions.filter(function (q) {
+    return answers[q.id] !== q.correctAnswer;
+  });
+  var reviewQuestions = showWrongOnly ? wrongQuestions : questions;
+  var sectionMap = {};
+
+  questions.forEach(function (q) {
+    var label = q.subject + " - " + q.source;
+    if (!sectionMap[label]) {
+      sectionMap[label] = {
+        label: label,
+        subjectKey: q.subjectKey,
+        correct: 0,
+        total: 0,
+      };
+    }
+    sectionMap[label].total++;
+    if (answers[q.id] === q.correctAnswer) {
+      sectionMap[label].correct++;
+    }
+  });
+
+  var sectionBreakdown = Object.keys(sectionMap).map(function (key) {
+    return sectionMap[key];
+  });
 
   var feedbackText = "";
   var feedbackColor = "";
   var feedbackBg = "";
   if (percentage >= 70) {
-    feedbackText = "Great job! \uD83C\uDF1F";
+    feedbackText = "Passed. Strong work - keep this rhythm.";
     feedbackColor = "#166534";
     feedbackBg = "#dcfce7";
   } else if (percentage >= 40) {
-    feedbackText = "Keep practicing \uD83D\uDCAA";
+    feedbackText = "Improving. Review the weak spots and try again.";
     feedbackColor = "#92400e";
     feedbackBg = "#fef3c7";
   } else {
-    feedbackText = "Read again and try again \uD83D\uDCDA";
+    feedbackText = "Needs practice. Start with the wrong answers below.";
     feedbackColor = "#991b1b";
     feedbackBg = "#fee2e2";
   }
@@ -308,28 +365,32 @@ export default function TestPage({ goToTopic }) {
 
   return (
     <div style={{ padding: "10px 0" }}>
-      <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 16 }}>
+      <h2 style={{ fontSize: 22, fontWeight: 900, marginBottom: 16 }}>
         Test Result
       </h2>
 
       <div
         style={{
-          background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-          borderRadius: 14,
-          padding: "24px 16px",
+          background: "linear-gradient(135deg, #7c3aed, #ec4899)",
+          borderRadius: 24,
+          padding: "24px 18px",
           color: "#fff",
           textAlign: "center",
           marginBottom: 16,
+          boxShadow: "0 18px 38px rgba(124, 58, 237, 0.24)",
         }}
       >
         <p style={{ fontSize: 13, opacity: 0.85, marginBottom: 4 }}>
           Your score
         </p>
-        <p style={{ fontSize: 48, fontWeight: 800, margin: "2px 0" }}>
+        <p style={{ fontSize: 48, fontWeight: 900, margin: "2px 0" }}>
           {correct}/{total}
         </p>
-        <p style={{ fontSize: 16, opacity: 0.95, fontWeight: 600 }}>
+        <p style={{ fontSize: 16, opacity: 0.95, fontWeight: 800 }}>
           {percentage}%
+        </p>
+        <p style={{ fontSize: 13, opacity: 0.9, marginTop: 8 }}>
+          Time used: {formatTime(timeUsedSeconds)}
         </p>
       </div>
 
@@ -337,16 +398,75 @@ export default function TestPage({ goToTopic }) {
         style={{
           background: feedbackBg,
           color: feedbackColor,
-          borderRadius: 12,
+          borderRadius: 18,
           padding: "14px 16px",
           textAlign: "center",
-          fontWeight: 700,
+          fontWeight: 800,
           fontSize: 15,
           marginBottom: 16,
+          border: "1px solid rgba(255,255,255,0.65)",
         }}
       >
         {feedbackText}
       </div>
+
+      {sectionBreakdown.length > 0 && (
+        <div
+          style={{
+            background: "#fff",
+            border: "1px solid #eadcff",
+            borderRadius: 20,
+            padding: "16px",
+            marginBottom: 16,
+            boxShadow: "0 12px 30px rgba(124, 58, 237, 0.08)",
+          }}
+        >
+          <p
+            style={{
+              fontSize: 15,
+              fontWeight: 900,
+              color: "#27103f",
+              marginBottom: 10,
+            }}
+          >
+            Section-wise feedback
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {sectionBreakdown.map(function (item) {
+              var itemPercentage = Math.round((item.correct / item.total) * 100);
+              return (
+                <div
+                  key={item.label}
+                  style={{
+                    padding: "10px 12px",
+                    borderRadius: 14,
+                    background: item.subjectKey === "ict" ? "#f5edff" : "#fff1f8",
+                    border:
+                      item.subjectKey === "ict"
+                        ? "1px solid #eadcff"
+                        : "1px solid #fbcfe8",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 800,
+                      color: "#334155",
+                      lineHeight: 1.5,
+                      marginBottom: 3,
+                    }}
+                  >
+                    {item.label}
+                  </p>
+                  <p style={{ fontSize: 12, color: "#64748b", fontWeight: 700 }}>
+                    {item.correct}/{item.total} correct - {itemPercentage}%
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {weakTopics.length > 0 && (
         <div style={{ marginBottom: 16 }}>
@@ -413,18 +533,47 @@ export default function TestPage({ goToTopic }) {
         </div>
       )}
 
-      <p
+      <div
         style={{
-          fontSize: 15,
-          fontWeight: 700,
-          color: "#1e293b",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 10,
           marginBottom: 10,
         }}
       >
-        Review
-      </p>
+        <p
+          style={{
+            fontSize: 15,
+            fontWeight: 900,
+            color: "#27103f",
+          }}
+        >
+          Review
+        </p>
+        {wrongQuestions.length > 0 && (
+          <button
+            onClick={function () {
+              setShowWrongOnly(!showWrongOnly);
+            }}
+            style={{
+              padding: "8px 12px",
+              border: "1px solid #eadcff",
+              borderRadius: 14,
+              background: showWrongOnly ? "#7c3aed" : "#fff",
+              color: showWrongOnly ? "#fff" : "#7c3aed",
+              fontSize: 12,
+              fontWeight: 800,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            {showWrongOnly ? "Show All" : "Review Wrong Answers"}
+          </button>
+        )}
+      </div>
 
-      {questions.map(function (q, idx) {
+      {reviewQuestions.map(function (q, idx) {
         var userAns = answers[q.id];
         var isCorrect = userAns === q.correctAnswer;
         var unanswered = typeof userAns !== "number";
@@ -433,10 +582,11 @@ export default function TestPage({ goToTopic }) {
             key={q.id}
             style={{
               background: "#fff",
-              border: "1px solid #e2e8f0",
-              borderRadius: 12,
+              border: isCorrect ? "1px solid #dcfce7" : "1px solid #fecaca",
+              borderRadius: 18,
               padding: "14px 16px",
               marginBottom: 10,
+              boxShadow: "0 10px 24px rgba(124, 58, 237, 0.06)",
             }}
           >
             <p
@@ -458,7 +608,7 @@ export default function TestPage({ goToTopic }) {
                 lineHeight: 1.6,
               }}
             >
-              {idx + 1}. {q.question}
+              {showWrongOnly ? "Wrong " + (idx + 1) : idx + 1}. {q.question}
             </p>
             <p
               style={{
@@ -475,12 +625,25 @@ export default function TestPage({ goToTopic }) {
                 : "Wrong"}
             </p>
             <p style={{ fontSize: 13, color: "#475569", marginBottom: 2 }}>
+              Your answer:{" "}
+              <strong>
+                {unanswered
+                  ? "No answer"
+                  : String.fromCharCode(65 + userAns) + ". " + q.options[userAns]}
+              </strong>
+            </p>
+            <p style={{ fontSize: 13, color: "#475569", marginBottom: 2 }}>
               Correct answer:{" "}
               <strong>
                 {String.fromCharCode(65 + q.correctAnswer)}.{" "}
                 {q.options[q.correctAnswer]}
               </strong>
             </p>
+            {q.explanation && (
+              <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.7 }}>
+                {q.explanation}
+              </p>
+            )}
           </div>
         );
       })}
@@ -491,14 +654,15 @@ export default function TestPage({ goToTopic }) {
           marginTop: 10,
           padding: "14px 20px",
           fontSize: 16,
-          fontWeight: 700,
+          fontWeight: 800,
           fontFamily: "inherit",
           border: "none",
-          borderRadius: 12,
-          background: "#6366f1",
+          borderRadius: 18,
+          background: "linear-gradient(135deg, #7c3aed, #ec4899)",
           color: "#fff",
           cursor: "pointer",
           width: "100%",
+          boxShadow: "0 12px 24px rgba(124, 58, 237, 0.22)",
         }}
       >
         Retake Test
