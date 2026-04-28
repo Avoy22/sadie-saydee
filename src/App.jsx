@@ -2718,6 +2718,29 @@ const clozeWithoutCluesTask = {
   ],
 };
 
+const rearrangingTask = {
+  title: "Rearranging Sentences",
+  marks: 10,
+  instruction:
+    "Rearrange the following sentences to make a meaningful story.",
+  sentences: [
+    { label: "a", text: "He saw a thirsty crow." },
+    { label: "b", text: "The crow found a pitcher." },
+    { label: "c", text: "Once there was a farmer." },
+    { label: "d", text: "There was a little water at the bottom." },
+    { label: "e", text: "The crow dropped stones into the pitcher." },
+    { label: "f", text: "The water rose up." },
+    { label: "g", text: "The crow drank the water." },
+    { label: "h", text: "The farmer watched the clever crow." },
+    { label: "i", text: "He became very surprised." },
+    { label: "j", text: "The crow flew away happily." },
+  ],
+  answerId: "rearrange-1",
+  correctOrder: ["c", "a", "b", "d", "e", "f", "g", "h", "i", "j"],
+  explanation:
+    "The story starts with the farmer, then the crow finds water, drops stones, drinks the water, and finally flies away.",
+};
+
 const paragraphTasks = [
   {
     id: "para-1",
@@ -4360,6 +4383,169 @@ function WritingPractice({ title, subtitle, tasks }) {
     );
   }
 
+  function RearrangingPractice({ taskData }) {
+    var userOrder = answers[taskData.answerId] || "";
+    var normalizedOrder = userOrder
+      .split(",")
+      .map(function (item) {
+        return item.trim().toLowerCase();
+      })
+      .filter(Boolean);
+    var isCorrect =
+      normalizedOrder.join(",") === taskData.correctOrder.join(",");
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          â† Back
+        </button>
+
+        <h2>Q6 {taskData.title}</h2>
+        <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 8 }}>
+          {taskData.instruction}
+        </p>
+        <p
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 10,
+          }}
+        >
+          Marks: {taskData.marks}
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {taskData.sentences.map(function (sentence) {
+            return (
+              <div
+                key={sentence.label}
+                style={{
+                  padding: 12,
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 10,
+                  background: "#fff",
+                  color: "#334155",
+                  lineHeight: 1.5,
+                }}
+              >
+                <strong>{sentence.label}.</strong> {sentence.text}
+              </div>
+            );
+          })}
+        </div>
+
+        <div
+          style={{
+            marginTop: 16,
+            padding: 16,
+            border: "1px solid #e2e8f0",
+            borderRadius: 12,
+            background: "#fff",
+          }}
+        >
+          <label
+            style={{
+              display: "block",
+              fontWeight: 700,
+              marginBottom: 6,
+            }}
+          >
+            Write the correct order
+          </label>
+
+          <input
+            value={userOrder}
+            onChange={(e) => updateAnswer(taskData.answerId, e.target.value)}
+            placeholder="c, a, b, d, e, f, g, h, i, j"
+            style={{
+              width: "100%",
+              padding: "12px",
+              borderRadius: 10,
+              border: "1px solid #cbd5e1",
+              fontSize: 15,
+              fontFamily: "inherit",
+            }}
+          />
+
+          {checked && (
+            <div
+              style={{
+                marginTop: 10,
+                padding: 12,
+                borderRadius: 10,
+                background: isCorrect ? "#dcfce7" : "#fee2e2",
+                color: isCorrect ? "#166534" : "#991b1b",
+                lineHeight: 1.6,
+              }}
+            >
+              <p style={{ fontWeight: 700 }}>
+                {isCorrect ? "Correct" : "Wrong"}
+              </p>
+              <p>
+                Correct order:{" "}
+                <strong>{taskData.correctOrder.join(", ")}</strong>
+              </p>
+              <p>{taskData.explanation}</p>
+            </div>
+          )}
+        </div>
+
+        {!checked ? (
+          <button
+            onClick={() => setChecked(true)}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "14px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            Check Answer
+          </button>
+        ) : (
+          <div
+            style={{
+              marginTop: 16,
+              padding: 16,
+              borderRadius: 12,
+              background: "#eef2ff",
+              border: "1px solid #c7d2fe",
+              textAlign: "center",
+            }}
+          >
+            <button
+              onClick={resetPractice}
+              style={{
+                padding: "10px 16px",
+                border: "none",
+                borderRadius: 10,
+                background: "#6366f1",
+                color: "#fff",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
 function WordBoxPractice({ title, subtitle, items, wordBox }) {
   var score = 0;
 
@@ -4626,6 +4812,10 @@ if (task === "clozeWithoutClues") {
   return <ClozeWithoutCluesPractice taskData={clozeWithoutCluesTask} />;
 }
 
+if (task === "rearranging") {
+  return <RearrangingPractice taskData={rearrangingTask} />;
+}
+
 if (task === "graphAnalysis") {
   return (
     <WritingPractice
@@ -4770,13 +4960,12 @@ if (task === "wordsPhrases") {
           Q5 Cloze Test without Clues — 10 marks
         </button>
 
-        {[
-          "Q6 Rearranging Sentences — 10 marks",
-        ].map((item) => (
-          <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
-            {item}
-          </div>
-        ))}
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("rearranging")}
+        >
+          Q6 Rearranging Sentences — 10 marks
+        </button>
 
         <h3 style={{ marginTop: 18 }}>Part II — Guided Writing: 40 marks</h3>
         <button
