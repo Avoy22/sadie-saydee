@@ -2622,6 +2622,33 @@ const compositionTasks = [
   },
 ];
 
+const graphAnalysisTasks = [
+  {
+    id: "graph-1",
+    title: "Graph / Chart Analysis",
+    question: "Describe the graph/chart in 150 words.",
+    marks: 15,
+    table: {
+      headers: ["Year", "Internet Users (%)"],
+      rows: [
+        ["2018", "45"],
+        ["2019", "50"],
+        ["2020", "58"],
+        ["2021", "65"],
+        ["2022", "72"],
+      ],
+    },
+    modelAnswer:
+      "The chart shows the percentage of internet users from 2018 to 2022. In 2018, internet users were 45%. The number increased to 50% in 2019 and 58% in 2020. The rising trend continued in 2021, when it reached 65%. Finally, in 2022, the percentage became 72%. The chart clearly shows a steady increase every year. The highest percentage was in 2022 and the lowest was in 2018. So, it can be said that internet use increased rapidly during these five years.",
+    keyPoints: [
+      "introduction",
+      "trend description",
+      "comparison",
+      "conclusion",
+    ],
+  },
+];
+
 const summaryTasks = [
   {
     id: "summary-1",
@@ -3503,6 +3530,58 @@ function WritingPractice({ title, subtitle, tasks }) {
                 {item.question}
               </p>
 
+              {item.table && (
+                <table
+                  style={{
+                    width: "100%",
+                    marginBottom: 10,
+                    borderCollapse: "collapse",
+                    color: "#334155",
+                  }}
+                >
+                  <thead>
+                    <tr>
+                      {item.table.headers.map(function (header) {
+                        return (
+                          <th
+                            key={header}
+                            style={{
+                              padding: 10,
+                              border: "1px solid #cbd5e1",
+                              background: "#f8fafc",
+                              textAlign: "left",
+                            }}
+                          >
+                            {header}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {item.table.rows.map(function (row) {
+                      return (
+                        <tr key={row.join("-")}>
+                          {row.map(function (cell, cellIndex) {
+                            return (
+                              <td
+                                key={cellIndex}
+                                style={{
+                                  padding: 10,
+                                  border: "1px solid #cbd5e1",
+                                }}
+                              >
+                                {cell}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+
               {item.passage && (
                 <div
                   style={{
@@ -3891,6 +3970,16 @@ if (task === "summary") {
   );
 }
 
+if (task === "graphAnalysis") {
+  return (
+    <WritingPractice
+      title="Q7 Graph / Chart Analysis"
+      subtitle="Board pattern: 15 marks. Data দেখে introduction, trend, comparison এবং conclusion লিখতে হবে।"
+      tasks={graphAnalysisTasks}
+    />
+  );
+}
+
 if (task === "informalLetter") {
   return (
     <WritingPractice
@@ -4016,8 +4105,14 @@ if (task === "wordsPhrases") {
         ))}
 
         <h3 style={{ marginTop: 18 }}>Part II — Guided Writing: 40 marks</h3>
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("graphAnalysis")}
+        >
+          Q7 Graph / Chart Analysis — 15 marks
+        </button>
+
         {[
-          "Q7 Graph / Chart Analysis — 15 marks",
           "Q8 Story Completion — 15 marks",
         ].map((item) => (
           <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
