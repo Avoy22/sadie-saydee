@@ -2677,6 +2677,55 @@ const passageBroadQuestionTask = {
   ],
 };
 
+const flowChartTask = {
+  title: "Flow Chart / Information Transfer",
+  marks: 5,
+  pattern: "Board pattern: 5 blanks x 1 = 5 marks.",
+  passage:
+    "Trees are essential for our environment. They provide oxygen, food, and shelter. Without trees, life on earth would be impossible. However, people are cutting trees rapidly, which is causing environmental imbalance. We should plant more trees and protect our forests.",
+  instruction:
+    "Complete the flow chart with information from the passage.",
+  start: "Importance of trees",
+  items: [
+    {
+      id: "flow-1",
+      number: 1,
+      before: "provide",
+      answer: "oxygen",
+      explanation: "The passage says trees provide oxygen.",
+    },
+    {
+      id: "flow-2",
+      number: 2,
+      before: "provide",
+      answer: "food",
+      explanation: "The passage says trees provide food.",
+    },
+    {
+      id: "flow-3",
+      number: 3,
+      before: "provide",
+      answer: "shelter",
+      explanation: "The passage says trees provide shelter.",
+    },
+    {
+      id: "flow-4",
+      number: 4,
+      before: "prevent environmental",
+      answer: "imbalance",
+      explanation:
+        "Protecting trees helps prevent environmental imbalance.",
+    },
+    {
+      id: "flow-5",
+      number: 5,
+      before: "we should protect",
+      answer: "forests",
+      explanation: "The passage says we should protect our forests.",
+    },
+  ],
+};
+
 const clozeWithCluesTask = {
   title: "Cloze Test with Clues",
   marks: 5,
@@ -2897,6 +2946,26 @@ const summaryTasks = [
       "Avoid examples and extra details",
       "Make it shorter than the passage",
       "Write in clear sentences",
+    ],
+  },
+];
+
+const storyCompletionTasks = [
+  {
+    id: "story-1",
+    title: "Story Completion",
+    question: "Complete the story in about 150 words.",
+    storyBeginning:
+      "Once there lived a poor farmer in a village. He had a small piece of land. He worked hard every day, but he could not earn enough money for his family. One day, while working in the field, he found a small bag under a tree...",
+    marks: 15,
+    modelAnswer:
+      "He opened the bag and found some gold coins inside it. At first, he became very happy. He thought that the money would solve all his problems. But soon he remembered that the bag might belong to someone else. So, he went to the village headman and gave him the bag. After some time, a rich man came there and said that he had lost his bag. The headman returned it to him. The rich man was pleased with the farmer's honesty and gave him a reward. The farmer returned home happily. From that day, everyone in the village respected him. Honesty is always rewarded.",
+    keyPoints: [
+      "continue from the given beginning",
+      "keep story logical",
+      "use simple past tense",
+      "give a clear ending",
+      "include a moral if possible",
     ],
   },
 ];
@@ -3831,6 +3900,25 @@ function WritingPractice({ title, subtitle, tasks }) {
                 </div>
               )}
 
+              {item.storyBeginning && (
+                <div
+                  style={{
+                    marginBottom: 10,
+                    padding: 12,
+                    borderRadius: 10,
+                    background: "#f8fafc",
+                    border: "1px solid #e2e8f0",
+                    color: "#334155",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  <p style={{ fontWeight: 700, marginBottom: 6 }}>
+                    Story beginning:
+                  </p>
+                  <p>{item.storyBeginning}</p>
+                </div>
+              )}
+
               <p
                 style={{
                   fontSize: 13,
@@ -4232,6 +4320,185 @@ function WritingPractice({ title, subtitle, tasks }) {
             <button
               onClick={resetPractice}
               style={{
+                padding: "10px 16px",
+                border: "none",
+                borderRadius: 10,
+                background: "#6366f1",
+                color: "#fff",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function FlowChartPractice({ taskData }) {
+    var score = 0;
+
+    taskData.items.forEach(function (item) {
+      if (normalizeAnswer(answers[item.id] || "") === item.answer) {
+        score++;
+      }
+    });
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          â† Back
+        </button>
+
+        <h2>Q2 {taskData.title}</h2>
+        <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 8 }}>
+          {taskData.pattern}
+        </p>
+        <p
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 10,
+          }}
+        >
+          Marks: {taskData.marks}
+        </p>
+
+        <div
+          style={{
+            padding: 16,
+            border: "1px solid #e2e8f0",
+            borderRadius: 12,
+            background: "#f8fafc",
+            color: "#334155",
+            lineHeight: 1.7,
+            marginBottom: 16,
+          }}
+        >
+          <p style={{ fontWeight: 700, marginBottom: 6 }}>Passage:</p>
+          <p>{taskData.passage}</p>
+        </div>
+
+        <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 12 }}>
+          {taskData.instruction}
+        </p>
+
+        <div
+          style={{
+            padding: 16,
+            border: "1px solid #e2e8f0",
+            borderRadius: 12,
+            background: "#fff",
+          }}
+        >
+          <p style={{ fontWeight: 700, marginBottom: 12 }}>
+            {taskData.start} →
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {taskData.items.map(function (item) {
+              var userAnswer = answers[item.id] || "";
+              var isCorrect =
+                normalizeAnswer(userAnswer) === item.answer;
+
+              return (
+                <div key={item.id}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontWeight: 700,
+                      marginBottom: 6,
+                    }}
+                  >
+                    {item.number}. {item.before} ___
+                  </label>
+
+                  <input
+                    value={userAnswer}
+                    onChange={(e) => updateAnswer(item.id, e.target.value)}
+                    placeholder="Write answer here"
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      borderRadius: 10,
+                      border: "1px solid #cbd5e1",
+                      fontSize: 15,
+                      fontFamily: "inherit",
+                    }}
+                  />
+
+                  {checked && (
+                    <div
+                      style={{
+                        marginTop: 8,
+                        padding: 10,
+                        borderRadius: 10,
+                        background: isCorrect ? "#dcfce7" : "#fee2e2",
+                        color: isCorrect ? "#166534" : "#991b1b",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <p style={{ fontWeight: 700 }}>
+                        {isCorrect ? "Correct" : "Wrong"}
+                      </p>
+                      <p>
+                        Correct answer: <strong>{item.answer}</strong>
+                      </p>
+                      <p>{item.explanation}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {!checked ? (
+          <button
+            onClick={() => setChecked(true)}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "14px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontWeight: 700,
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            Check Answers
+          </button>
+        ) : (
+          <div
+            style={{
+              marginTop: 16,
+              padding: 16,
+              borderRadius: 12,
+              background: "#eef2ff",
+              border: "1px solid #c7d2fe",
+              textAlign: "center",
+            }}
+          >
+            <h3>
+              Score: {score}/{taskData.items.length}
+            </h3>
+
+            <button
+              onClick={resetPractice}
+              style={{
+                marginTop: 10,
                 padding: "10px 16px",
                 border: "none",
                 borderRadius: 10,
@@ -5023,6 +5290,10 @@ if (task === "passageBroadQuestions") {
   return <BroadQuestionPractice taskData={passageBroadQuestionTask} />;
 }
 
+if (task === "flowChart") {
+  return <FlowChartPractice taskData={flowChartTask} />;
+}
+
 if (task === "clozeWithClues") {
   return <ClozeWithCluesPractice taskData={clozeWithCluesTask} />;
 }
@@ -5041,6 +5312,16 @@ if (task === "graphAnalysis") {
       title="Q7 Graph / Chart Analysis"
       subtitle="Board pattern: 15 marks. Data দেখে introduction, trend, comparison এবং conclusion লিখতে হবে।"
       tasks={graphAnalysisTasks}
+    />
+  );
+}
+
+if (task === "storyCompletion") {
+  return (
+    <WritingPractice
+      title="Q8 Story Completion"
+      subtitle="Board pattern: 15 marks. Given beginning থেকে logical story complete করতে হবে।"
+      tasks={storyCompletionTasks}
     />
   );
 }
@@ -5156,13 +5437,12 @@ if (task === "wordsPhrases") {
           Q1B Broad Questions — 15 marks
         </button>
 
-        {[
-          "Q2 Flow Chart — 5 marks",
-        ].map((item) => (
-          <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
-            {item}
-          </div>
-        ))}
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("flowChart")}
+        >
+          Q2 Flow Chart / Information Transfer — 5 marks
+        </button>
 
         <button
           style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
@@ -5200,13 +5480,12 @@ if (task === "wordsPhrases") {
           Q7 Graph / Chart Analysis — 15 marks
         </button>
 
-        {[
-          "Q8 Story Completion — 15 marks",
-        ].map((item) => (
-          <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
-            {item}
-          </div>
-        ))}
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("storyCompletion")}
+        >
+          Q8 Story Completion — 15 marks
+        </button>
 
         <button
           style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
