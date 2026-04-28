@@ -2446,6 +2446,10 @@ function BoardPracticePage() {
   const [ictFullExamQuestionsPicked, setIctFullExamQuestionsPicked] = useState([]);
   const [ictFullExamTimeLeft, setIctFullExamTimeLeft] = useState(1500);
   const [ictFullExamCurrentIndex, setIctFullExamCurrentIndex] = useState(0);
+  const [readingTestStage, setReadingTestStage] = useState("start");
+  const [readingTestTimeLeft, setReadingTestTimeLeft] = useState(3600);
+  const [eng2FullExamStage, setEng2FullExamStage] = useState("start");
+  const [eng2FullExamTimeLeft, setEng2FullExamTimeLeft] = useState(5400);
 
   const ictCreativeItems = [
     {
@@ -2550,7 +2554,8 @@ function BoardPracticePage() {
       id: "mock-english2",
       title: "English 2nd Paper Full Mock",
       sections: ["Grammar: 60 marks", "Composition: 40 marks"],
-      status: "Coming soon",
+      status: "Ready",
+      taskId: "eng2FullExam",
     },
   ];
 
@@ -3621,6 +3626,463 @@ const informalLetterTasks = [
   },
 ];
 
+const eng2FullExamData = {
+  title: "English 2nd Paper Full Test",
+  totalMarks: 100,
+  durationSeconds: 5400,
+  grammarTotal: 60,
+  compositionTotal: 40,
+  autoTotal: 53,
+  manualTotal: 47,
+  q1: {
+    title: "Q1 Prepositions",
+    marks: 5,
+    type: "text",
+    instruction: "Fill in the blanks with suitable prepositions.",
+    items: [
+      {
+        id: "eng2full-q1-1",
+        sentence: "The farmer is looking ___ his lost cow.",
+        answer: "for",
+        explanation: "Look for means to search for something.",
+      },
+      {
+        id: "eng2full-q1-2",
+        sentence: "I have no interest ___ politics.",
+        answer: "in",
+        explanation: "Interest is followed by the preposition in.",
+      },
+      {
+        id: "eng2full-q1-3",
+        sentence: "She is good ___ mathematics.",
+        answer: "at",
+        explanation: "Good at is used before a subject or skill.",
+      },
+      {
+        id: "eng2full-q1-4",
+        sentence: "He suffered ___ fever.",
+        answer: "from",
+        explanation: "Suffer from is used for illness or trouble.",
+      },
+      {
+        id: "eng2full-q1-5",
+        sentence: "The teacher was pleased ___ my result.",
+        answer: "with",
+        explanation: "Pleased with means satisfied with something.",
+      },
+    ],
+  },
+  q2: {
+    title: "Q2 Words/Phrases",
+    marks: 5,
+    type: "select",
+    instruction: "Complete the sentences using suitable words or phrases from the box.",
+    wordBox: [
+      "in order to",
+      "as soon as",
+      "had better",
+      "let alone",
+      "would rather",
+      "because of",
+      "according to",
+    ],
+    items: [
+      {
+        id: "eng2full-q2-1",
+        sentence: "He studies hard ___ pass the examination.",
+        answer: "in order to",
+        explanation: "In order to is used to express purpose.",
+      },
+      {
+        id: "eng2full-q2-2",
+        sentence: "___ I reached the station, the train left.",
+        answer: "as soon as",
+        explanation: "As soon as means immediately after.",
+      },
+      {
+        id: "eng2full-q2-3",
+        sentence: "You ___ consult a doctor.",
+        answer: "had better",
+        explanation: "Had better is used to give strong advice.",
+      },
+      {
+        id: "eng2full-q2-4",
+        sentence: "He cannot buy a pen, ___ a book.",
+        answer: "let alone",
+        explanation: "Let alone is used to mean something is even less possible.",
+      },
+      {
+        id: "eng2full-q2-5",
+        sentence: "I ___ stay home than go out today.",
+        answer: "would rather",
+        explanation: "Would rather is used to express preference.",
+      },
+    ],
+  },
+  q3: {
+    title: "Q3 Completing Sentences",
+    marks: 10,
+    type: "text",
+    instruction: "Complete the sentences with suitable clauses or phrases.",
+    items: [
+      {
+        id: "eng2full-q3-1",
+        sentence: "If I were rich, ___.",
+        answer: "I would help the poor",
+        explanation: "Second conditional uses would plus base verb.",
+      },
+      {
+        id: "eng2full-q3-2",
+        sentence: "Though it was raining, ___.",
+        answer: "we went to school",
+        explanation: "Though introduces contrast.",
+      },
+      {
+        id: "eng2full-q3-3",
+        sentence: "No sooner had he seen the police than ___.",
+        answer: "he ran away",
+        explanation: "No sooner is followed by than.",
+      },
+      {
+        id: "eng2full-q3-4",
+        sentence: "It is high time ___.",
+        answer: "we started the work",
+        explanation: "It is high time is followed by a past form.",
+      },
+      {
+        id: "eng2full-q3-5",
+        sentence: "Unless you work hard, ___.",
+        answer: "you will fail",
+        explanation: "Unless means if not.",
+      },
+      {
+        id: "eng2full-q3-6",
+        sentence: "Read attentively so that ___.",
+        answer: "you can answer the questions",
+        explanation: "So that expresses purpose.",
+      },
+      {
+        id: "eng2full-q3-7",
+        sentence: "The man who came yesterday ___.",
+        answer: "is my uncle",
+        explanation: "The relative clause describes the subject.",
+      },
+      {
+        id: "eng2full-q3-8",
+        sentence: "He talks as if ___.",
+        answer: "he knew everything",
+        explanation: "As if often takes a past form for unreal meaning.",
+      },
+      {
+        id: "eng2full-q3-9",
+        sentence: "I wish ___.",
+        answer: "I could fly",
+        explanation: "Wish can express an unreal desire.",
+      },
+      {
+        id: "eng2full-q3-10",
+        sentence: "Scarcely had we reached home when ___.",
+        answer: "it began to rain",
+        explanation: "Scarcely is followed by when.",
+      },
+    ],
+  },
+  q4: {
+    title: "Q4 Right Form of Verbs",
+    marks: 7,
+    type: "text",
+    instruction: "Use the correct form of the verbs in brackets.",
+    items: [
+      {
+        id: "eng2full-q4-1",
+        sentence: "He usually ___ (go) to bed early.",
+        answer: "goes",
+        explanation: "Usually indicates present indefinite; he takes goes.",
+      },
+      {
+        id: "eng2full-q4-2",
+        sentence: "The train ___ (leave) before we reached the station.",
+        answer: "had left",
+        explanation: "The earlier past action takes past perfect.",
+      },
+      {
+        id: "eng2full-q4-3",
+        sentence: "If I ___ (be) you, I would not do it.",
+        answer: "were",
+        explanation: "Were is used in imaginary conditional sentences.",
+      },
+      {
+        id: "eng2full-q4-4",
+        sentence: "She ___ (read) when I called her.",
+        answer: "was reading",
+        explanation: "A continuing past action takes past continuous.",
+      },
+      {
+        id: "eng2full-q4-5",
+        sentence: "Let the matter ___ (discuss).",
+        answer: "be discussed",
+        explanation: "Passive form after let is be plus past participle.",
+      },
+      {
+        id: "eng2full-q4-6",
+        sentence: "I saw him ___ (walk) along the road.",
+        answer: "walking",
+        explanation: "After verbs of perception, an ongoing action may take verb-ing.",
+      },
+      {
+        id: "eng2full-q4-7",
+        sentence: "The letter was ___ (write) yesterday.",
+        answer: "written",
+        explanation: "Passive voice uses past participle.",
+      },
+    ],
+  },
+  q5: {
+    title: "Q5 Narration",
+    marks: 7,
+    type: "textarea",
+    instruction: "Change the following passage into indirect speech.",
+    direct:
+      'Rafi said to me, "Where are you going?" I said, "I am going to the library." He said, "May I go with you?"',
+    answer:
+      "Rafi asked me where I was going. I replied that I was going to the library. He asked if he might go with me.",
+    explanation:
+      "Check reporting verbs, pronouns, tense changes, and statement word order.",
+  },
+  q6: {
+    title: "Q6 Modifiers",
+    marks: 5,
+    type: "text",
+    instruction: "Fill in the blanks with suitable modifiers.",
+    items: [
+      {
+        id: "eng2full-q6-1",
+        sentence: "The ___ boy helped the old man.",
+        answer: "kind",
+        explanation: "Kind modifies boy.",
+      },
+      {
+        id: "eng2full-q6-2",
+        sentence: "He came ___ to school.",
+        answer: "early",
+        explanation: "Early modifies the verb came.",
+      },
+      {
+        id: "eng2full-q6-3",
+        sentence: "___ by hunger, the child cried.",
+        answer: "driven",
+        explanation: "Driven by hunger is a participle phrase.",
+      },
+      {
+        id: "eng2full-q6-4",
+        sentence: "The girl ___ on the stage is my sister.",
+        answer: "singing",
+        explanation: "Singing on the stage modifies girl.",
+      },
+      {
+        id: "eng2full-q6-5",
+        sentence: "I saw a bird ___ in the sky.",
+        answer: "flying",
+        explanation: "Flying in the sky modifies bird.",
+      },
+    ],
+  },
+  q7: {
+    title: "Q7 Connectors",
+    marks: 7,
+    type: "select",
+    instruction: "Use suitable connectors to complete the sentences.",
+    wordBox: [
+      "however",
+      "therefore",
+      "moreover",
+      "otherwise",
+      "although",
+      "as a result",
+      "first",
+    ],
+    items: [
+      {
+        id: "eng2full-q7-1",
+        sentence: "He was tired. ___, he continued his work.",
+        answer: "however",
+        explanation: "However shows contrast.",
+      },
+      {
+        id: "eng2full-q7-2",
+        sentence: "He worked hard. ___, he succeeded.",
+        answer: "therefore",
+        explanation: "Therefore shows result.",
+      },
+      {
+        id: "eng2full-q7-3",
+        sentence: "Trees give us oxygen. ___, they protect the environment.",
+        answer: "moreover",
+        explanation: "Moreover adds another point.",
+      },
+      {
+        id: "eng2full-q7-4",
+        sentence: "Walk fast. ___, you will miss the bus.",
+        answer: "otherwise",
+        explanation: "Otherwise means if not.",
+      },
+      {
+        id: "eng2full-q7-5",
+        sentence: "___ he is poor, he is honest.",
+        answer: "although",
+        explanation: "Although introduces contrast.",
+      },
+      {
+        id: "eng2full-q7-6",
+        sentence: "It rained heavily. ___, the roads were flooded.",
+        answer: "as a result",
+        explanation: "As a result introduces the consequence.",
+      },
+      {
+        id: "eng2full-q7-7",
+        sentence: "___, read the question carefully.",
+        answer: "first",
+        explanation: "First marks the beginning of a sequence.",
+      },
+    ],
+  },
+  q8: {
+    title: "Q8 Synonym/Antonym",
+    marks: 7,
+    type: "option",
+    instruction: "Choose the correct synonym or antonym.",
+    items: [
+      {
+        id: "eng2full-q8-1",
+        question: "Synonym of 'brave' is:",
+        options: ["weak", "courageous", "careless", "lazy"],
+        answer: "courageous",
+        explanation: "Brave means courageous.",
+      },
+      {
+        id: "eng2full-q8-2",
+        question: "Antonym of 'ancient' is:",
+        options: ["old", "historic", "modern", "past"],
+        answer: "modern",
+        explanation: "Modern is the opposite of ancient.",
+      },
+      {
+        id: "eng2full-q8-3",
+        question: "Antonym of 'expand' is:",
+        options: ["increase", "spread", "shrink", "extend"],
+        answer: "shrink",
+        explanation: "Shrink is the opposite of expand.",
+      },
+      {
+        id: "eng2full-q8-4",
+        question: "Synonym of 'liberty' is:",
+        options: ["freedom", "bondage", "duty", "fear"],
+        answer: "freedom",
+        explanation: "Liberty means freedom.",
+      },
+      {
+        id: "eng2full-q8-5",
+        question: "Antonym of 'honest' is:",
+        options: ["truthful", "sincere", "dishonest", "fair"],
+        answer: "dishonest",
+        explanation: "Dishonest is the opposite of honest.",
+      },
+      {
+        id: "eng2full-q8-6",
+        question: "Synonym of 'tiny' is:",
+        options: ["large", "small", "wide", "heavy"],
+        answer: "small",
+        explanation: "Tiny means very small.",
+      },
+      {
+        id: "eng2full-q8-7",
+        question: "Antonym of 'temporary' is:",
+        options: ["short", "brief", "permanent", "quick"],
+        answer: "permanent",
+        explanation: "Permanent is the opposite of temporary.",
+      },
+    ],
+  },
+  q9: {
+    title: "Q9 Punctuation",
+    marks: 7,
+    type: "text",
+    instruction: "Rewrite the sentences using correct punctuation and capitalization.",
+    items: [
+      {
+        id: "eng2full-q9-1",
+        sentence: "rahim said i am ill",
+        answer: 'Rahim said, "I am ill."',
+        explanation: "Use a capital letter, comma, quotation marks, and full stop.",
+      },
+      {
+        id: "eng2full-q9-2",
+        sentence: "where are you going",
+        answer: "Where are you going?",
+        explanation: "A question begins with a capital letter and ends with a question mark.",
+      },
+      {
+        id: "eng2full-q9-3",
+        sentence: "dhaka is a big city",
+        answer: "Dhaka is a big city.",
+        explanation: "A proper noun begins with a capital letter and the sentence ends with a full stop.",
+      },
+      {
+        id: "eng2full-q9-4",
+        sentence: "alas the man is dead",
+        answer: "Alas! The man is dead.",
+        explanation: "Alas is followed by an exclamation mark.",
+      },
+      {
+        id: "eng2full-q9-5",
+        sentence: "he bought rice fish and oil",
+        answer: "He bought rice, fish and oil.",
+        explanation: "Use commas to separate items in a list.",
+      },
+      {
+        id: "eng2full-q9-6",
+        sentence: "mother said to me obey your teachers",
+        answer: 'Mother said to me, "Obey your teachers."',
+        explanation: "Direct speech needs a comma and quotation marks.",
+      },
+      {
+        id: "eng2full-q9-7",
+        sentence: "the padma the meghna and the jamuna are rivers",
+        answer: "The Padma, the Meghna and the Jamuna are rivers.",
+        explanation: "Proper nouns need capital letters, and list items need commas.",
+      },
+    ],
+  },
+  q10: {
+    id: "eng2full-q10",
+    title: "Q10 Application",
+    marks: 10,
+    question:
+      "Write an application to the Principal of your college for setting up a computer club.",
+    modelAnswer:
+      "To\nThe Principal\nABC College, Dhaka\n\nSubject: Prayer for setting up a computer club.\n\nSir,\nWith due respect, we, the students of your college, beg to state that our college does not have a computer club. A computer club will help students learn ICT, programming, internet use and digital communication. It will also make our study more practical and useful.\n\nWe, therefore, pray and hope that you would be kind enough to take necessary steps to set up a computer club in our college.\n\nYours obediently,\nThe students of ABC College",
+    keyPoints: ["formal format", "subject line", "clear reason", "polite request", "proper closing"],
+  },
+  q11: {
+    id: "eng2full-q11",
+    title: "Q11 Paragraph",
+    marks: 15,
+    question: "Write a paragraph on Duties of a Student.",
+    modelAnswer:
+      "A student has many duties. The main duty of a student is to study regularly and prepare lessons properly. A student should attend classes, respect teachers, obey parents and follow discipline. Students should also be honest, punctual and helpful to others. They should keep their school clean and take part in games and social work. A good student uses time properly and avoids bad company. By performing these duties, students can build a bright future and serve the country.",
+    keyPoints: ["regular study", "respect and discipline", "good character", "proper use of time", "service to society"],
+  },
+  q12: {
+    id: "eng2full-q12",
+    title: "Q12 Paragraph",
+    marks: 15,
+    question: "Write a paragraph on Tree Plantation.",
+    modelAnswer:
+      "Tree plantation means planting trees in a planned way. Trees are very important for our life and environment. They give us oxygen, food, fruits, wood and shade. They also protect us from floods, droughts and soil erosion. But many people cut trees carelessly, and this harms nature. So, we should plant more trees around our houses, roads, schools and open places. The government and people should work together to make tree plantation successful.",
+    keyPoints: ["meaning", "importance of trees", "environmental benefits", "problem of cutting trees", "need to plant more trees"],
+  },
+};
+
   const cardStyle = {
     padding: 16,
     border: "1px solid #e2e8f0",
@@ -3662,6 +4124,10 @@ const informalLetterTasks = [
     setIctFullExamQuestionsPicked([]);
     setIctFullExamTimeLeft(1500);
     setIctFullExamCurrentIndex(0);
+    setReadingTestStage("start");
+    setReadingTestTimeLeft(3600);
+    setEng2FullExamStage("start");
+    setEng2FullExamTimeLeft(5400);
   }
 
   function openTask(taskId) {
@@ -3705,6 +4171,44 @@ const informalLetterTasks = [
       };
     },
     [task, ictFullExamStage, ictFullExamTimeLeft]
+  );
+
+  useEffect(
+    function () {
+      if (task !== "eng1ReadingFull" || readingTestStage !== "running") return;
+      if (readingTestTimeLeft <= 0) {
+        submitReadingTest();
+        return;
+      }
+
+      var timerId = setTimeout(function () {
+        setReadingTestTimeLeft(readingTestTimeLeft - 1);
+      }, 1000);
+
+      return function () {
+        clearTimeout(timerId);
+      };
+    },
+    [task, readingTestStage, readingTestTimeLeft]
+  );
+
+  useEffect(
+    function () {
+      if (task !== "eng2FullExam" || eng2FullExamStage !== "running") return;
+      if (eng2FullExamTimeLeft <= 0) {
+        submitEng2FullExam();
+        return;
+      }
+
+      var timerId = setTimeout(function () {
+        setEng2FullExamTimeLeft(eng2FullExamTimeLeft - 1);
+      }, 1000);
+
+      return function () {
+        clearTimeout(timerId);
+      };
+    },
+    [task, eng2FullExamStage, eng2FullExamTimeLeft]
   );
 
   function getScore(items) {
@@ -3912,6 +4416,296 @@ const informalLetterTasks = [
     saveWrongAnswers(getICTFullExamWrongEntries());
     setChecked(true);
     setIctFullExamStage("done");
+  }
+
+  function getReadingTestProgressInfo() {
+    return {
+      id: "eng1-reading-full",
+      title: "English 1st Reading Test",
+    };
+  }
+
+  function getBlankScore(blanks, marksPerBlank) {
+    var score = 0;
+    blanks.forEach(function (blank) {
+      if (normalizeAnswer(answers[blank.id] || "") === blank.answer) {
+        score += marksPerBlank;
+      }
+    });
+    return score;
+  }
+
+  function getReadingRearrangeOrder() {
+    return (answers[rearrangingTask.answerId] || "")
+      .split(",")
+      .map(function (item) {
+        return item.trim().toLowerCase();
+      })
+      .filter(Boolean);
+  }
+
+  function isReadingRearrangeCorrect() {
+    return (
+      getReadingRearrangeOrder().join(",") ===
+      rearrangingTask.correctOrder.join(",")
+    );
+  }
+
+  function getReadingScores() {
+    var mcqScore = 0;
+    passageMCQTask.mcqs.forEach(function (mcq) {
+      if (answers[mcq.id] === mcq.correctAnswer) {
+        mcqScore++;
+      }
+    });
+
+    var flowScore = getBlankScore(flowChartTask.items, 1);
+    var clozeWithScore = getBlankScore(clozeWithCluesTask.blanks, 1);
+    var clozeWithoutScore = getBlankScore(clozeWithoutCluesTask.blanks, 2);
+    var rearrangeScore = isReadingRearrangeCorrect() ? rearrangingTask.marks : 0;
+    var autoScore =
+      mcqScore + flowScore + clozeWithScore + clozeWithoutScore + rearrangeScore;
+
+    return {
+      mcq: mcqScore,
+      flow: flowScore,
+      clozeWith: clozeWithScore,
+      clozeWithout: clozeWithoutScore,
+      rearrange: rearrangeScore,
+      auto: autoScore,
+      autoTotal: 35,
+      paperTotal: 60,
+    };
+  }
+
+  function getReadingWrongEntries() {
+    var entries = [];
+
+    passageMCQTask.mcqs.forEach(function (mcq) {
+      var selected = answers[mcq.id];
+      if (selected !== mcq.correctAnswer) {
+        entries.push({
+          question: "Q1A: " + mcq.question,
+          studentAnswer:
+            selected === undefined ? "No answer" : mcq.options[selected],
+          correctAnswer: mcq.options[mcq.correctAnswer],
+          explanation: mcq.explanation,
+        });
+      }
+    });
+
+    flowChartTask.items.forEach(function (item) {
+      var studentAnswer = answers[item.id] || "";
+      if (normalizeAnswer(studentAnswer) !== item.answer) {
+        entries.push({
+          question: "Q2: " + item.before + " ___",
+          studentAnswer: studentAnswer || "No answer",
+          correctAnswer: item.answer,
+          explanation: item.explanation,
+        });
+      }
+    });
+
+    clozeWithCluesTask.blanks.forEach(function (blank) {
+      var studentAnswer = answers[blank.id] || "";
+      if (normalizeAnswer(studentAnswer) !== blank.answer) {
+        entries.push({
+          question: "Q4 blank " + blank.number,
+          studentAnswer: studentAnswer || "No answer",
+          correctAnswer: blank.answer,
+          explanation: blank.explanation,
+        });
+      }
+    });
+
+    clozeWithoutCluesTask.blanks.forEach(function (blank) {
+      var studentAnswer = answers[blank.id] || "";
+      if (normalizeAnswer(studentAnswer) !== blank.answer) {
+        entries.push({
+          question: "Q5 blank " + blank.number,
+          studentAnswer: studentAnswer || "No answer",
+          correctAnswer: blank.answer,
+          explanation: blank.explanation,
+        });
+      }
+    });
+
+    if (!isReadingRearrangeCorrect()) {
+      entries.push({
+        question: "Q6: Rearranging Sentences",
+        studentAnswer: answers[rearrangingTask.answerId] || "No answer",
+        correctAnswer: rearrangingTask.correctOrder.join(", "),
+        explanation: rearrangingTask.explanation,
+      });
+    }
+
+    return addWrongAnswerInfo(getReadingTestProgressInfo(), entries);
+  }
+
+  function startReadingTest() {
+    setAnswers({});
+    setChecked(false);
+    setReadingTestTimeLeft(3600);
+    setReadingTestStage("running");
+  }
+
+  function submitReadingTest() {
+    if (readingTestStage !== "running") return;
+    var scores = getReadingScores();
+    saveBoardSectionProgress({
+      id: "eng1-reading-full",
+      title: "English 1st Reading Test",
+      score: scores.auto,
+      total: scores.paperTotal,
+      type: "eng1-reading-full",
+      date: formatDateISO(new Date()),
+    });
+    saveWrongAnswers(getReadingWrongEntries());
+    setChecked(true);
+    setReadingTestStage("done");
+  }
+
+  function normalizeEng2FullAnswer(value) {
+    return String(value || "")
+      .trim()
+      .replace(/[“”]/g, '"')
+      .replace(/[‘’]/g, "'")
+      .replace(/\s+/g, " ")
+      .toLowerCase();
+  }
+
+  function getEng2FullAutoSections() {
+    return [
+      { key: "q1", data: eng2FullExamData.q1 },
+      { key: "q2", data: eng2FullExamData.q2 },
+      { key: "q3", data: eng2FullExamData.q3 },
+      { key: "q4", data: eng2FullExamData.q4 },
+      { key: "q6", data: eng2FullExamData.q6 },
+      { key: "q7", data: eng2FullExamData.q7 },
+      { key: "q8", data: eng2FullExamData.q8 },
+      { key: "q9", data: eng2FullExamData.q9 },
+    ];
+  }
+
+  function getEng2FullSectionScore(sectionData) {
+    var score = 0;
+    sectionData.items.forEach(function (item) {
+      if (
+        normalizeEng2FullAnswer(answers[item.id]) ===
+        normalizeEng2FullAnswer(item.answer)
+      ) {
+        score++;
+      }
+    });
+    return score;
+  }
+
+  function getEng2FullScores() {
+    var sections = {};
+    var autoScore = 0;
+
+    getEng2FullAutoSections().forEach(function (sectionInfo) {
+      var sectionScore = getEng2FullSectionScore(sectionInfo.data);
+      sections[sectionInfo.key] = {
+        score: sectionScore,
+        total: sectionInfo.data.marks,
+        title: sectionInfo.data.title,
+      };
+      autoScore += sectionScore;
+    });
+
+    sections.q5 = {
+      score: null,
+      total: eng2FullExamData.q5.marks,
+      title: eng2FullExamData.q5.title,
+      review: true,
+    };
+    sections.q10 = {
+      score: null,
+      total: eng2FullExamData.q10.marks,
+      title: eng2FullExamData.q10.title,
+      review: true,
+    };
+    sections.q11 = {
+      score: null,
+      total: eng2FullExamData.q11.marks,
+      title: eng2FullExamData.q11.title,
+      review: true,
+    };
+    sections.q12 = {
+      score: null,
+      total: eng2FullExamData.q12.marks,
+      title: eng2FullExamData.q12.title,
+      review: true,
+    };
+
+    return {
+      sections: sections,
+      autoScore: autoScore,
+      autoTotal: eng2FullExamData.autoTotal,
+      total: eng2FullExamData.totalMarks,
+      manualTotal: eng2FullExamData.manualTotal,
+    };
+  }
+
+  function getEng2FullWrongEntries() {
+    var entries = [];
+
+    getEng2FullAutoSections().forEach(function (sectionInfo) {
+      sectionInfo.data.items.forEach(function (item, index) {
+        var studentAnswer = answers[item.id] || "";
+        var isCorrect =
+          normalizeEng2FullAnswer(studentAnswer) ===
+          normalizeEng2FullAnswer(item.answer);
+
+        if (!isCorrect) {
+          entries.push({
+            question:
+              sectionInfo.data.title +
+              " - " +
+              (index + 1) +
+              ". " +
+              (item.sentence || item.question),
+            studentAnswer: studentAnswer || "No answer",
+            correctAnswer: item.answer,
+            explanation: item.explanation || "",
+          });
+        }
+      });
+    });
+
+    return addWrongAnswerInfo(
+      {
+        id: "eng2-full",
+        title: "English 2nd Paper Full Test",
+      },
+      entries
+    );
+  }
+
+  function startEng2FullExam() {
+    setAnswers({});
+    setChecked(false);
+    setEng2FullExamTimeLeft(5400);
+    setEng2FullExamStage("running");
+  }
+
+  function submitEng2FullExam() {
+    if (eng2FullExamStage !== "running") return;
+    var scores = getEng2FullScores();
+    saveBoardSectionProgress({
+      id: "eng2-full",
+      title: "English 2nd Paper Full Test",
+      score: scores.autoScore,
+      total: scores.total,
+      type: "eng2-full",
+      autoTotal: scores.autoTotal,
+      manualTotal: scores.manualTotal,
+      date: formatDateISO(new Date()),
+    });
+    saveWrongAnswers(getEng2FullWrongEntries());
+    setChecked(true);
+    setEng2FullExamStage("done");
   }
 
   function checkPractice(progressInfo, score, total, wrongEntries) {
@@ -5501,7 +6295,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
 
         <h2>Full Mock Test</h2>
         <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 16 }}>
-          Full mock tests will be added after all practice sections are stable.
+          Choose an available full test simulation.
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -5545,6 +6339,26 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
                 >
                   Status: {mock.status}
                 </p>
+                {mock.taskId && (
+                  <button
+                    onClick={() => openTask(mock.taskId)}
+                    style={{
+                      display: "block",
+                      marginTop: 12,
+                      width: "100%",
+                      padding: "10px 14px",
+                      border: "none",
+                      borderRadius: 10,
+                      background: "#6366f1",
+                      color: "#fff",
+                      fontWeight: 700,
+                      fontFamily: "inherit",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Start Test
+                  </button>
+                )}
               </div>
             );
           })}
@@ -5883,6 +6697,964 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
               setMiniMockQuestions([]);
               setMiniMockTimeLeft(300);
               setMiniMockStage("start");
+            }}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  function English1ReadingTestPage() {
+    var scores = getReadingScores();
+    var isDone = readingTestStage === "done";
+
+    if (readingTestStage === "start") {
+      return (
+        <div style={{ padding: "10px 0" }}>
+          <button
+            style={backButtonStyle}
+            onClick={() => {
+              setTask(null);
+              resetPractice();
+            }}
+          >
+            Ã¢â€ Â Back
+          </button>
+
+          <div
+            style={{
+              padding: 18,
+              border: "1px solid #e2e8f0",
+              borderRadius: 12,
+              background: "#f8fafc",
+              textAlign: "center",
+            }}
+          >
+            <h2 style={{ marginBottom: 10 }}>English 1st Reading Test</h2>
+            <p style={{ color: "#334155", fontWeight: 700, marginBottom: 4 }}>
+              60 Marks
+            </p>
+            <p style={{ color: "#334155", fontWeight: 700, marginBottom: 16 }}>
+              60 Minutes
+            </p>
+            <button
+              onClick={startReadingTest}
+              style={{
+                width: "100%",
+                padding: "12px 20px",
+                border: "none",
+                borderRadius: 12,
+                background: "#6366f1",
+                color: "#fff",
+                fontSize: 15,
+                fontWeight: 700,
+                fontFamily: "inherit",
+                cursor: "pointer",
+              }}
+            >
+              Start Test
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          Ã¢â€ Â Back
+        </button>
+
+        <h2>English 1st Reading Test</h2>
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 16,
+            padding: 14,
+            borderRadius: 12,
+            background: isDone ? "#f0fdf4" : "#eef2ff",
+            border: isDone ? "1px solid #bbf7d0" : "1px solid #c7d2fe",
+            color: isDone ? "#166534" : "#3730a3",
+            fontWeight: 800,
+            textAlign: "center",
+          }}
+        >
+          {isDone
+            ? "Auto-marked score: " + scores.auto + " / " + scores.paperTotal
+            : "Time left: " + formatMiniMockTime(readingTestTimeLeft)}
+        </div>
+
+        {isDone && (
+          <div
+            style={{
+              marginBottom: 16,
+              padding: 16,
+              border: "1px solid #c7d2fe",
+              borderRadius: 12,
+              background: "#eef2ff",
+              color: "#334155",
+              lineHeight: 1.7,
+            }}
+          >
+            <h3 style={{ marginBottom: 8 }}>Section-wise score</h3>
+            <p>Q1A MCQ: {scores.mcq}/5</p>
+            <p>Q1B Broad Questions: Review Needed / 15</p>
+            <p>Q2 Flow Chart: {scores.flow}/5</p>
+            <p>Q3 Summary: Review Needed / 10</p>
+            <p>Q4 Cloze with Clues: {scores.clozeWith}/5</p>
+            <p>Q5 Cloze without Clues: {scores.clozeWithout}/10</p>
+            <p>Q6 Rearrangement: {scores.rearrange}/10</p>
+          </div>
+        )}
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+            <h3 style={{ marginBottom: 8 }}>Q1 Passage</h3>
+            <p style={{ color: "#334155", lineHeight: 1.7 }}>
+              {passageMCQTask.passage}
+            </p>
+          </div>
+
+          <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+            <h3 style={{ marginBottom: 10 }}>Q1A Passage MCQ - 5 marks</h3>
+            {passageMCQTask.mcqs.map(function (mcq, index) {
+              var selected = answers[mcq.id];
+              var isCorrect = selected === mcq.correctAnswer;
+
+              return (
+                <div key={mcq.id} style={{ marginBottom: 14 }}>
+                  <p style={{ fontWeight: 700, marginBottom: 8 }}>
+                    {index + 1}. {mcq.question}
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {mcq.options.map(function (option, optionIndex) {
+                      var bg = "#f8fafc";
+                      var border = "1px solid #e2e8f0";
+                      var color = "#334155";
+
+                      if (!isDone && selected === optionIndex) {
+                        bg = "#eef2ff";
+                        border = "2px solid #6366f1";
+                        color = "#3730a3";
+                      }
+
+                      if (isDone) {
+                        if (optionIndex === mcq.correctAnswer) {
+                          bg = "#dcfce7";
+                          border = "2px solid #22c55e";
+                          color = "#166534";
+                        } else if (optionIndex === selected) {
+                          bg = "#fee2e2";
+                          border = "2px solid #ef4444";
+                          color = "#991b1b";
+                        }
+                      }
+
+                      return (
+                        <button
+                          key={option}
+                          onClick={() => {
+                            if (!isDone) updateAnswer(mcq.id, optionIndex);
+                          }}
+                          style={{
+                            textAlign: "left",
+                            padding: "10px 12px",
+                            borderRadius: 10,
+                            background: bg,
+                            border: border,
+                            color: color,
+                            fontFamily: "inherit",
+                            cursor: isDone ? "default" : "pointer",
+                          }}
+                        >
+                          {String.fromCharCode(65 + optionIndex)}. {option}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {isDone && (
+                    <div
+                      style={{
+                        marginTop: 8,
+                        padding: 10,
+                        borderRadius: 10,
+                        background: isCorrect ? "#f0fdf4" : "#fef2f2",
+                        border: isCorrect ? "1px solid #bbf7d0" : "1px solid #fecaca",
+                        color: "#334155",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <p style={{ fontWeight: 700 }}>{isCorrect ? "Correct" : "Incorrect"}</p>
+                      <p>Correct answer: <strong>{mcq.options[mcq.correctAnswer]}</strong></p>
+                      <p>{mcq.explanation}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+            <h3 style={{ marginBottom: 10 }}>Q1B Broad Questions - 15 marks</h3>
+            {passageBroadQuestionTask.questions.map(function (item, index) {
+              return (
+                <div key={item.id} style={{ marginBottom: 12 }}>
+                  <p style={{ fontWeight: 700, marginBottom: 6 }}>
+                    {index + 1}. {item.question} ({item.marks} marks)
+                  </p>
+                  <textarea
+                    value={answers[item.id] || ""}
+                    onChange={(e) => updateAnswer(item.id, e.target.value)}
+                    disabled={isDone}
+                    rows={3}
+                    placeholder="Write your answer"
+                    style={{
+                      width: "100%",
+                      padding: 12,
+                      borderRadius: 10,
+                      border: "1px solid #cbd5e1",
+                      fontFamily: "inherit",
+                      resize: "vertical",
+                    }}
+                  />
+                  {isDone && (
+                    <p style={{ marginTop: 6, color: "#92400e", fontWeight: 700 }}>
+                      Review Needed
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+            <h3 style={{ marginBottom: 8 }}>Q2 Flow Chart - 5 marks</h3>
+            <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 10 }}>
+              {flowChartTask.instruction}
+            </p>
+            <p style={{ fontWeight: 700, marginBottom: 10 }}>{flowChartTask.start}</p>
+            {flowChartTask.items.map(function (item) {
+              var userAnswer = answers[item.id] || "";
+              var isCorrect = normalizeAnswer(userAnswer) === item.answer;
+              return (
+                <div key={item.id} style={{ marginBottom: 12 }}>
+                  <label style={{ display: "block", fontWeight: 700, marginBottom: 6 }}>
+                    {item.number}. {item.before} ___
+                  </label>
+                  <input
+                    value={userAnswer}
+                    onChange={(e) => updateAnswer(item.id, e.target.value)}
+                    disabled={isDone}
+                    placeholder="Write answer"
+                    style={{
+                      width: "100%",
+                      padding: 12,
+                      borderRadius: 10,
+                      border: "1px solid #cbd5e1",
+                      fontFamily: "inherit",
+                    }}
+                  />
+                  {isDone && (
+                    <div
+                      style={{
+                        marginTop: 8,
+                        padding: 10,
+                        borderRadius: 10,
+                        background: isCorrect ? "#f0fdf4" : "#fef2f2",
+                        border: isCorrect ? "1px solid #bbf7d0" : "1px solid #fecaca",
+                        color: "#334155",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <p style={{ fontWeight: 700 }}>{isCorrect ? "Correct" : "Wrong"}</p>
+                      <p>Correct answer: <strong>{item.answer}</strong></p>
+                      <p>{item.explanation}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+            <h3 style={{ marginBottom: 8 }}>Q3 Summary - 10 marks</h3>
+            <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 10 }}>
+              {summaryTasks[0].passage}
+            </p>
+            <textarea
+              value={answers[summaryTasks[0].id] || ""}
+              onChange={(e) => updateAnswer(summaryTasks[0].id, e.target.value)}
+              disabled={isDone}
+              rows={6}
+              placeholder="Write your summary"
+              style={{
+                width: "100%",
+                padding: 12,
+                borderRadius: 10,
+                border: "1px solid #cbd5e1",
+                fontFamily: "inherit",
+                resize: "vertical",
+              }}
+            />
+            {isDone && (
+              <p style={{ marginTop: 6, color: "#92400e", fontWeight: 700 }}>
+                Review Needed
+              </p>
+            )}
+          </div>
+
+          <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+            <h3 style={{ marginBottom: 8 }}>Q4 Cloze with Clues - 5 marks</h3>
+            <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 10 }}>
+              {clozeWithCluesTask.text}
+            </p>
+            <p style={{ fontWeight: 700, marginBottom: 8 }}>Word box</p>
+            <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 12 }}>
+              {clozeWithCluesTask.wordBox.join(", ")}
+            </p>
+            {clozeWithCluesTask.blanks.map(function (blank) {
+              var userAnswer = answers[blank.id] || "";
+              var isCorrect = normalizeAnswer(userAnswer) === blank.answer;
+              return (
+                <div key={blank.id} style={{ marginBottom: 12 }}>
+                  <label style={{ display: "block", fontWeight: 700, marginBottom: 6 }}>
+                    Blank {blank.number}
+                  </label>
+                  <input
+                    value={userAnswer}
+                    onChange={(e) => updateAnswer(blank.id, e.target.value)}
+                    disabled={isDone}
+                    placeholder="Choose from word box"
+                    style={{
+                      width: "100%",
+                      padding: 12,
+                      borderRadius: 10,
+                      border: "1px solid #cbd5e1",
+                      fontFamily: "inherit",
+                    }}
+                  />
+                  {isDone && (
+                    <div
+                      style={{
+                        marginTop: 8,
+                        padding: 10,
+                        borderRadius: 10,
+                        background: isCorrect ? "#f0fdf4" : "#fef2f2",
+                        border: isCorrect ? "1px solid #bbf7d0" : "1px solid #fecaca",
+                        color: "#334155",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <p style={{ fontWeight: 700 }}>{isCorrect ? "Correct" : "Wrong"}</p>
+                      <p>Correct answer: <strong>{blank.answer}</strong></p>
+                      <p>{blank.explanation}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+            <h3 style={{ marginBottom: 8 }}>Q5 Cloze without Clues - 10 marks</h3>
+            <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 12 }}>
+              {clozeWithoutCluesTask.text}
+            </p>
+            {clozeWithoutCluesTask.blanks.map(function (blank) {
+              var userAnswer = answers[blank.id] || "";
+              var isCorrect = normalizeAnswer(userAnswer) === blank.answer;
+              return (
+                <div key={blank.id} style={{ marginBottom: 12 }}>
+                  <label style={{ display: "block", fontWeight: 700, marginBottom: 6 }}>
+                    Blank {blank.number}
+                  </label>
+                  <input
+                    value={userAnswer}
+                    onChange={(e) => updateAnswer(blank.id, e.target.value)}
+                    disabled={isDone}
+                    placeholder="Write answer"
+                    style={{
+                      width: "100%",
+                      padding: 12,
+                      borderRadius: 10,
+                      border: "1px solid #cbd5e1",
+                      fontFamily: "inherit",
+                    }}
+                  />
+                  {isDone && (
+                    <div
+                      style={{
+                        marginTop: 8,
+                        padding: 10,
+                        borderRadius: 10,
+                        background: isCorrect ? "#f0fdf4" : "#fef2f2",
+                        border: isCorrect ? "1px solid #bbf7d0" : "1px solid #fecaca",
+                        color: "#334155",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <p style={{ fontWeight: 700 }}>{isCorrect ? "Correct" : "Wrong"}</p>
+                      <p>Correct answer: <strong>{blank.answer}</strong></p>
+                      <p>{blank.explanation}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+            <h3 style={{ marginBottom: 8 }}>Q6 Rearrangement - 10 marks</h3>
+            <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 10 }}>
+              {rearrangingTask.instruction}
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
+              {rearrangingTask.sentences.map(function (sentence) {
+                return (
+                  <p key={sentence.label} style={{ color: "#334155", lineHeight: 1.5 }}>
+                    <strong>{sentence.label}.</strong> {sentence.text}
+                  </p>
+                );
+              })}
+            </div>
+            <input
+              value={answers[rearrangingTask.answerId] || ""}
+              onChange={(e) => updateAnswer(rearrangingTask.answerId, e.target.value)}
+              disabled={isDone}
+              placeholder="Example: c, a, b, d..."
+              style={{
+                width: "100%",
+                padding: 12,
+                borderRadius: 10,
+                border: "1px solid #cbd5e1",
+                fontFamily: "inherit",
+              }}
+            />
+            {isDone && (
+              <div
+                style={{
+                  marginTop: 8,
+                  padding: 10,
+                  borderRadius: 10,
+                  background: isReadingRearrangeCorrect() ? "#f0fdf4" : "#fef2f2",
+                  border: isReadingRearrangeCorrect()
+                    ? "1px solid #bbf7d0"
+                    : "1px solid #fecaca",
+                  color: "#334155",
+                  lineHeight: 1.6,
+                }}
+              >
+                <p style={{ fontWeight: 700 }}>
+                  {isReadingRearrangeCorrect() ? "Correct" : "Wrong"}
+                </p>
+                <p>Correct order: <strong>{rearrangingTask.correctOrder.join(", ")}</strong></p>
+                <p>{rearrangingTask.explanation}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {!isDone ? (
+          <button
+            onClick={submitReadingTest}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Submit
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setAnswers({});
+              setChecked(false);
+              setReadingTestTimeLeft(3600);
+              setReadingTestStage("start");
+            }}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  function renderEng2FullResultBox(item, userAnswer, isCorrect) {
+    return (
+      <div
+        style={{
+          marginTop: 8,
+          padding: 10,
+          borderRadius: 10,
+          background: isCorrect ? "#f0fdf4" : "#fef2f2",
+          border: isCorrect ? "1px solid #bbf7d0" : "1px solid #fecaca",
+          color: "#334155",
+          lineHeight: 1.6,
+        }}
+      >
+        <p style={{ fontWeight: 700 }}>{isCorrect ? "Correct" : "Wrong"}</p>
+        <p>
+          Your answer: <strong>{userAnswer || "No answer"}</strong>
+        </p>
+        <p>
+          Correct answer: <strong>{item.answer}</strong>
+        </p>
+        <p>{item.explanation}</p>
+      </div>
+    );
+  }
+
+  function renderEng2FullTextSection(sectionData, isDone) {
+    return (
+      <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+        <h3 style={{ marginBottom: 8 }}>
+          {sectionData.title} - {sectionData.marks} marks
+        </h3>
+        <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 12 }}>
+          {sectionData.instruction}
+        </p>
+        {sectionData.items.map(function (item, index) {
+          var userAnswer = answers[item.id] || "";
+          var isCorrect =
+            normalizeEng2FullAnswer(userAnswer) ===
+            normalizeEng2FullAnswer(item.answer);
+
+          return (
+            <div key={item.id} style={{ marginBottom: 12 }}>
+              <label style={{ display: "block", fontWeight: 700, marginBottom: 6 }}>
+                {index + 1}. {item.sentence}
+              </label>
+              <input
+                value={userAnswer}
+                onChange={(e) => updateAnswer(item.id, e.target.value)}
+                disabled={isDone}
+                placeholder="Write answer"
+                style={{
+                  width: "100%",
+                  padding: 12,
+                  borderRadius: 10,
+                  border: "1px solid #cbd5e1",
+                  fontFamily: "inherit",
+                }}
+              />
+              {isDone && renderEng2FullResultBox(item, userAnswer, isCorrect)}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  function renderEng2FullSelectSection(sectionData, isDone) {
+    return (
+      <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+        <h3 style={{ marginBottom: 8 }}>
+          {sectionData.title} - {sectionData.marks} marks
+        </h3>
+        <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 8 }}>
+          {sectionData.instruction}
+        </p>
+        <p style={{ color: "#334155", fontWeight: 700, marginBottom: 12 }}>
+          Word box: {sectionData.wordBox.join(", ")}
+        </p>
+        {sectionData.items.map(function (item, index) {
+          var userAnswer = answers[item.id] || "";
+          var isCorrect =
+            normalizeEng2FullAnswer(userAnswer) ===
+            normalizeEng2FullAnswer(item.answer);
+
+          return (
+            <div key={item.id} style={{ marginBottom: 12 }}>
+              <label style={{ display: "block", fontWeight: 700, marginBottom: 6 }}>
+                {index + 1}. {item.sentence}
+              </label>
+              <select
+                value={userAnswer}
+                onChange={(e) => updateAnswer(item.id, e.target.value)}
+                disabled={isDone}
+                style={{
+                  width: "100%",
+                  padding: 12,
+                  borderRadius: 10,
+                  border: "1px solid #cbd5e1",
+                  background: "#fff",
+                  fontFamily: "inherit",
+                }}
+              >
+                <option value="">Choose answer</option>
+                {sectionData.wordBox.map(function (option) {
+                  return (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  );
+                })}
+              </select>
+              {isDone && renderEng2FullResultBox(item, userAnswer, isCorrect)}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  function renderEng2FullOptionSection(sectionData, isDone) {
+    return (
+      <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+        <h3 style={{ marginBottom: 8 }}>
+          {sectionData.title} - {sectionData.marks} marks
+        </h3>
+        <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 12 }}>
+          {sectionData.instruction}
+        </p>
+        {sectionData.items.map(function (item, index) {
+          var userAnswer = answers[item.id] || "";
+          var isCorrect =
+            normalizeEng2FullAnswer(userAnswer) ===
+            normalizeEng2FullAnswer(item.answer);
+
+          return (
+            <div key={item.id} style={{ marginBottom: 14 }}>
+              <p style={{ fontWeight: 700, marginBottom: 8 }}>
+                {index + 1}. {item.question}
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {item.options.map(function (option, optionIndex) {
+                  var bg = "#f8fafc";
+                  var border = "1px solid #e2e8f0";
+                  var color = "#334155";
+
+                  if (!isDone && userAnswer === option) {
+                    bg = "#eef2ff";
+                    border = "2px solid #6366f1";
+                    color = "#3730a3";
+                  }
+
+                  if (isDone) {
+                    if (option === item.answer) {
+                      bg = "#dcfce7";
+                      border = "2px solid #22c55e";
+                      color = "#166534";
+                    } else if (option === userAnswer) {
+                      bg = "#fee2e2";
+                      border = "2px solid #ef4444";
+                      color = "#991b1b";
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => {
+                        if (!isDone) updateAnswer(item.id, option);
+                      }}
+                      style={{
+                        textAlign: "left",
+                        padding: "10px 12px",
+                        borderRadius: 10,
+                        background: bg,
+                        border: border,
+                        color: color,
+                        fontFamily: "inherit",
+                        cursor: isDone ? "default" : "pointer",
+                      }}
+                    >
+                      {String.fromCharCode(65 + optionIndex)}. {option}
+                    </button>
+                  );
+                })}
+              </div>
+              {isDone && renderEng2FullResultBox(item, userAnswer, isCorrect)}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  function English2FullExamPage() {
+    var isDone = eng2FullExamStage === "done";
+    var scores = getEng2FullScores();
+    var sectionOrder = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11", "q12"];
+
+    if (eng2FullExamStage === "start") {
+      return (
+        <div style={{ padding: "10px 0" }}>
+          <button
+            style={backButtonStyle}
+            onClick={() => {
+              setTask(null);
+              resetPractice();
+            }}
+          >
+            {"<- Back"}
+          </button>
+
+          <div
+            style={{
+              padding: 18,
+              border: "1px solid #e2e8f0",
+              borderRadius: 12,
+              background: "#f8fafc",
+              textAlign: "center",
+            }}
+          >
+            <h2 style={{ marginBottom: 10 }}>English 2nd Paper Full Test</h2>
+            <p style={{ color: "#334155", fontWeight: 700, marginBottom: 4 }}>
+              100 Marks
+            </p>
+            <p style={{ color: "#334155", fontWeight: 700, marginBottom: 16 }}>
+              90 Minutes
+            </p>
+            <button
+              onClick={startEng2FullExam}
+              style={{
+                width: "100%",
+                padding: "12px 20px",
+                border: "none",
+                borderRadius: 12,
+                background: "#6366f1",
+                color: "#fff",
+                fontSize: 15,
+                fontWeight: 700,
+                fontFamily: "inherit",
+                cursor: "pointer",
+              }}
+            >
+              Start Test
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          {"<- Back"}
+        </button>
+
+        <h2>English 2nd Paper Full Test</h2>
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 16,
+            padding: 14,
+            borderRadius: 12,
+            background: isDone ? "#f0fdf4" : "#eef2ff",
+            border: isDone ? "1px solid #bbf7d0" : "1px solid #c7d2fe",
+            color: isDone ? "#166534" : "#3730a3",
+            fontWeight: 800,
+            textAlign: "center",
+          }}
+        >
+          {isDone
+            ? "Total score: " +
+              scores.autoScore +
+              " / " +
+              scores.total +
+              " (" +
+              scores.manualTotal +
+              " marks review pending)"
+            : "Time left: " + formatMiniMockTime(eng2FullExamTimeLeft)}
+        </div>
+
+        {isDone && (
+          <div
+            style={{
+              marginBottom: 16,
+              padding: 16,
+              border: "1px solid #c7d2fe",
+              borderRadius: 12,
+              background: "#eef2ff",
+              color: "#334155",
+              lineHeight: 1.7,
+            }}
+          >
+            <h3 style={{ marginBottom: 8 }}>Result</h3>
+            <p>
+              Auto-graded grammar score: {scores.autoScore}/{scores.autoTotal}
+            </p>
+            <p>Manual review marks: {scores.manualTotal}</p>
+            <p style={{ color: "#475569" }}>
+              Q5 and Part B need teacher or self review before final marks are complete.
+            </p>
+            <h3 style={{ marginTop: 12, marginBottom: 8 }}>Section-wise score</h3>
+            {sectionOrder.map(function (key) {
+              var item = scores.sections[key];
+              return (
+                <p key={key}>
+                  {item.title}:{" "}
+                  {item.review ? "Review Needed" : item.score + "/" + item.total}
+                  {item.review ? " / " + item.total : ""}
+                </p>
+              );
+            })}
+          </div>
+        )}
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <h3>Part A - Grammar: 60 marks</h3>
+          {renderEng2FullTextSection(eng2FullExamData.q1, isDone)}
+          {renderEng2FullSelectSection(eng2FullExamData.q2, isDone)}
+          {renderEng2FullTextSection(eng2FullExamData.q3, isDone)}
+          {renderEng2FullTextSection(eng2FullExamData.q4, isDone)}
+
+          <div style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+            <h3 style={{ marginBottom: 8 }}>
+              {eng2FullExamData.q5.title} - {eng2FullExamData.q5.marks} marks
+            </h3>
+            <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 10 }}>
+              {eng2FullExamData.q5.instruction}
+            </p>
+            <p style={{ padding: 12, background: "#f8fafc", borderRadius: 10, color: "#334155", lineHeight: 1.6, marginBottom: 10 }}>
+              {eng2FullExamData.q5.direct}
+            </p>
+            <textarea
+              value={answers["eng2full-q5"] || ""}
+              onChange={(e) => updateAnswer("eng2full-q5", e.target.value)}
+              disabled={isDone}
+              rows={5}
+              placeholder="Write indirect speech"
+              style={{
+                width: "100%",
+                padding: 12,
+                borderRadius: 10,
+                border: "1px solid #cbd5e1",
+                fontFamily: "inherit",
+                resize: "vertical",
+              }}
+            />
+            {isDone && (
+              <div style={{ marginTop: 10, padding: 12, borderRadius: 10, background: "#fffbeb", border: "1px solid #fde68a", color: "#334155", lineHeight: 1.6 }}>
+                <p style={{ fontWeight: 700 }}>Review Needed</p>
+                <p>Model answer: <strong>{eng2FullExamData.q5.answer}</strong></p>
+                <p>{eng2FullExamData.q5.explanation}</p>
+              </div>
+            )}
+          </div>
+
+          {renderEng2FullTextSection(eng2FullExamData.q6, isDone)}
+          {renderEng2FullSelectSection(eng2FullExamData.q7, isDone)}
+          {renderEng2FullOptionSection(eng2FullExamData.q8, isDone)}
+          {renderEng2FullTextSection(eng2FullExamData.q9, isDone)}
+
+          <h3>Part B - Composition: 40 marks</h3>
+          {[eng2FullExamData.q10, eng2FullExamData.q11, eng2FullExamData.q12].map(function (item) {
+            return (
+              <div key={item.id} style={{ padding: 16, border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
+                <h3 style={{ marginBottom: 8 }}>
+                  {item.title} - {item.marks} marks
+                </h3>
+                <p style={{ color: "#334155", fontWeight: 700, lineHeight: 1.6, marginBottom: 10 }}>
+                  {item.question}
+                </p>
+                <textarea
+                  value={answers[item.id] || ""}
+                  onChange={(e) => updateAnswer(item.id, e.target.value)}
+                  disabled={isDone}
+                  rows={7}
+                  placeholder="Write your answer"
+                  style={{
+                    width: "100%",
+                    padding: 12,
+                    borderRadius: 10,
+                    border: "1px solid #cbd5e1",
+                    fontFamily: "inherit",
+                    resize: "vertical",
+                  }}
+                />
+                {isDone && (
+                  <div style={{ marginTop: 10, padding: 12, borderRadius: 10, background: "#fffbeb", border: "1px solid #fde68a", color: "#334155", lineHeight: 1.6 }}>
+                    <p style={{ fontWeight: 700 }}>Review Needed</p>
+                    <p style={{ fontWeight: 700, marginTop: 6 }}>Key points</p>
+                    <p>{item.keyPoints.join(", ")}</p>
+                    <p style={{ fontWeight: 700, marginTop: 6 }}>Model answer</p>
+                    <p style={{ whiteSpace: "pre-wrap" }}>{item.modelAnswer}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {!isDone ? (
+          <button
+            onClick={submitEng2FullExam}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Submit
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setAnswers({});
+              setChecked(false);
+              setEng2FullExamTimeLeft(5400);
+              setEng2FullExamStage("start");
             }}
             style={{
               marginTop: 16,
@@ -7455,6 +9227,10 @@ if (task === "ictCreative") {
   return <ICTCreativePractice />;
 }
 
+if (task === "eng2FullExam") {
+  return <English2FullExamPage />;
+}
+
 if (task === "fullMock") {
   return <FullMockTestPage />;
 }
@@ -7465,6 +9241,10 @@ if (task === "reviewMistakes") {
 
 if (task === "timedMiniMock") {
   return <TimedMiniMockPage />;
+}
+
+if (task === "eng1ReadingFull") {
+  return <English1ReadingTestPage />;
 }
 
 if (task === "passageBroadQuestions") {
@@ -7637,6 +9417,13 @@ if (task === "wordsPhrases") {
         <h2>English 1st Paper Practice</h2>
         <p>Subject Code: 107 | Full Marks: 100 | Time: 3 hours</p>
 
+        <button
+          style={{ ...cardStyle, marginTop: 16, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("eng1ReadingFull")}
+        >
+          English 1st Reading Test Simulation - 60 marks
+        </button>
+
         <h3 style={{ marginTop: 18 }}>Part I — Reading Test: 60 marks</h3>
         <button
           style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
@@ -7720,6 +9507,14 @@ if (task === "wordsPhrases") {
         </button>
         <h2>English 2nd Paper Practice</h2>
         <p>Subject Code: 108 | Full Marks: 100 | Time: 3 hours</p>
+
+        <button
+          style={{ ...cardStyle, marginTop: 16, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("eng2FullExam")}
+        >
+          <h3>English 2nd Paper Full Test</h3>
+          <p>100 marks | 90 minutes</p>
+        </button>
 
         <h3 style={{ marginTop: 18 }}>Part A — Grammar: 60 marks</h3>
 
@@ -7835,7 +9630,7 @@ if (task === "wordsPhrases") {
 
         <button style={cardStyle} onClick={() => openTask("fullMock")}>
           <h3>Full Mock Test</h3>
-          <p>ICT + English full mock skeleton</p>
+          <p>Available full test simulations</p>
         </button>
 
         <button style={cardStyle} onClick={() => openTask("timedMiniMock")}>
