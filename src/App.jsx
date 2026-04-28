@@ -2442,6 +2442,10 @@ function BoardPracticePage() {
   const [miniMockStage, setMiniMockStage] = useState("start");
   const [miniMockQuestions, setMiniMockQuestions] = useState([]);
   const [miniMockTimeLeft, setMiniMockTimeLeft] = useState(300);
+  const [ictFullExamStage, setIctFullExamStage] = useState("start");
+  const [ictFullExamQuestionsPicked, setIctFullExamQuestionsPicked] = useState([]);
+  const [ictFullExamTimeLeft, setIctFullExamTimeLeft] = useState(1500);
+  const [ictFullExamCurrentIndex, setIctFullExamCurrentIndex] = useState(0);
 
   const ictCreativeItems = [
     {
@@ -2547,6 +2551,174 @@ function BoardPracticePage() {
       title: "English 2nd Paper Full Mock",
       sections: ["Grammar: 60 marks", "Composition: 40 marks"],
       status: "Coming soon",
+    },
+  ];
+
+  const ictFullExamQuestions = [
+    {
+      id: "ict-full-1",
+      question: "বিশ্বগ্রাম ধারণার মূল ভিত্তি কোনটি?",
+      options: [
+        "কৃষি প্রযুক্তি",
+        "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "শিল্প উৎপাদন",
+        "প্রচলিত ডাকব্যবস্থা",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "বিশ্বগ্রাম ধারণার মূল ভিত্তি হলো তথ্য ও যোগাযোগ প্রযুক্তি। ইন্টারনেট, মোবাইল যোগাযোগ ও ডিজিটাল সেবার মাধ্যমে দূরের মানুষও দ্রুত যুক্ত হতে পারে।",
+      language: "bn",
+    },
+    {
+      id: "ict-full-2",
+      question: "E-commerce বলতে কী বোঝায়?",
+      options: [
+        "ইন্টারনেটের মাধ্যমে পণ্য বা সেবা ক্রয়-বিক্রয়",
+        "শুধু ই-মেইল পাঠানো",
+        "কম্পিউটার মেরামত",
+        "অফলাইনে হিসাব সংরক্ষণ",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "E-commerce হলো ইন্টারনেট বা ডিজিটাল নেটওয়ার্ক ব্যবহার করে পণ্য ও সেবা ক্রয়-বিক্রয়ের প্রক্রিয়া।",
+      language: "bn",
+    },
+    {
+      id: "ict-full-3",
+      question: "Which transmission mode allows communication in both directions at the same time?",
+      options: ["Simplex", "Half-duplex", "Full-duplex", "Broadcast"],
+      correctAnswer: 2,
+      explanation:
+        "Full-duplex communication allows both sender and receiver to transmit data at the same time, such as in a telephone call.",
+      language: "en",
+    },
+    {
+      id: "ict-full-4",
+      question: "ডেটা যোগাযোগে bandwidth কী নির্দেশ করে?",
+      options: [
+        "ডেটা সংরক্ষণের স্থান",
+        "ডেটা পরিবহনের ক্ষমতা",
+        "কম্পিউটারের রং",
+        "প্রিন্টারের গতি",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Bandwidth হলো একটি যোগাযোগ মাধ্যম নির্দিষ্ট সময়ে কত পরিমাণ ডেটা বহন করতে পারে তার পরিমাপ।",
+      language: "bn",
+    },
+    {
+      id: "ict-full-5",
+      question: "What is the binary equivalent of decimal 13?",
+      options: ["1011", "1101", "1110", "1001"],
+      correctAnswer: 1,
+      explanation:
+        "Decimal 13 = 8 + 4 + 1. Therefore its binary form is 1101.",
+      language: "en",
+    },
+    {
+      id: "ict-full-6",
+      question: "Which hexadecimal number is equal to binary 1111?",
+      options: ["A", "E", "F", "10"],
+      correctAnswer: 2,
+      explanation:
+        "Binary 1111 equals decimal 15, and decimal 15 is represented as F in hexadecimal.",
+      language: "en",
+    },
+    {
+      id: "ict-full-7",
+      question: "HTML-এ paragraph তৈরির জন্য কোন tag ব্যবহৃত হয়?",
+      options: ["<h1>", "<p>", "<br>", "<img>"],
+      correctAnswer: 1,
+      explanation:
+        "HTML-এ paragraph বা অনুচ্ছেদ লেখার জন্য <p> tag ব্যবহার করা হয়।",
+      language: "bn",
+    },
+    {
+      id: "ict-full-8",
+      question: "Which HTML attribute is used to specify the destination of a hyperlink?",
+      options: ["src", "alt", "href", "title"],
+      correctAnswer: 2,
+      explanation:
+        "The href attribute of the <a> tag specifies the URL or destination of a hyperlink.",
+      language: "en",
+    },
+    {
+      id: "ict-full-9",
+      question: "AND gate-এর output কখন 1 হয়?",
+      options: [
+        "যে কোনো একটি input 1 হলে",
+        "সব input 1 হলে",
+        "সব input 0 হলে",
+        "input উল্টো হলে",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "AND gate-এর output 1 হয় কেবল তখনই, যখন সবগুলো input 1 থাকে।",
+      language: "bn",
+    },
+    {
+      id: "ict-full-10",
+      question: "Which logic gate works as an inverter?",
+      options: ["AND", "OR", "NOT", "XOR"],
+      correctAnswer: 2,
+      explanation:
+        "The NOT gate is called an inverter because it changes 1 to 0 and 0 to 1.",
+      language: "en",
+    },
+    {
+      id: "ict-full-11",
+      question: "C programming language-এ variable declaration-এর সঠিক উদাহরণ কোনটি?",
+      options: ["int age;", "age int;", "number = int;", "var age int;"],
+      correctAnswer: 0,
+      explanation:
+        "C ভাষায় variable declare করতে প্রথমে data type এবং পরে variable name লেখা হয়। তাই int age; সঠিক।",
+      language: "bn",
+    },
+    {
+      id: "ict-full-12",
+      question: "Which header file is commonly used for printf() in C?",
+      options: ["stdio.h", "math.h", "string.h", "conio.h"],
+      correctAnswer: 0,
+      explanation:
+        "printf() is declared in the standard input-output header file stdio.h.",
+      language: "en",
+    },
+    {
+      id: "ict-full-13",
+      question: "DBMS-এর প্রধান কাজ কোনটি?",
+      options: [
+        "ডেটা সংরক্ষণ, ব্যবস্থাপনা ও অনুসন্ধান সহজ করা",
+        "শুধু ছবি সম্পাদনা করা",
+        "ইন্টারনেটের গতি বাড়ানো",
+        "কীবোর্ড নিয়ন্ত্রণ করা",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "DBMS বা Database Management System ডেটা সংরক্ষণ, ব্যবস্থাপনা, অনুসন্ধান, হালনাগাদ ও নিরাপত্তা নিয়ন্ত্রণে সাহায্য করে।",
+      language: "bn",
+    },
+    {
+      id: "ict-full-14",
+      question: "In a relational database, a column is usually called a ____.",
+      options: ["record", "field", "table", "form"],
+      correctAnswer: 1,
+      explanation:
+        "In a database table, each column is called a field, and each row is called a record.",
+      language: "en",
+    },
+    {
+      id: "ict-full-15",
+      question: "Primary key-এর বৈশিষ্ট্য কোনটি?",
+      options: [
+        "একই মান বারবার থাকতে পারে",
+        "এটি record-কে এককভাবে শনাক্ত করে",
+        "এটি শুধু text data রাখে",
+        "এটি table মুছে দেয়",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "Primary key কোনো table-এর প্রতিটি record-কে এককভাবে শনাক্ত করে। তাই এর মান সাধারণত unique হয়।",
+      language: "bn",
     },
   ];
 
@@ -3486,6 +3658,10 @@ const informalLetterTasks = [
     setMiniMockStage("start");
     setMiniMockQuestions([]);
     setMiniMockTimeLeft(300);
+    setIctFullExamStage("start");
+    setIctFullExamQuestionsPicked([]);
+    setIctFullExamTimeLeft(1500);
+    setIctFullExamCurrentIndex(0);
   }
 
   function openTask(taskId) {
@@ -3510,6 +3686,25 @@ const informalLetterTasks = [
       };
     },
     [task, miniMockStage, miniMockTimeLeft]
+  );
+
+  useEffect(
+    function () {
+      if (task !== "ictFullMCQExam" || ictFullExamStage !== "running") return;
+      if (ictFullExamTimeLeft <= 0) {
+        submitICTFullExam();
+        return;
+      }
+
+      var timerId = setTimeout(function () {
+        setIctFullExamTimeLeft(ictFullExamTimeLeft - 1);
+      }, 1000);
+
+      return function () {
+        clearTimeout(timerId);
+      };
+    },
+    [task, ictFullExamStage, ictFullExamTimeLeft]
   );
 
   function getScore(items) {
@@ -3660,6 +3855,63 @@ const informalLetterTasks = [
     );
     setChecked(true);
     setMiniMockStage("done");
+  }
+
+  function getICTFullExamProgressInfo() {
+    return {
+      id: "ict-full-mcq",
+      title: "ICT Full MCQ Exam",
+    };
+  }
+
+  function getICTFullExamScore() {
+    var score = 0;
+    ictFullExamQuestionsPicked.forEach(function (mcq) {
+      if (answers[mcq.id] === mcq.correctAnswer) {
+        score++;
+      }
+    });
+    return score;
+  }
+
+  function getICTFullExamWrongEntries() {
+    var entries = [];
+    ictFullExamQuestionsPicked.forEach(function (mcq) {
+      var selected = answers[mcq.id];
+      if (selected !== mcq.correctAnswer) {
+        entries.push({
+          question: mcq.question,
+          studentAnswer:
+            selected === undefined ? "No answer" : mcq.options[selected],
+          correctAnswer: mcq.options[mcq.correctAnswer],
+          explanation: mcq.explanation,
+        });
+      }
+    });
+    return addWrongAnswerInfo(getICTFullExamProgressInfo(), entries);
+  }
+
+  function startICTFullExam() {
+    var picked = shuffleAndPick(
+      ictFullExamQuestions,
+      Math.min(25, ictFullExamQuestions.length)
+    );
+    setAnswers({});
+    setChecked(false);
+    setIctFullExamQuestionsPicked(picked);
+    setIctFullExamTimeLeft(1500);
+    setIctFullExamCurrentIndex(0);
+    setIctFullExamStage("running");
+  }
+
+  function submitICTFullExam() {
+    if (ictFullExamStage !== "running") return;
+    var score = getICTFullExamScore();
+    var total = ictFullExamQuestionsPicked.length;
+    saveScoredPractice(getICTFullExamProgressInfo(), score, total);
+    saveWrongAnswers(getICTFullExamWrongEntries());
+    setChecked(true);
+    setIctFullExamStage("done");
   }
 
   function checkPractice(progressInfo, score, total, wrongEntries) {
@@ -5653,6 +5905,394 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
     );
   }
 
+  function ICTFullMCQExamPage() {
+    var score = getICTFullExamScore();
+    var total = ictFullExamQuestionsPicked.length;
+    var percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+    var currentQuestion = ictFullExamQuestionsPicked[ictFullExamCurrentIndex];
+
+    if (ictFullExamStage === "start") {
+      return (
+        <div style={{ padding: "10px 0" }}>
+          <button
+            style={backButtonStyle}
+            onClick={() => {
+              setTask(null);
+              resetPractice();
+            }}
+          >
+            Ã¢â€ Â Back
+          </button>
+
+          <div
+            style={{
+              padding: 18,
+              border: "1px solid #e2e8f0",
+              borderRadius: 12,
+              background: "#f8fafc",
+              textAlign: "center",
+            }}
+          >
+            <h2 style={{ marginBottom: 10 }}>ICT Full MCQ Exam</h2>
+            <p style={{ color: "#334155", fontWeight: 700, marginBottom: 4 }}>
+              25 Questions
+            </p>
+            <p style={{ color: "#334155", fontWeight: 700, marginBottom: 10 }}>
+              25 Minutes
+            </p>
+            <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 16 }}>
+              Phase 1 sample set: {ictFullExamQuestions.length} questions. The exam engine is ready for 25.
+            </p>
+            <button
+              onClick={startICTFullExam}
+              style={{
+                width: "100%",
+                padding: "12px 20px",
+                border: "none",
+                borderRadius: 12,
+                background: "#6366f1",
+                color: "#fff",
+                fontSize: 15,
+                fontWeight: 700,
+                fontFamily: "inherit",
+                cursor: "pointer",
+              }}
+            >
+              Start Exam
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (ictFullExamStage === "done") {
+      return (
+        <div style={{ padding: "10px 0" }}>
+          <button
+            style={backButtonStyle}
+            onClick={() => {
+              setTask(null);
+              resetPractice();
+            }}
+          >
+            Ã¢â€ Â Back
+          </button>
+
+          <h2>ICT Full MCQ Exam</h2>
+          <div
+            style={{
+              marginTop: 12,
+              marginBottom: 16,
+              padding: 16,
+              borderRadius: 12,
+              background: "#eef2ff",
+              border: "1px solid #c7d2fe",
+              textAlign: "center",
+              color: "#334155",
+            }}
+          >
+            <p style={{ fontSize: 13, fontWeight: 700, color: "#6366f1" }}>
+              Score
+            </p>
+            <p style={{ fontSize: 30, fontWeight: 800, margin: "4px 0" }}>
+              {score}/{total}
+            </p>
+            <p style={{ fontWeight: 700 }}>{percentage}%</p>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {ictFullExamQuestionsPicked.map(function (mcq, index) {
+              var selected = answers[mcq.id];
+              var isCorrect = selected === mcq.correctAnswer;
+
+              return (
+                <div
+                  key={mcq.id}
+                  style={{
+                    padding: 16,
+                    border: "1px solid #e2e8f0",
+                    borderRadius: 12,
+                    background: "#fff",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontWeight: 700,
+                      lineHeight: 1.6,
+                      marginBottom: 10,
+                    }}
+                  >
+                    Q{index + 1}. {mcq.question}
+                  </p>
+                  <p
+                    style={{
+                      color: isCorrect ? "#166534" : "#991b1b",
+                      fontWeight: 700,
+                      marginBottom: 6,
+                    }}
+                  >
+                    {isCorrect ? "Correct" : "Incorrect"}
+                  </p>
+                  <p style={{ color: "#475569", lineHeight: 1.6, marginBottom: 4 }}>
+                    Your answer:{" "}
+                    <strong>
+                      {selected === undefined
+                        ? "No answer"
+                        : mcq.options[selected]}
+                    </strong>
+                  </p>
+                  <p style={{ color: "#166534", lineHeight: 1.6, marginBottom: 4 }}>
+                    Correct answer:{" "}
+                    <strong>{mcq.options[mcq.correctAnswer]}</strong>
+                  </p>
+                  <p style={{ color: "#334155", lineHeight: 1.7 }}>
+                    {mcq.explanation}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={() => {
+              setAnswers({});
+              setChecked(false);
+              setIctFullExamQuestionsPicked([]);
+              setIctFullExamTimeLeft(1500);
+              setIctFullExamCurrentIndex(0);
+              setIctFullExamStage("start");
+            }}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        </div>
+      );
+    }
+
+    if (!currentQuestion) {
+      return (
+        <div style={{ padding: "10px 0" }}>
+          <button
+            style={backButtonStyle}
+            onClick={() => {
+              setTask(null);
+              resetPractice();
+            }}
+          >
+            Ã¢â€ Â Back
+          </button>
+          <p style={{ color: "#64748b" }}>No questions loaded.</p>
+        </div>
+      );
+    }
+
+    var selected = answers[currentQuestion.id];
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          Ã¢â€ Â Back
+        </button>
+
+        <h2>ICT Full MCQ Exam</h2>
+        <div
+          style={{
+            marginTop: 10,
+            marginBottom: 14,
+            padding: 14,
+            borderRadius: 12,
+            background: "#eef2ff",
+            border: "1px solid #c7d2fe",
+            color: "#3730a3",
+            fontWeight: 800,
+            textAlign: "center",
+          }}
+        >
+          Time left: {formatMiniMockTime(ictFullExamTimeLeft)}
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 6,
+            marginBottom: 14,
+          }}
+        >
+          {ictFullExamQuestionsPicked.map(function (mcq, index) {
+            var isCurrent = index === ictFullExamCurrentIndex;
+            var isAnswered = answers[mcq.id] !== undefined;
+            return (
+              <button
+                key={mcq.id}
+                onClick={() => setIctFullExamCurrentIndex(index)}
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 999,
+                  border: isCurrent
+                    ? "2px solid #6366f1"
+                    : "1px solid #cbd5e1",
+                  background: isAnswered ? "#dcfce7" : "#fff",
+                  color: isCurrent ? "#3730a3" : "#334155",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                {index + 1}
+              </button>
+            );
+          })}
+        </div>
+
+        <div
+          style={{
+            padding: 16,
+            border: "1px solid #e2e8f0",
+            borderRadius: 12,
+            background: "#fff",
+          }}
+        >
+          <p
+            style={{
+              fontSize: 13,
+              fontWeight: 700,
+              color: "#6366f1",
+              marginBottom: 8,
+            }}
+          >
+            Q{ictFullExamCurrentIndex + 1} of {total}
+          </p>
+          <p style={{ fontWeight: 700, marginBottom: 12, lineHeight: 1.7 }}>
+            {currentQuestion.question}
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {currentQuestion.options.map(function (option, optionIndex) {
+              var isSelected = selected === optionIndex;
+              return (
+                <button
+                  key={option}
+                  onClick={() => updateAnswer(currentQuestion.id, optionIndex)}
+                  style={{
+                    textAlign: "left",
+                    padding: "12px 14px",
+                    borderRadius: 10,
+                    background: isSelected ? "#eef2ff" : "#f8fafc",
+                    border: isSelected
+                      ? "2px solid #6366f1"
+                      : "1px solid #e2e8f0",
+                    color: isSelected ? "#3730a3" : "#334155",
+                    fontSize: 14,
+                    fontFamily: "inherit",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {String.fromCharCode(65 + optionIndex)}. {option}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            marginTop: 14,
+          }}
+        >
+          <button
+            onClick={() =>
+              setIctFullExamCurrentIndex(
+                Math.max(0, ictFullExamCurrentIndex - 1)
+              )
+            }
+            disabled={ictFullExamCurrentIndex === 0}
+            style={{
+              flex: 1,
+              padding: "12px",
+              border: "1px solid #e2e8f0",
+              borderRadius: 12,
+              background: "#fff",
+              color: "#6366f1",
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: ictFullExamCurrentIndex === 0 ? "default" : "pointer",
+              opacity: ictFullExamCurrentIndex === 0 ? 0.5 : 1,
+            }}
+          >
+            Previous
+          </button>
+          <button
+            onClick={() =>
+              setIctFullExamCurrentIndex(
+                Math.min(total - 1, ictFullExamCurrentIndex + 1)
+              )
+            }
+            disabled={ictFullExamCurrentIndex === total - 1}
+            style={{
+              flex: 1,
+              padding: "12px",
+              border: "1px solid #e2e8f0",
+              borderRadius: 12,
+              background: "#fff",
+              color: "#6366f1",
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor:
+                ictFullExamCurrentIndex === total - 1 ? "default" : "pointer",
+              opacity: ictFullExamCurrentIndex === total - 1 ? 0.5 : 1,
+            }}
+          >
+            Next
+          </button>
+        </div>
+
+        <button
+          onClick={submitICTFullExam}
+          style={{
+            marginTop: 12,
+            width: "100%",
+            padding: "12px 20px",
+            border: "none",
+            borderRadius: 12,
+            background: "#6366f1",
+            color: "#fff",
+            fontSize: 15,
+            fontWeight: 700,
+            fontFamily: "inherit",
+            cursor: "pointer",
+          }}
+        >
+          Submit Exam
+        </button>
+      </div>
+    );
+  }
+
   function BroadQuestionPractice({ taskData }) {
     return (
       <div style={{ padding: "10px 0" }}>
@@ -6807,6 +7447,10 @@ if (task === "ictMCQ") {
   return <ICTMCQPractice />;
 }
 
+if (task === "ictFullMCQExam") {
+  return <ICTFullMCQExamPage />;
+}
+
 if (task === "ictCreative") {
   return <ICTCreativePractice />;
 }
@@ -6960,6 +7604,14 @@ if (task === "wordsPhrases") {
           >
             <h3>MCQ Section</h3>
             <p>25 questions × 1 = 25 marks</p>
+          </button>
+
+          <button
+            style={{ ...cardStyle, marginBottom: 0, width: "100%" }}
+            onClick={() => openTask("ictFullMCQExam")}
+          >
+            <h3>ICT Full MCQ Exam</h3>
+            <p>25 questions × 1 = 25 marks | 25 minutes</p>
           </button>
 
           <button
