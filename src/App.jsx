@@ -2642,6 +2642,41 @@ const summaryTasks = [
   },
 ];
 
+const informalLetterTasks = [
+  {
+    id: "informal-1",
+    title: "Email about HSC Exam Preparation",
+    question:
+      "Write an email to your friend about your preparation for the HSC exam.",
+    marks: 10,
+    modelAnswer:
+      "To: friend@example.com\nSubject: My HSC exam preparation\n\nDear Rafi,\nI hope you are well. My HSC exam preparation is going on well. I have made a daily routine and I am following it carefully. I revise English, ICT and other subjects every day. I also solve board questions to understand the exam pattern. Please pray for me so that I can do well in the exam.\n\nYour friend,\nSadia",
+    keyPoints: [
+      "Email address and subject",
+      "Friendly greeting",
+      "Preparation routine",
+      "Board question practice",
+      "Proper closing",
+    ],
+  },
+  {
+    id: "informal-2",
+    title: "Informal Letter about Learning ICT",
+    question:
+      "Write an informal letter to your friend describing the importance of learning ICT.",
+    marks: 10,
+    modelAnswer:
+      "Dear Rafi,\nI hope you are fine. Today I want to tell you about the importance of learning ICT. ICT helps us use computers, internet and digital tools properly. It is useful for study, communication and future jobs. A student who knows ICT can collect information quickly and learn many new things online. So, we should learn ICT with care.\n\nNo more today. Write to me soon.\n\nYour loving friend,\nSadia",
+    keyPoints: [
+      "Friendly opening",
+      "Importance of ICT",
+      "Uses in study and communication",
+      "Future job benefits",
+      "Informal closing",
+    ],
+  },
+];
+
   const cardStyle = {
     padding: 16,
     border: "1px solid #e2e8f0",
@@ -3856,6 +3891,16 @@ if (task === "summary") {
   );
 }
 
+if (task === "informalLetter") {
+  return (
+    <WritingPractice
+      title="Q9 Informal Letter / Email"
+      subtitle="Board pattern: 10 marks. Friendly tone, clear message এবং proper closing ঠিক রাখতে হবে।"
+      tasks={informalLetterTasks}
+    />
+  );
+}
+
   if (task === "connectors") {
   return (
     <FillPractice
@@ -3974,12 +4019,18 @@ if (task === "wordsPhrases") {
         {[
           "Q7 Graph / Chart Analysis — 15 marks",
           "Q8 Story Completion — 15 marks",
-          "Q9 Informal Letter / Email — 10 marks",
         ].map((item) => (
           <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
             {item}
           </div>
         ))}
+
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("informalLetter")}
+        >
+          Q9 Informal Letter / Email — 10 marks
+        </button>
       </div>
     );
   }
