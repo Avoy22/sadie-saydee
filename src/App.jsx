@@ -2199,6 +2199,92 @@ function BoardPracticePage() {
   const [answers, setAnswers] = useState({});
   const [checked, setChecked] = useState(false);
 
+  const ictCreativeItems = [
+    {
+      id: "ict-creative-html",
+      title: "HTML / Web Design",
+      scenario:
+        "Rahim wants to create a webpage for his college. He wants to add a heading, a paragraph, an image and a hyperlink to the college website.",
+      parts: [
+        {
+          id: "ict-creative-html-ka",
+          label: "ক",
+          marks: 1,
+          question: "HTML কী?",
+          modelAnswer:
+            "HTML এর পূর্ণরূপ HyperText Markup Language. এটি ওয়েব পেজ তৈরি করার প্রধান markup language.",
+        },
+        {
+          id: "ict-creative-html-kha",
+          label: "খ",
+          marks: 2,
+          question: "HTML কে markup language বলা হয় কেন?",
+          modelAnswer:
+            "HTML বিভিন্ন tag ব্যবহার করে webpage-এর heading, paragraph, image, link ইত্যাদি structure নির্ধারণ করে. তাই HTML কে markup language বলা হয়.",
+        },
+        {
+          id: "ict-creative-html-ga",
+          label: "গ",
+          marks: 3,
+          question:
+            "Rahim কীভাবে একটি image এবং hyperlink যুক্ত করবে? উদাহরণসহ লেখ।",
+          modelAnswer:
+            "Rahim image যুক্ত করতে <img> tag এবং hyperlink যুক্ত করতে <a> tag ব্যবহার করবে. যেমন: <img src=\"college.jpg\" alt=\"College\"> এবং <a href=\"https://college.edu.bd\">College Website</a>.",
+        },
+        {
+          id: "ict-creative-html-gha",
+          label: "ঘ",
+          marks: 8,
+          question:
+            "একটি educational website তৈরিতে HTML-এর গুরুত্ব বিশ্লেষণ কর।",
+          modelAnswer:
+            "Educational website তৈরিতে HTML খুব গুরুত্বপূর্ণ, কারণ এটি webpage-এর মূল কাঠামো তৈরি করে. HTML দিয়ে heading, paragraph, list, image, table, form এবং link সাজানো যায়. শিক্ষার্থীরা class routine, notice, result, admission information এবং study materials সহজে দেখতে পারে. CSS ও JavaScript ব্যবহার করার আগে HTML ভিত্তি হিসেবে কাজ করে. তাই একটি কার্যকর educational website তৈরির প্রথম ও অপরিহার্য ধাপ হলো সঠিক HTML structure তৈরি করা.",
+        },
+      ],
+    },
+    {
+      id: "ict-creative-number-system",
+      title: "Number System",
+      scenario:
+        "A student is learning how computers store numbers. His teacher asks him to convert decimal numbers into binary and explain why computers use binary.",
+      parts: [
+        {
+          id: "ict-creative-number-ka",
+          label: "ক",
+          marks: 1,
+          question: "Binary number system কী?",
+          modelAnswer:
+            "Binary number system হলো base-2 number system, যেখানে শুধু 0 এবং 1 digit ব্যবহার করা হয়.",
+        },
+        {
+          id: "ict-creative-number-kha",
+          label: "খ",
+          marks: 2,
+          question: "Computer কেন binary number system ব্যবহার করে?",
+          modelAnswer:
+            "Computer electronic circuit দিয়ে কাজ করে, যেখানে signal-এর দুটি অবস্থা থাকে: on এবং off. এই দুটি অবস্থাকে 1 এবং 0 দিয়ে প্রকাশ করা সহজ, তাই computer binary number system ব্যবহার করে.",
+        },
+        {
+          id: "ict-creative-number-ga",
+          label: "গ",
+          marks: 3,
+          question: "(25)₁₀ কে binary-তে রূপান্তর কর।",
+          modelAnswer:
+            "25 কে 2 দিয়ে ভাগ করলে remainder গুলো নিচ থেকে ওপরে পড়তে হয়: 25 ÷ 2 = 12 remainder 1, 12 ÷ 2 = 6 remainder 0, 6 ÷ 2 = 3 remainder 0, 3 ÷ 2 = 1 remainder 1, 1 ÷ 2 = 0 remainder 1. তাই (25)₁₀ = (11001)₂.",
+        },
+        {
+          id: "ict-creative-number-gha",
+          label: "ঘ",
+          marks: 8,
+          question:
+            "Number system conversion ICT শিক্ষায় কেন গুরুত্বপূর্ণ — বিশ্লেষণ কর।",
+          modelAnswer:
+            "Number system conversion ICT শিক্ষায় গুরুত্বপূর্ণ, কারণ computer data internally binary আকারে সংরক্ষণ ও প্রক্রিয়াকরণ করে. Decimal, binary, octal এবং hexadecimal system বুঝলে memory, coding, digital logic, address, color code এবং machine-level data সম্পর্কে পরিষ্কার ধারণা পাওয়া যায়. Programming, networking এবং hardware-related বিষয়েও number conversion দরকার হয়. তাই ICT-তে computer কীভাবে data বোঝে ও ব্যবহার করে তা শেখার জন্য number system conversion একটি মৌলিক দক্ষতা.",
+        },
+      ],
+    },
+  ];
+
   const prepositionItems = [
     {
       id: "prep-1",
@@ -2553,6 +2639,99 @@ const applicationTasks = [
       "Request politely",
       "Keep paragraphs clear",
     ],
+  },
+];
+
+const ictMcqItems = [
+  {
+    id: "ict-mcq-1",
+    topic: "Global Village",
+    question: "Who introduced the term 'Global Village'?",
+    options: ["Bill Gates", "Marshall McLuhan", "Tim Berners-Lee", "Charles Babbage"],
+    correctAnswer: 1,
+    explanation:
+      "Marshall McLuhan introduced the term Global Village to explain how electronic communication connects the world like one village.",
+  },
+  {
+    id: "ict-mcq-2",
+    topic: "Data Communication",
+    question: "Which device is used to connect multiple networks together?",
+    options: ["Router", "Keyboard", "Monitor", "Scanner"],
+    correctAnswer: 0,
+    explanation:
+      "A router forwards data between different networks and helps devices communicate across network boundaries.",
+  },
+  {
+    id: "ict-mcq-3",
+    topic: "Data Communication",
+    question: "Which transmission mode allows data to travel in both directions, but not at the same time?",
+    options: ["Simplex", "Half-duplex", "Full-duplex", "Broadcast"],
+    correctAnswer: 1,
+    explanation:
+      "In half-duplex mode, both sides can send and receive data, but only one side transmits at a time.",
+  },
+  {
+    id: "ict-mcq-4",
+    topic: "Number System",
+    question: "What is the binary equivalent of decimal 10?",
+    options: ["1000", "1010", "1100", "1110"],
+    correctAnswer: 1,
+    explanation:
+      "Decimal 10 is 8 + 2, so its binary form is 1010.",
+  },
+  {
+    id: "ict-mcq-5",
+    topic: "Number System",
+    question: "Which number system uses the digits 0 to 9 and A to F?",
+    options: ["Binary", "Octal", "Decimal", "Hexadecimal"],
+    correctAnswer: 3,
+    explanation:
+      "Hexadecimal is base 16, so it uses 0-9 and A-F to represent values.",
+  },
+  {
+    id: "ict-mcq-6",
+    topic: "HTML",
+    question: "Which HTML tag is used to create a hyperlink?",
+    options: ["<p>", "<a>", "<img>", "<table>"],
+    correctAnswer: 1,
+    explanation:
+      "The <a> tag creates a hyperlink, usually with an href attribute.",
+  },
+  {
+    id: "ict-mcq-7",
+    topic: "Logic Gate",
+    question: "Which logic gate gives output 1 only when all inputs are 1?",
+    options: ["OR", "NOT", "AND", "XOR"],
+    correctAnswer: 2,
+    explanation:
+      "An AND gate outputs 1 only if every input is 1.",
+  },
+  {
+    id: "ict-mcq-8",
+    topic: "Logic Gate",
+    question: "Which gate reverses the input signal?",
+    options: ["AND", "OR", "NOT", "NAND"],
+    correctAnswer: 2,
+    explanation:
+      "A NOT gate is an inverter. It changes 1 to 0 and 0 to 1.",
+  },
+  {
+    id: "ict-mcq-9",
+    topic: "C Programming",
+    question: "Which symbol is used to end a statement in C programming?",
+    options: [",", ".", ";", ":"],
+    correctAnswer: 2,
+    explanation:
+      "Most C statements end with a semicolon.",
+  },
+  {
+    id: "ict-mcq-10",
+    topic: "Database",
+    question: "In a database table, what is a row usually called?",
+    options: ["Field", "Record", "Column", "Query"],
+    correctAnswer: 1,
+    explanation:
+      "A row in a database table is called a record. A column is called a field.",
   },
 ];
 
@@ -4169,6 +4348,412 @@ function WritingPractice({ title, subtitle, tasks }) {
     );
   }
 
+  function ICTMCQPractice() {
+    var score = 0;
+
+    ictMcqItems.forEach(function (mcq) {
+      if (answers[mcq.id] === mcq.correctAnswer) {
+        score++;
+      }
+    });
+
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          â† Back
+        </button>
+
+        <h2>ICT MCQ Practice</h2>
+        <p
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 10,
+          }}
+        >
+          Board pattern: 25 MCQs × 1 = 25 marks
+        </p>
+        <p style={{ color: "#64748b", lineHeight: 1.6 }}>
+          Sample set: 10 MCQs now. Full board set will be expanded to 25 later.
+        </p>
+
+        {checked && (
+          <div
+            style={{
+              marginTop: 16,
+              padding: 16,
+              borderRadius: 12,
+              background: "#eef2ff",
+              border: "1px solid #c7d2fe",
+              color: "#334155",
+              fontWeight: 700,
+            }}
+          >
+            Score: {score} / {ictMcqItems.length}
+          </div>
+        )}
+
+        <div
+          style={{
+            marginTop: 16,
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+          }}
+        >
+          {ictMcqItems.map(function (mcq, index) {
+            var selected = answers[mcq.id];
+            var hasSelected = selected !== undefined;
+            var isCorrect = selected === mcq.correctAnswer;
+
+            return (
+              <div
+                key={mcq.id}
+                style={{
+                  padding: 16,
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 12,
+                  background: "#fff",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: "#6366f1",
+                    marginBottom: 6,
+                  }}
+                >
+                  {mcq.topic}
+                </p>
+                <p style={{ fontWeight: 700, marginBottom: 10, lineHeight: 1.6 }}>
+                  {index + 1}. {mcq.question}
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {mcq.options.map(function (option, optionIndex) {
+                    var bg = "#f8fafc";
+                    var border = "1px solid #e2e8f0";
+                    var color = "#334155";
+
+                    if (!checked && selected === optionIndex) {
+                      bg = "#eef2ff";
+                      border = "2px solid #6366f1";
+                      color = "#3730a3";
+                    }
+
+                    if (checked) {
+                      if (optionIndex === mcq.correctAnswer) {
+                        bg = "#dcfce7";
+                        border = "2px solid #22c55e";
+                        color = "#166534";
+                      } else if (optionIndex === selected) {
+                        bg = "#fee2e2";
+                        border = "2px solid #ef4444";
+                        color = "#991b1b";
+                      }
+                    }
+
+                    return (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          if (!checked) updateAnswer(mcq.id, optionIndex);
+                        }}
+                        style={{
+                          textAlign: "left",
+                          padding: "12px 14px",
+                          borderRadius: 10,
+                          background: bg,
+                          border: border,
+                          color: color,
+                          fontSize: 14,
+                          fontFamily: "inherit",
+                          fontWeight: 500,
+                          cursor: checked ? "default" : "pointer",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {String.fromCharCode(65 + optionIndex)}. {option}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {checked && (
+                  <div
+                    style={{
+                      marginTop: 12,
+                      padding: "12px 14px",
+                      borderRadius: 10,
+                      background: isCorrect ? "#f0fdf4" : "#fef2f2",
+                      border: isCorrect
+                        ? "1px solid #bbf7d0"
+                        : "1px solid #fecaca",
+                      color: "#334155",
+                      fontSize: 13,
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    <p style={{ fontWeight: 700, marginBottom: 4 }}>
+                      {isCorrect ? "Correct" : "Wrong"}
+                    </p>
+                    {!hasSelected && (
+                      <p style={{ marginBottom: 4 }}>You did not select an answer.</p>
+                    )}
+                    <p style={{ marginBottom: 4 }}>
+                      Correct answer: {String.fromCharCode(65 + mcq.correctAnswer)}.{" "}
+                      {mcq.options[mcq.correctAnswer]}
+                    </p>
+                    <p>{mcq.explanation}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {!checked ? (
+          <button
+            onClick={() => setChecked(true)}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Submit
+          </button>
+        ) : (
+          <button
+            onClick={resetPractice}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              padding: "12px 20px",
+              border: "none",
+              borderRadius: 12,
+              background: "#6366f1",
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
+            Try Again
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  function ICTCreativePractice() {
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          Ã¢â€ Â Back
+        </button>
+
+        <h2>ICT Creative Practice</h2>
+        <p
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 10,
+          }}
+        >
+          Board pattern: Scenario-based question. à¦• = 1, à¦– = 2, à¦— = 3, à¦˜ = 8 marks
+        </p>
+        <p style={{ color: "#64748b", lineHeight: 1.6 }}>
+          Write your answer for each part, then compare it with the model answer.
+        </p>
+
+        <div
+          style={{
+            marginTop: 16,
+            display: "flex",
+            flexDirection: "column",
+            gap: 14,
+          }}
+        >
+          {ictCreativeItems.map(function (item, index) {
+            var showModel = answers[item.id + "-showModel"] === true;
+
+            return (
+              <div
+                key={item.id}
+                style={{
+                  padding: 16,
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 12,
+                  background: "#fff",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: "#6366f1",
+                    marginBottom: 6,
+                  }}
+                >
+                  Creative Question {index + 1}
+                </p>
+                <h3 style={{ marginBottom: 10 }}>{item.title}</h3>
+
+                <div
+                  style={{
+                    padding: 14,
+                    border: "1px solid #e2e8f0",
+                    borderRadius: 10,
+                    background: "#f8fafc",
+                    color: "#334155",
+                    lineHeight: 1.7,
+                    marginBottom: 14,
+                  }}
+                >
+                  <p style={{ fontWeight: 700, marginBottom: 4 }}>Scenario:</p>
+                  <p>{item.scenario}</p>
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  {item.parts.map(function (part) {
+                    return (
+                      <div
+                        key={part.id}
+                        style={{
+                          padding: 14,
+                          border: "1px solid #e2e8f0",
+                          borderRadius: 10,
+                          background: "#f8fafc",
+                        }}
+                      >
+                        <p
+                          style={{
+                            fontWeight: 700,
+                            color: "#1e293b",
+                            lineHeight: 1.6,
+                            marginBottom: 8,
+                          }}
+                        >
+                          {part.label}) ({part.marks} mark{part.marks > 1 ? "s" : ""}){" "}
+                          {part.question}
+                        </p>
+                        <textarea
+                          value={answers[part.id] || ""}
+                          onChange={(e) => updateAnswer(part.id, e.target.value)}
+                          rows={part.marks > 3 ? 7 : 4}
+                          placeholder="Write your answer here"
+                          style={{
+                            width: "100%",
+                            resize: "vertical",
+                            padding: "12px",
+                            borderRadius: 10,
+                            border: "1px solid #cbd5e1",
+                            fontSize: 14,
+                            fontFamily: "inherit",
+                            lineHeight: 1.6,
+                            background: "#fff",
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <button
+                  onClick={() => updateAnswer(item.id + "-showModel", true)}
+                  style={{
+                    marginTop: 14,
+                    width: "100%",
+                    padding: "12px 20px",
+                    border: "none",
+                    borderRadius: 12,
+                    background: "#6366f1",
+                    color: "#fff",
+                    fontSize: 15,
+                    fontWeight: 700,
+                    fontFamily: "inherit",
+                    cursor: "pointer",
+                  }}
+                >
+                  Show Model Answer
+                </button>
+
+                {showModel && (
+                  <div
+                    style={{
+                      marginTop: 14,
+                      padding: 14,
+                      borderRadius: 12,
+                      background: "#eef2ff",
+                      border: "1px solid #c7d2fe",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontWeight: 700,
+                        color: "#3730a3",
+                        marginBottom: 10,
+                      }}
+                    >
+                      Model Answers
+                    </p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                      {item.parts.map(function (part) {
+                        return (
+                          <div
+                            key={part.id + "-model"}
+                            style={{
+                              padding: 12,
+                              borderRadius: 10,
+                              background: "#fff",
+                              border: "1px solid #c7d2fe",
+                              color: "#334155",
+                              lineHeight: 1.7,
+                            }}
+                          >
+                            <p style={{ fontWeight: 700, marginBottom: 4 }}>
+                              {part.label}) {part.marks} mark{part.marks > 1 ? "s" : ""}
+                            </p>
+                            <p>{part.modelAnswer}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   function BroadQuestionPractice({ taskData }) {
     return (
       <div style={{ padding: "10px 0" }}>
@@ -5286,6 +5871,14 @@ if (task === "passageMCQ") {
   return <PassageMCQPractice taskData={passageMCQTask} />;
 }
 
+if (task === "ictMCQ") {
+  return <ICTMCQPractice />;
+}
+
+if (task === "ictCreative") {
+  return <ICTCreativePractice />;
+}
+
 if (task === "passageBroadQuestions") {
   return <BroadQuestionPractice taskData={passageBroadQuestionTask} />;
 }
@@ -5397,17 +5990,23 @@ if (task === "wordsPhrases") {
         <p>Subject Code: 275</p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 16 }}>
-          <div style={cardStyle}>
+          <button
+            style={{ ...cardStyle, marginBottom: 0, width: "100%" }}
+            onClick={() => openTask("ictMCQ")}
+          >
             <h3>MCQ Section</h3>
             <p>25 questions × 1 = 25 marks</p>
-          </div>
+          </button>
 
-          <div style={cardStyle}>
+          <button
+            style={{ ...cardStyle, marginBottom: 0, width: "100%" }}
+            onClick={() => openTask("ictCreative")}
+          >
             <h3>Creative / Written Section</h3>
             <p>Total: 50 marks</p>
             <p>Pattern: ক = 1, খ = 2, গ = 3, ঘ = 8</p>
             <p>Scenario-based questions from ICT chapters.</p>
-          </div>
+          </button>
         </div>
       </div>
     );
