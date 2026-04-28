@@ -2,6 +2,17 @@ import { ictBoardMcq2023 } from "./ictBoardMcq2023.js";
 
 export const ictTopics = [
   {
+    id: "board-mcq-2023",
+    title: "Board MCQ 2023",
+    titleBn: "Board MCQ 2023",
+    explanation:
+      "HSC ICT board MCQ practice set for exam-style question review.",
+    keyTerms: "Board MCQ, ICT, Dhaka Board, HSC 2023",
+    importance:
+      "Use this set to practice direct board-pattern MCQs with answer feedback.",
+    mcqs: ictBoardMcq2023,
+  },
+  {
     id: 1,
     title: "Global Village",
     titleBn: "\u09AC\u09BF\u09B6\u09CD\u09AC\u0997\u09CD\u09B0\u09BE\u09AE",

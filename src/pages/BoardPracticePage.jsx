@@ -7,6 +7,7 @@ import {
 } from "../utils/storage.js";
 import { formatDateISO } from "../utils/date.js";
 import { collectAllMCQs, shuffleAndPick } from "../utils/mcq.js";
+import { ictBoardMcq2023 } from "../data/ictBoardMcq2023.js";
 import {
   synonymAntonymItems,
   punctuationItems,
@@ -52,6 +53,8 @@ export default function BoardPracticePage() {
   const [readingTestTimeLeft, setReadingTestTimeLeft] = useState(3600);
   const [eng2FullExamStage, setEng2FullExamStage] = useState("start");
   const [eng2FullExamTimeLeft, setEng2FullExamTimeLeft] = useState(5400);
+  const ictMcqEngineItems =
+    ictBoardMcq2023.length > 0 ? ictBoardMcq2023 : ictMcqItems;
 
   const ictCreativeItems = [
     {
@@ -646,7 +649,7 @@ export default function BoardPracticePage() {
 
   function getICTMCQWrongEntries(progressInfo) {
     var entries = [];
-    ictMcqItems.forEach(function (mcq) {
+    ictMcqEngineItems.forEach(function (mcq) {
       var selected = answers[mcq.id];
       if (selected !== mcq.correctAnswer) {
         entries.push({
@@ -743,8 +746,8 @@ export default function BoardPracticePage() {
 
   function startICTFullExam() {
     var picked = shuffleAndPick(
-      ictFullExamQuestions,
-      Math.min(25, ictFullExamQuestions.length)
+      ictMcqEngineItems,
+      Math.min(25, ictMcqEngineItems.length)
     );
     setAnswers({});
     setChecked(false);
@@ -2158,7 +2161,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
   function ICTMCQPractice() {
     var score = 0;
 
-    ictMcqItems.forEach(function (mcq) {
+    ictMcqEngineItems.forEach(function (mcq) {
       if (answers[mcq.id] === mcq.correctAnswer) {
         score++;
       }
@@ -2188,7 +2191,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
           Board pattern: 25 MCQs × 1 = 25 marks
         </p>
         <p style={{ color: "#64748b", lineHeight: 1.6 }}>
-          Sample set: 10 MCQs now. Full board set will be expanded to 25 later.
+          Board MCQ set: {ictMcqEngineItems.length} questions loaded.
         </p>
 
         {checked && (
@@ -2203,7 +2206,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
               fontWeight: 700,
             }}
           >
-            Score: {score} / {ictMcqItems.length}
+            Score: {score} / {ictMcqEngineItems.length}
           </div>
         )}
 
@@ -2215,7 +2218,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
             gap: 12,
           }}
         >
-          {ictMcqItems.map(function (mcq, index) {
+          {ictMcqEngineItems.map(function (mcq, index) {
             var selected = answers[mcq.id];
             var hasSelected = selected !== undefined;
             var isCorrect = selected === mcq.correctAnswer;
@@ -2336,7 +2339,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
                   title: "ICT Board Practice - MCQ Section",
                 },
                 score,
-                ictMcqItems.length,
+                ictMcqEngineItems.length,
                 getICTMCQWrongEntries({
                   id: "ict-mcq",
                   title: "ICT Board Practice - MCQ Section",
@@ -4013,7 +4016,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
               25 Minutes
             </p>
             <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 16 }}>
-              Phase 1 sample set: {ictFullExamQuestions.length} questions. The exam engine is ready for 25.
+              Board MCQ set: {ictMcqEngineItems.length} questions. The exam engine is ready for 25.
             </p>
             <button
               onClick={startICTFullExam}
