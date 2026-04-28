@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logo from "./assets/logo.png";
 import Dashboard from "./components/Dashboard.jsx";
 import ICTPage from "./components/ICTPage.jsx";
 import English1Page from "./components/English1Page.jsx";
@@ -91,23 +92,7 @@ export default function App() {
       }}
     >
       <div style={{ textAlign: "center", marginBottom: 32 }}>
-        <div
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 14,
-            background: "#6366f1",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 24,
-            fontWeight: 800,
-            color: "#fff",
-            marginBottom: 10,
-          }}
-        >
-          S
-        </div>
+        <img src={logo} alt="logo" style={{ width: 60, height: 60 }} />
         <h1 style={{ fontSize: 28, fontWeight: 800, margin: "0 0 4px" }}>
           Sadie_Say-dee
         </h1>

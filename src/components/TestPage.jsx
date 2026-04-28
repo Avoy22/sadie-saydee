@@ -94,7 +94,7 @@ export default function TestPage({ goToTopic }) {
             lineHeight: 1.6,
           }}
         >
-          ICT + English \u09A5\u09C7\u0995\u09C7 \u09E7\u09E6\u099F\u09BF Mixed MCQ
+          ICT + English থেকে Mixed MCQ
         </p>
         <p
           style={{
@@ -104,7 +104,7 @@ export default function TestPage({ goToTopic }) {
             lineHeight: 1.6,
           }}
         >
-          \u09AD\u09AF\u09BC \u09AA\u09C7\u09AF\u09BC\u09CB \u09A8\u09BE -- \u0986\u09B8\u09CD\u09A4\u09C7 \u0986\u09B8\u09CD\u09A4\u09C7 \u09A6\u09BE\u0993
+          ভয় নেই, শুধু চেষ্টা করো। ভুল করলে শিখবে।
         </p>
         <button
           onClick={startTest}
@@ -367,7 +367,7 @@ export default function TestPage({ goToTopic }) {
               marginBottom: 10,
             }}
           >
-            {"\u098F\u0987 Topic\u0997\u09C1\u09B2\u09CB \u0986\u09B0\u09CB \u09AA\u09CD\u09B0\u09CD\u09AF\u09BE\u0995\u099F\u09BF\u09B8 \u0995\u09B0\u09CB -- Tap to study"}
+            এই Topicগুলো আরও প্র্যাকটিস করো -- Tap to study
           </p>
           <div
             style={{ display: "flex", flexDirection: "column", gap: 8 }}

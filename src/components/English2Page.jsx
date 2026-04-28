@@ -1,38 +1,141 @@
+const grammarTopics = [
+  {
+    name: "Prepositions",
+    helper: "কোন শব্দের পরে কোন preposition বসে, সেটা নিয়মসহ মনে রাখার অংশ।",
+  },
+  {
+    name: "Words/Phrases",
+    helper: "গুরুত্বপূর্ণ phrase ও expression ব্যবহার করে বাক্যের অর্থ ঠিক করা।",
+  },
+  {
+    name: "Completing Sentences",
+    helper: "কারণ, শর্ত, ফলাফল বা contrast বুঝে অসম্পূর্ণ বাক্য শেষ করা।",
+  },
+  {
+    name: "Right Form of Verbs",
+    helper: "Tense, subject ও sentence structure দেখে verb-এর সঠিক রূপ বসানো।",
+  },
+  {
+    name: "Narration",
+    helper: "Direct speech থেকে indirect speech-এ tense, pronoun ও reporting verb বদলানো।",
+  },
+  {
+    name: "Modifiers",
+    helper: "Phrase বা clause দিয়ে noun, verb বা পুরো বাক্যকে সুন্দরভাবে modify করা।",
+  },
+  {
+    name: "Sentence Connectors",
+    helper: "দুইটি idea যুক্ত করতে therefore, however, otherwise ধরনের connector ব্যবহার করা।",
+  },
+  {
+    name: "Synonym / Antonym",
+    helper: "শব্দের কাছাকাছি অর্থ ও বিপরীত অর্থ চেনার vocabulary practice।",
+  },
+  {
+    name: "Punctuation",
+    helper: "Capital letter, comma, full stop, question mark ও quotation ঠিক করা।",
+  },
+];
+
+const compositionTopics = [
+  {
+    name: "Application / Formal Letter",
+    helper: "সঠিক format, formal tone ও clear request দিয়ে application লেখা।",
+  },
+  {
+    name: "Paragraph Writing",
+    helper: "একটি topic নিয়ে সহজ, ধারাবাহিক ও পরীক্ষার উপযোগী paragraph তৈরি করা।",
+  },
+  {
+    name: "Composition",
+    helper: "Introduction, body ও conclusion সাজিয়ে বড় writing answer লেখা।",
+  },
+];
+
+function TopicCard({ topic }) {
+  return (
+    <div
+      style={{
+        background: "#f8fafc",
+        border: "1px solid #e2e8f0",
+        borderRadius: 14,
+        padding: "18px 16px",
+      }}
+    >
+      <p
+        style={{
+          fontSize: 17,
+          fontWeight: 700,
+          color: "#1e293b",
+          marginBottom: 8,
+        }}
+      >
+        {topic.name}
+      </p>
+      <p
+        style={{
+          fontSize: 14,
+          lineHeight: 1.7,
+          color: "#475569",
+          marginBottom: 10,
+        }}
+      >
+        {topic.helper}
+      </p>
+      <p
+        style={{
+          fontSize: 12,
+          color: "#6366f1",
+          fontWeight: 600,
+        }}
+      >
+        Practice in Board section
+      </p>
+    </div>
+  );
+}
+
+function TopicSection({ title, topics }) {
+  return (
+    <section style={{ marginTop: 22 }}>
+      <h3
+        style={{
+          fontSize: 18,
+          fontWeight: 800,
+          color: "#1e293b",
+          marginBottom: 12,
+        }}
+      >
+        {title}
+      </h3>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {topics.map(function (topic) {
+          return <TopicCard key={topic.name} topic={topic} />;
+        })}
+      </div>
+    </section>
+  );
+}
+
 export default function English2Page() {
   return (
-    <div style={{ padding: "30px 0", textAlign: "center" }}>
-      <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 6 }}>
-        English 2nd Paper
+    <div style={{ padding: "10px 0" }}>
+      <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 6 }}>
+        English 2nd Paper Study
       </h2>
       <p
         style={{
           fontSize: 14,
           color: "#6366f1",
           fontWeight: 600,
-          marginBottom: 20,
+          marginBottom: 18,
         }}
       >
-        Grammar & Composition
+        Grammar & Composition preparation
       </p>
 
-      <div
-        style={{
-          background: "#f8fafc",
-          border: "1px solid #e2e8f0",
-          borderRadius: 14,
-          padding: "24px 18px",
-        }}
-      >
-        <p
-          style={{
-            fontSize: 14,
-            color: "#64748b",
-            lineHeight: 1.7,
-          }}
-        >
-          Board-pattern practice will be added next.
-        </p>
-      </div>
+      <TopicSection title="Grammar Topics" topics={grammarTopics} />
+      <TopicSection title="Composition Topics" topics={compositionTopics} />
     </div>
   );
 }
