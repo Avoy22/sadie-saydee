@@ -2,6 +2,10 @@ import { useState } from "react";
 import { collectAllMCQs, shuffleAndPick } from "../utils/mcq.js";
 import { saveProgress } from "../utils/storage.js";
 import { formatDateISO } from "../utils/date.js";
+import {
+  getWeakTopicBoosterData,
+  getWeakTopicKey,
+} from "../utils/weakTopicBooster.js";
 
 export default function TestPage({ goToTopic }) {
   var _st = useState("intro");
@@ -28,6 +32,22 @@ export default function TestPage({ goToTopic }) {
   var showWrongOnly = _review[0];
   var setShowWrongOnly = _review[1];
 
+  var _mode = useState("regular");
+  var testMode = _mode[0];
+  var setTestMode = _mode[1];
+
+  var _bt = useState([]);
+  var boosterTopics = _bt[0];
+  var setBoosterTopics = _bt[1];
+
+  var _bm = useState("");
+  var boosterMessage = _bm[0];
+  var setBoosterMessage = _bm[1];
+
+  function getTestTitle() {
+    return testMode === "booster" ? "Weak Area Mini Test" : "Mini Test";
+  }
+
   function startTest() {
     var all = collectAllMCQs();
     var picked = shuffleAndPick(all, Math.min(10, all.length));
@@ -36,6 +56,31 @@ export default function TestPage({ goToTopic }) {
     setShowWrongOnly(false);
     setTimeUsedSeconds(null);
     setTestStartedAt(Date.now());
+    setTestMode("regular");
+    setBoosterTopics([]);
+    setBoosterMessage("");
+    setStage("running");
+  }
+
+  function startWeakBooster() {
+    var boosterData = getWeakTopicBoosterData();
+    if (boosterData.questionPool.length === 0) {
+      setBoosterMessage("Take a test or save mistakes first.");
+      return;
+    }
+
+    var picked = shuffleAndPick(
+      boosterData.questionPool,
+      Math.min(10, boosterData.questionPool.length)
+    );
+    setQuestions(picked);
+    setAnswers({});
+    setShowWrongOnly(false);
+    setTimeUsedSeconds(null);
+    setTestStartedAt(Date.now());
+    setTestMode("booster");
+    setBoosterTopics(boosterData.topTopics);
+    setBoosterMessage("");
     setStage("running");
   }
 
@@ -103,6 +148,9 @@ export default function TestPage({ goToTopic }) {
     setShowWrongOnly(false);
     setTimeUsedSeconds(null);
     setTestStartedAt(null);
+    setTestMode("regular");
+    setBoosterTopics([]);
+    setBoosterMessage("");
   }
 
   function formatTime(seconds) {
@@ -113,6 +161,9 @@ export default function TestPage({ goToTopic }) {
   }
 
   if (stage === "intro") {
+    var boosterData = getWeakTopicBoosterData();
+    var canStartBooster = boosterData.questionPool.length > 0;
+
     return (
       <div style={{ padding: "30px 0", textAlign: "center" }}>
         <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 8 }}>
@@ -138,6 +189,122 @@ export default function TestPage({ goToTopic }) {
         >
           ভয় নেই, শুধু চেষ্টা করো। ভুল করলে শিখবে।
         </p>
+        <div
+          style={{
+            textAlign: "left",
+            background: "linear-gradient(145deg, #ffffff, #fff7fb)",
+            border: "1px solid #eadcff",
+            borderRadius: 22,
+            padding: "16px",
+            marginBottom: 14,
+            boxShadow: "0 14px 34px rgba(124, 58, 237, 0.08)",
+          }}
+        >
+          <p
+            style={{
+              fontSize: 12,
+              fontWeight: 900,
+              color: "#7c3aed",
+              marginBottom: 8,
+              letterSpacing: 0.3,
+            }}
+          >
+            WEAK TOPIC BOOSTER
+          </p>
+          {boosterData.topTopics.length > 0 ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {boosterData.topTopics.map(function (topic, index) {
+                return (
+                  <div
+                    key={getWeakTopicKey(topic)}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 10,
+                      padding: "10px 12px",
+                      borderRadius: 16,
+                      background: index === 0 ? "#f5edff" : "#fff1f8",
+                      border:
+                        index === 0 ? "1px solid #eadcff" : "1px solid #fbcfe8",
+                    }}
+                  >
+                    <span
+                      style={{
+                        minWidth: 0,
+                        fontSize: 13,
+                        fontWeight: 800,
+                        color: "#334155",
+                        lineHeight: 1.45,
+                      }}
+                    >
+                      {topic.subject} - {topic.source}
+                    </span>
+                    <span
+                      style={{
+                        flexShrink: 0,
+                        fontSize: 12,
+                        fontWeight: 900,
+                        color: "#be185d",
+                      }}
+                    >
+                      {topic.count} wrong
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p
+              style={{
+                color: "#64748b",
+                fontSize: 13,
+                fontWeight: 700,
+                lineHeight: 1.6,
+                marginBottom: 10,
+              }}
+            >
+              No weak topics saved yet.
+            </p>
+          )}
+          <button
+            onClick={startWeakBooster}
+            disabled={!canStartBooster}
+            style={{
+              marginTop: 12,
+              padding: "13px 18px",
+              fontSize: 15,
+              fontWeight: 900,
+              fontFamily: "inherit",
+              border: "none",
+              borderRadius: 16,
+              background: canStartBooster
+                ? "linear-gradient(135deg, #7c3aed, #ec4899)"
+                : "#e2e8f0",
+              color: canStartBooster ? "#fff" : "#94a3b8",
+              cursor: canStartBooster ? "pointer" : "not-allowed",
+              width: "100%",
+              boxShadow: canStartBooster
+                ? "0 12px 24px rgba(124, 58, 237, 0.22)"
+                : "none",
+            }}
+          >
+            Fix My Weak Areas
+          </button>
+          {boosterMessage && (
+            <p
+              style={{
+                marginTop: 8,
+                color: "#92400e",
+                fontSize: 12,
+                fontWeight: 700,
+                textAlign: "center",
+              }}
+            >
+              {boosterMessage}
+            </p>
+          )}
+        </div>
         <button
           onClick={startTest}
           style={{
@@ -171,7 +338,7 @@ export default function TestPage({ goToTopic }) {
             marginBottom: 14,
           }}
         >
-          <h2 style={{ fontSize: 20, fontWeight: 800 }}>Mini Test</h2>
+          <h2 style={{ fontSize: 20, fontWeight: 800 }}>{getTestTitle()}</h2>
           <span
             style={{
               fontSize: 13,
@@ -185,6 +352,36 @@ export default function TestPage({ goToTopic }) {
             {answeredCount}/{questions.length}
           </span>
         </div>
+
+        {testMode === "booster" && boosterTopics.length > 0 && (
+          <div
+            style={{
+              background: "#f5edff",
+              border: "1px solid #eadcff",
+              borderRadius: 16,
+              padding: "12px",
+              marginBottom: 14,
+            }}
+          >
+            <p
+              style={{
+                fontSize: 12,
+                fontWeight: 900,
+                color: "#7c3aed",
+                marginBottom: 6,
+              }}
+            >
+              Top weak topics
+            </p>
+            <p style={{ fontSize: 13, color: "#475569", lineHeight: 1.6 }}>
+              {boosterTopics
+                .map(function (topic) {
+                  return topic.source;
+                })
+                .join(" + ")}
+            </p>
+          </div>
+        )}
 
         {questions.map(function (q, idx) {
           var selected = answers[q.id];
@@ -366,7 +563,7 @@ export default function TestPage({ goToTopic }) {
   return (
     <div style={{ padding: "10px 0" }}>
       <h2 style={{ fontSize: 22, fontWeight: 900, marginBottom: 16 }}>
-        Test Result
+        {testMode === "booster" ? "Weak Area Result" : "Test Result"}
       </h2>
 
       <div
@@ -530,6 +727,25 @@ export default function TestPage({ goToTopic }) {
               );
             })}
           </div>
+          <button
+            onClick={startWeakBooster}
+            style={{
+              marginTop: 12,
+              padding: "13px 18px",
+              border: "none",
+              borderRadius: 16,
+              background: "linear-gradient(135deg, #7c3aed, #ec4899)",
+              color: "#fff",
+              fontSize: 14,
+              fontWeight: 900,
+              fontFamily: "inherit",
+              cursor: "pointer",
+              width: "100%",
+              boxShadow: "0 12px 24px rgba(124, 58, 237, 0.22)",
+            }}
+          >
+            Fix My Weak Areas
+          </button>
         </div>
       )}
 

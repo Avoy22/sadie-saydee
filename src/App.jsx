@@ -138,7 +138,7 @@ export default function App() {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 8,
+          gap: 10,
           marginBottom: 18,
           padding: 6,
           borderRadius: 22,
@@ -149,6 +149,7 @@ export default function App() {
       >
         {buttons.map(function (btn) {
           var isActive = page === btn.id;
+          var isBoardButton = btn.id === "practice";
           return (
             <button
               key={btn.id}
@@ -168,6 +169,9 @@ export default function App() {
                 color: isActive ? "#fff" : "#6b4b7d",
                 cursor: "pointer",
                 whiteSpace: "nowrap",
+                gridColumn: isBoardButton ? "span 3" : undefined,
+                justifySelf: isBoardButton ? "center" : undefined,
+                width: isBoardButton ? "65%" : undefined,
                 boxShadow: isActive
                   ? "0 12px 24px rgba(124, 58, 237, 0.22)"
                   : "none",
