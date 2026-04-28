@@ -1,3 +1,5 @@
+import { ictBoardMcq2023 } from "./ictBoardMcq2023.js";
+
 export const ictTopics = [
   {
     id: 1,
