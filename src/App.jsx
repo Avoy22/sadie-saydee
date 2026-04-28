@@ -104,9 +104,34 @@ function formatDateISO(d) {
 }
 
 function Dashboard({ setPage }) {
-  var examDate = new Date("2026-06-01T00:00:00");
   var today = new Date();
-  var daysLeft = Math.max(0, Math.ceil((examDate - today) / 86400000));
+  var examCountdowns = [
+    {
+      paper: "English 1st Paper",
+      date: "2026-07-06",
+      daysLeft: Math.max(
+        0,
+        Math.ceil((new Date("2026-07-06T00:00:00") - today) / 86400000)
+      ),
+    },
+    {
+      paper: "English 2nd Paper",
+      date: "2026-07-08",
+      daysLeft: Math.max(
+        0,
+        Math.ceil((new Date("2026-07-08T00:00:00") - today) / 86400000)
+      ),
+    },
+    {
+      paper: "ICT",
+      date: "2026-07-11",
+      daysLeft: Math.max(
+        0,
+        Math.ceil((new Date("2026-07-11T00:00:00") - today) / 86400000)
+      ),
+    },
+  ];
+  var priorityItems = ["English 1st Paper", "English 2nd Paper", "ICT"];
 
   var progress = loadProgress();
   var boardProgress = loadBoardProgress();
@@ -142,21 +167,89 @@ function Dashboard({ setPage }) {
     <div style={{ padding: "20px 0" }}>
       <div
         style={{
-          textAlign: "center",
-          background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-          borderRadius: 14,
-          padding: "24px 16px",
-          color: "#fff",
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
           marginBottom: 14,
         }}
       >
-        <p style={{ fontSize: 13, opacity: 0.85, marginBottom: 2 }}>
-          HSC Exam Countdown
+        {examCountdowns.map(function (item) {
+          return (
+            <div
+              key={item.paper}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 12,
+                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                borderRadius: 14,
+                padding: "16px",
+                color: "#fff",
+              }}
+            >
+              <div>
+                <p style={{ fontSize: 13, opacity: 0.85, marginBottom: 4 }}>
+                  HSC Exam Countdown
+                </p>
+                <h3 style={{ fontSize: 18, marginBottom: 4 }}>{item.paper}</h3>
+                <p style={{ fontSize: 13, opacity: 0.9 }}>{item.date}</p>
+              </div>
+              <div style={{ textAlign: "right", flexShrink: 0 }}>
+                <p style={{ fontSize: 34, fontWeight: 800, margin: 0 }}>
+                  {item.daysLeft}
+                </p>
+                <p style={{ fontSize: 13, opacity: 0.9 }}>days left</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #e2e8f0",
+          borderRadius: 12,
+          padding: "14px 16px",
+          marginBottom: 20,
+        }}
+      >
+        <p
+          style={{
+            fontSize: 12,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 8,
+            letterSpacing: 0.3,
+          }}
+        >
+          Recommended Priority
         </p>
-        <p style={{ fontSize: 44, fontWeight: 800, margin: "4px 0" }}>
-          {daysLeft}
-        </p>
-        <p style={{ fontSize: 14, opacity: 0.9 }}>days remaining</p>
+        {priorityItems.map(function (paper, index) {
+          return (
+            <div
+              key={paper}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: index === 0 ? "0 0 8px" : "8px 0",
+                borderBottom:
+                  index === priorityItems.length - 1
+                    ? "none"
+                    : "1px solid #e2e8f0",
+              }}
+            >
+              <span style={{ fontSize: 14, color: "#334155", fontWeight: 700 }}>
+                {index + 1}. {paper}
+              </span>
+              <span style={{ fontSize: 12, color: "#64748b" }}>
+                Priority {index + 1}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       <div
