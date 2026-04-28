@@ -56,17 +56,18 @@ function TopicCard({ topic }) {
   return (
     <div
       style={{
-        background: "#f8fafc",
-        border: "1px solid #e2e8f0",
-        borderRadius: 14,
+        background: "linear-gradient(145deg, #ffffff, #fff7fb)",
+        border: "1px solid #eadcff",
+        borderRadius: 20,
         padding: "18px 16px",
+        boxShadow: "0 12px 28px rgba(124, 58, 237, 0.08)",
       }}
     >
       <p
         style={{
           fontSize: 17,
-          fontWeight: 700,
-          color: "#1e293b",
+          fontWeight: 800,
+          color: "#27103f",
           marginBottom: 8,
         }}
       >
@@ -76,7 +77,7 @@ function TopicCard({ topic }) {
         style={{
           fontSize: 14,
           lineHeight: 1.7,
-          color: "#475569",
+          color: "#5b5067",
           marginBottom: 10,
         }}
       >
@@ -85,8 +86,8 @@ function TopicCard({ topic }) {
       <p
         style={{
           fontSize: 12,
-          color: "#6366f1",
-          fontWeight: 600,
+          color: "#7c3aed",
+          fontWeight: 800,
         }}
       >
         Practice in Board section
@@ -101,8 +102,8 @@ function TopicSection({ title, topics }) {
       <h3
         style={{
           fontSize: 18,
-          fontWeight: 800,
-          color: "#1e293b",
+          fontWeight: 900,
+          color: "#27103f",
           marginBottom: 12,
         }}
       >
@@ -120,14 +121,14 @@ function TopicSection({ title, topics }) {
 export default function English2Page() {
   return (
     <div style={{ padding: "10px 0" }}>
-      <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 6 }}>
+      <h2 style={{ fontSize: 22, fontWeight: 900, marginBottom: 6 }}>
         English 2nd Paper Study
       </h2>
       <p
         style={{
           fontSize: 14,
-          color: "#6366f1",
-          fontWeight: 600,
+          color: "#7c3aed",
+          fontWeight: 800,
           marginBottom: 18,
         }}
       >

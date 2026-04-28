@@ -432,23 +432,27 @@ export default function BoardPracticePage() {
 
 
   const cardStyle = {
-    padding: 16,
-    border: "1px solid #e2e8f0",
-    borderRadius: 12,
-    background: "#f8fafc",
+    padding: 18,
+    border: "1px solid #eadcff",
+    borderRadius: 20,
+    background: "linear-gradient(145deg, #ffffff, #fff7fb)",
     cursor: "pointer",
     textAlign: "left",
     fontFamily: "inherit",
+    boxShadow: "0 12px 28px rgba(124, 58, 237, 0.08)",
   };
 
   const backButtonStyle = {
     marginBottom: 16,
-    padding: "8px 12px",
-    border: "1px solid #e2e8f0",
-    borderRadius: 10,
+    padding: "9px 14px",
+    border: "1px solid #eadcff",
+    borderRadius: 14,
     background: "#fff",
     cursor: "pointer",
     fontFamily: "inherit",
+    color: "#7c3aed",
+    fontWeight: 800,
+    boxShadow: "0 8px 18px rgba(124, 58, 237, 0.08)",
   };
 
   function normalizeAnswer(value) {

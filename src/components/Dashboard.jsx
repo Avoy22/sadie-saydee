@@ -61,7 +61,7 @@ export default function Dashboard({ setPage }) {
   }
 
   return (
-    <div style={{ padding: "20px 0" }}>
+    <div style={{ padding: "8px 0 4px" }}>
       <div
         style={{
           display: "flex",
@@ -79,17 +79,20 @@ export default function Dashboard({ setPage }) {
                 justifyContent: "space-between",
                 alignItems: "center",
                 gap: 12,
-                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                borderRadius: 14,
-                padding: "16px",
+                background: "linear-gradient(135deg, #7c3aed, #ec4899)",
+                borderRadius: 22,
+                padding: "18px 16px",
                 color: "#fff",
+                boxShadow: "0 16px 34px rgba(124, 58, 237, 0.22)",
               }}
             >
               <div>
                 <p style={{ fontSize: 13, opacity: 0.85, marginBottom: 4 }}>
                   HSC Exam Countdown
                 </p>
-                <h3 style={{ fontSize: 18, marginBottom: 4 }}>{item.paper}</h3>
+                <h3 style={{ fontSize: 18, marginBottom: 4, letterSpacing: 0 }}>
+                  {item.paper}
+                </h3>
                 <p style={{ fontSize: 13, opacity: 0.9 }}>{item.date}</p>
               </div>
               <div style={{ textAlign: "right", flexShrink: 0 }}>
@@ -106,17 +109,18 @@ export default function Dashboard({ setPage }) {
       <div
         style={{
           background: "#fff",
-          border: "1px solid #e2e8f0",
-          borderRadius: 12,
-          padding: "14px 16px",
+          border: "1px solid #eadcff",
+          borderRadius: 20,
+          padding: "16px",
           marginBottom: 20,
+          boxShadow: "0 12px 30px rgba(124, 58, 237, 0.08)",
         }}
       >
         <p
           style={{
             fontSize: 12,
             fontWeight: 700,
-            color: "#6366f1",
+            color: "#7c3aed",
             marginBottom: 8,
             letterSpacing: 0.3,
           }}
@@ -135,7 +139,7 @@ export default function Dashboard({ setPage }) {
                 borderBottom:
                   index === priorityItems.length - 1
                     ? "none"
-                    : "1px solid #e2e8f0",
+                    : "1px solid #f1e7ff",
               }}
             >
               <span style={{ fontSize: 14, color: "#334155", fontWeight: 700 }}>
@@ -151,18 +155,19 @@ export default function Dashboard({ setPage }) {
 
       <div
         style={{
-          background: "#f8fafc",
-          border: "1px solid #e2e8f0",
-          borderRadius: 12,
-          padding: "14px 16px",
+          background: "linear-gradient(145deg, #ffffff, #fff7fb)",
+          border: "1px solid #eadcff",
+          borderRadius: 20,
+          padding: "16px",
           marginBottom: 20,
+          boxShadow: "0 12px 30px rgba(236, 72, 153, 0.08)",
         }}
       >
         <p
           style={{
             fontSize: 12,
             fontWeight: 700,
-            color: "#6366f1",
+            color: "#7c3aed",
             marginBottom: 8,
             letterSpacing: 0.3,
           }}
@@ -241,17 +246,18 @@ export default function Dashboard({ setPage }) {
       <div
         style={{
           background: "#fff",
-          border: "1px solid #e2e8f0",
-          borderRadius: 12,
-          padding: "14px 16px",
+          border: "1px solid #eadcff",
+          borderRadius: 20,
+          padding: "16px",
           marginBottom: 20,
+          boxShadow: "0 12px 30px rgba(124, 58, 237, 0.08)",
         }}
       >
         <p
           style={{
             fontSize: 12,
             fontWeight: 700,
-            color: "#6366f1",
+            color: "#7c3aed",
             marginBottom: 8,
             letterSpacing: 0.3,
           }}
@@ -289,14 +295,15 @@ export default function Dashboard({ setPage }) {
           style={{
             padding: "10px 14px",
             border: "none",
-            borderRadius: 10,
-            background: "#6366f1",
+            borderRadius: 16,
+            background: "linear-gradient(135deg, #7c3aed, #ec4899)",
             color: "#fff",
             fontSize: 14,
             fontWeight: 700,
             fontFamily: "inherit",
             cursor: "pointer",
             width: "100%",
+            boxShadow: "0 12px 24px rgba(124, 58, 237, 0.2)",
           }}
         >
           Practice Now
@@ -305,18 +312,19 @@ export default function Dashboard({ setPage }) {
 
       <div
         style={{
-          background: "#f8fafc",
-          border: "1px solid #e2e8f0",
-          borderRadius: 12,
-          padding: "14px 16px",
+          background: "linear-gradient(145deg, #ffffff, #f8f7ff)",
+          border: "1px solid #eadcff",
+          borderRadius: 20,
+          padding: "16px",
           marginBottom: 20,
+          boxShadow: "0 12px 30px rgba(124, 58, 237, 0.08)",
         }}
       >
         <p
           style={{
             fontSize: 12,
             fontWeight: 700,
-            color: "#6366f1",
+            color: "#7c3aed",
             marginBottom: 8,
             letterSpacing: 0.3,
           }}
@@ -378,7 +386,7 @@ export default function Dashboard({ setPage }) {
         style={{
           textAlign: "center",
           fontSize: 15,
-          color: "#6366f1",
+          color: "#7c3aed",
           fontWeight: 600,
           marginBottom: 20,
           lineHeight: 1.5,
@@ -398,11 +406,12 @@ export default function Dashboard({ setPage }) {
             fontWeight: 600,
             fontFamily: "inherit",
             border: "none",
-            borderRadius: 12,
-            background: "#6366f1",
+            borderRadius: 18,
+            background: "linear-gradient(135deg, #7c3aed, #ec4899)",
             color: "#fff",
             cursor: "pointer",
             width: "100%",
+            boxShadow: "0 12px 24px rgba(124, 58, 237, 0.22)",
           }}
         >
           Start ICT
@@ -417,11 +426,12 @@ export default function Dashboard({ setPage }) {
             fontWeight: 600,
             fontFamily: "inherit",
             border: "none",
-            borderRadius: 12,
-            background: "#eef2ff",
-            color: "#6366f1",
+            borderRadius: 18,
+            background: "#f5edff",
+            color: "#7c3aed",
             cursor: "pointer",
             width: "100%",
+            border: "1px solid #eadcff",
           }}
         >
           Start English 1st Paper
@@ -436,11 +446,12 @@ export default function Dashboard({ setPage }) {
             fontWeight: 600,
             fontFamily: "inherit",
             border: "none",
-            borderRadius: 12,
-            background: "#eef2ff",
-            color: "#6366f1",
+            borderRadius: 18,
+            background: "#fff1f8",
+            color: "#be185d",
             cursor: "pointer",
             width: "100%",
+            border: "1px solid #fbcfe8",
           }}
         >
           Start English 2nd Paper
@@ -454,10 +465,10 @@ export default function Dashboard({ setPage }) {
             fontSize: 16,
             fontWeight: 600,
             fontFamily: "inherit",
-            border: "1px solid #e2e8f0",
-            borderRadius: 12,
-            background: "transparent",
-            color: "#6366f1",
+            border: "1px solid #eadcff",
+            borderRadius: 18,
+            background: "#fff",
+            color: "#7c3aed",
             cursor: "pointer",
             width: "100%",
           }}
