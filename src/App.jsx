@@ -2556,6 +2556,80 @@ const applicationTasks = [
   },
 ];
 
+const passageMCQTask = {
+  title: "Passage MCQ",
+  marks: 5,
+  passage:
+    "Trees are essential for our environment. They provide oxygen, food, and shelter. Without trees, life on earth would be impossible. However, people are cutting trees rapidly, which is causing environmental imbalance. We should plant more trees and protect our forests.",
+  mcqs: [
+    {
+      id: "passage-mcq-1",
+      question: "What do trees provide?",
+      options: [
+        "Oxygen, food, and shelter",
+        "Only wood",
+        "Only shade",
+        "Cars and roads",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "The passage says trees provide oxygen, food, and shelter.",
+    },
+    {
+      id: "passage-mcq-2",
+      question: "What happens without trees?",
+      options: [
+        "Life becomes easier",
+        "Life on earth would be impossible",
+        "There will be more forests",
+        "People will need less oxygen",
+      ],
+      correctAnswer: 1,
+      explanation:
+        "The passage says that without trees, life on earth would be impossible.",
+    },
+    {
+      id: "passage-mcq-3",
+      question: "What is causing environmental imbalance?",
+      options: [
+        "Planting more trees",
+        "Protecting forests",
+        "Cutting trees rapidly",
+        "Providing shelter",
+      ],
+      correctAnswer: 2,
+      explanation:
+        "Rapid cutting of trees is causing environmental imbalance.",
+    },
+    {
+      id: "passage-mcq-4",
+      question: "What should we do?",
+      options: [
+        "Cut more trees",
+        "Ignore forests",
+        "Use more paper",
+        "Plant more trees and protect forests",
+      ],
+      correctAnswer: 3,
+      explanation:
+        "The passage tells us to plant more trees and protect our forests.",
+    },
+    {
+      id: "passage-mcq-5",
+      question: "What is the main idea of the passage?",
+      options: [
+        "Trees are important and should be protected",
+        "People should cut forests",
+        "Food is more important than oxygen",
+        "Shelter is not necessary",
+      ],
+      correctAnswer: 0,
+      explanation:
+        "The main idea is that trees are essential for life and we should protect them.",
+    },
+  ],
+};
+
 const paragraphTasks = [
   {
     id: "para-1",
@@ -3712,9 +3786,142 @@ function WritingPractice({ title, subtitle, tasks }) {
           </button>
         </div>
       )}
-    </div>
-  );
-}
+      </div>
+    );
+  }
+
+  function PassageMCQPractice({ taskData }) {
+    return (
+      <div style={{ padding: "10px 0" }}>
+        <button
+          style={backButtonStyle}
+          onClick={() => {
+            setTask(null);
+            resetPractice();
+          }}
+        >
+          â† Back
+        </button>
+
+        <h2>Q1A {taskData.title}</h2>
+        <p
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: "#6366f1",
+            marginBottom: 10,
+          }}
+        >
+          Marks: {taskData.marks}
+        </p>
+
+        <div
+          style={{
+            padding: 16,
+            border: "1px solid #e2e8f0",
+            borderRadius: 12,
+            background: "#f8fafc",
+            color: "#334155",
+            lineHeight: 1.7,
+            marginBottom: 16,
+          }}
+        >
+          <p style={{ fontWeight: 700, marginBottom: 6 }}>Passage:</p>
+          <p>{taskData.passage}</p>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {taskData.mcqs.map(function (mcq, index) {
+            var selected = answers[mcq.id];
+            var answered = selected !== undefined;
+            var isCorrect = selected === mcq.correctAnswer;
+
+            return (
+              <div
+                key={mcq.id}
+                style={{
+                  padding: 16,
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 12,
+                  background: "#fff",
+                }}
+              >
+                <p style={{ fontWeight: 700, marginBottom: 10 }}>
+                  {index + 1}. {mcq.question}
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {mcq.options.map(function (option, optionIndex) {
+                    var bg = "#f8fafc";
+                    var border = "1px solid #e2e8f0";
+                    var color = "#334155";
+
+                    if (answered) {
+                      if (optionIndex === mcq.correctAnswer) {
+                        bg = "#dcfce7";
+                        border = "2px solid #22c55e";
+                        color = "#166534";
+                      } else if (optionIndex === selected) {
+                        bg = "#fee2e2";
+                        border = "2px solid #ef4444";
+                        color = "#991b1b";
+                      }
+                    }
+
+                    return (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          if (!answered) updateAnswer(mcq.id, optionIndex);
+                        }}
+                        style={{
+                          textAlign: "left",
+                          padding: "12px 14px",
+                          borderRadius: 10,
+                          background: bg,
+                          border: border,
+                          color: color,
+                          fontSize: 14,
+                          fontFamily: "inherit",
+                          fontWeight: 500,
+                          cursor: answered ? "default" : "pointer",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {String.fromCharCode(65 + optionIndex)}. {option}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {answered && (
+                  <div
+                    style={{
+                      marginTop: 12,
+                      padding: "12px 14px",
+                      borderRadius: 10,
+                      background: isCorrect ? "#f0fdf4" : "#fef2f2",
+                      border: isCorrect
+                        ? "1px solid #bbf7d0"
+                        : "1px solid #fecaca",
+                      color: "#334155",
+                      fontSize: 13,
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    <p style={{ fontWeight: 700, marginBottom: 4 }}>
+                      {isCorrect ? "Correct" : "Incorrect"}
+                    </p>
+                    <p>{mcq.explanation}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
 function WordBoxPractice({ title, subtitle, items, wordBox }) {
   var score = 0;
@@ -3970,6 +4177,10 @@ if (task === "summary") {
   );
 }
 
+if (task === "passageMCQ") {
+  return <PassageMCQPractice taskData={passageMCQTask} />;
+}
+
 if (task === "graphAnalysis") {
   return (
     <WritingPractice
@@ -4077,8 +4288,14 @@ if (task === "wordsPhrases") {
         <p>Subject Code: 107 | Full Marks: 100 | Time: 3 hours</p>
 
         <h3 style={{ marginTop: 18 }}>Part I — Reading Test: 60 marks</h3>
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("passageMCQ")}
+        >
+          Q1A Passage MCQ — 5 marks
+        </button>
+
         {[
-          "Q1A Passage MCQ — 5 marks",
           "Q1B Broad Questions — 15 marks",
           "Q2 Flow Chart — 5 marks",
         ].map((item) => (
