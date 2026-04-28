@@ -2589,6 +2589,39 @@ const paragraphTasks = [
   },
 ];
 
+const compositionTasks = [
+  {
+    id: "comp-1",
+    title: "The Uses and Abuses of Internet",
+    question: "Write a composition on the uses and abuses of internet.",
+    marks: 15,
+    modelAnswer:
+      "Internet is one of the greatest inventions of modern science. It helps us collect information, communicate with others, attend online classes and do many official works. Students can use it to learn new things and prepare their lessons. But internet also has some abuses. Some people waste time on social media, play games too much or visit harmful websites. It can also spread false information. So, we should use internet carefully and only for good purposes.",
+    keyPoints: [
+      "Meaning and importance of internet",
+      "Educational uses",
+      "Communication and daily work",
+      "Abuses and harmful sides",
+      "Careful and positive use",
+    ],
+  },
+  {
+    id: "comp-2",
+    title: "Student Life",
+    question: "Write a composition on student life.",
+    marks: 15,
+    modelAnswer:
+      "Student life is the most important period of human life. It is the time for learning, building character and preparing for the future. A student should study regularly, respect teachers and parents, and follow discipline. Student life is not only for reading books; it is also for learning honesty, punctuality and good manners. Students should take part in games and social activities too. If students use this time properly, they can become good citizens and serve the country.",
+    keyPoints: [
+      "Importance of student life",
+      "Regular study and discipline",
+      "Respect for teachers and parents",
+      "Good character and manners",
+      "Preparation for future life",
+    ],
+  },
+];
+
   const cardStyle = {
     padding: 16,
     border: "1px solid #e2e8f0",
@@ -3766,6 +3799,16 @@ if (task === "paragraph") {
   );
 }
 
+if (task === "composition") {
+  return (
+    <WritingPractice
+      title="Q12 Paragraph / Composition"
+      subtitle="Board pattern: 15 marks. Clear introduction, simple points এবং short conclusion ঠিক রাখতে হবে।"
+      tasks={compositionTasks}
+    />
+  );
+}
+
   if (task === "connectors") {
   return (
     <FillPractice
@@ -3970,13 +4013,12 @@ if (task === "wordsPhrases") {
           Q11 Paragraph Writing — 15 marks
         </button>
 
-        {[
-          "Q12 Paragraph / Composition — 15 marks",
-        ].map((item) => (
-          <div key={item} style={{ ...cardStyle, marginBottom: 10 }}>
-            {item}
-          </div>
-        ))}
+        <button
+          style={{ ...cardStyle, marginBottom: 10, width: "100%" }}
+          onClick={() => openTask("composition")}
+        >
+          Q12 Paragraph / Composition — 15 marks
+        </button>
       </div>
     );
   }
