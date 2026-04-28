@@ -17,7 +17,6 @@ import {
   modifierItems,
   narrationItems,
   applicationTasks,
-  ictMcqItems,
   passageMCQTask,
   passageBroadQuestionTask,
   flowChartTask,
@@ -42,6 +41,7 @@ export default function BoardPracticePage() {
   const [answers, setAnswers] = useState({});
   const [checked, setChecked] = useState(false);
   const [reviewVersion, setReviewVersion] = useState(0);
+  const [ictMcqExamStage, setIctMcqExamStage] = useState("start");
   const [miniMockStage, setMiniMockStage] = useState("start");
   const [miniMockQuestions, setMiniMockQuestions] = useState([]);
   const [miniMockTimeLeft, setMiniMockTimeLeft] = useState(300);
@@ -53,8 +53,7 @@ export default function BoardPracticePage() {
   const [readingTestTimeLeft, setReadingTestTimeLeft] = useState(3600);
   const [eng2FullExamStage, setEng2FullExamStage] = useState("start");
   const [eng2FullExamTimeLeft, setEng2FullExamTimeLeft] = useState(5400);
-  const ictMcqEngineItems =
-    ictBoardMcq2023.length > 0 ? ictBoardMcq2023 : ictMcqItems;
+  const ictMcqEngineItems = ictBoardMcq2023;
 
   const ictCreativeItems = [
     {
@@ -466,6 +465,7 @@ export default function BoardPracticePage() {
   function resetPractice() {
     setAnswers({});
     setChecked(false);
+    setIctMcqExamStage("start");
     setMiniMockStage("start");
     setMiniMockQuestions([]);
     setMiniMockTimeLeft(300);
@@ -745,10 +745,7 @@ export default function BoardPracticePage() {
   }
 
   function startICTFullExam() {
-    var picked = shuffleAndPick(
-      ictMcqEngineItems,
-      Math.min(25, ictMcqEngineItems.length)
-    );
+    var picked = ictMcqEngineItems.slice();
     setAnswers({});
     setChecked(false);
     setIctFullExamQuestionsPicked(picked);
@@ -2167,6 +2164,61 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
       }
     });
 
+    if (ictMcqExamStage === "start") {
+      return (
+        <div style={{ padding: "10px 0" }}>
+          <button
+            style={backButtonStyle}
+            onClick={() => {
+              setTask(null);
+              resetPractice();
+            }}
+          >
+            Ã¢â€ Â Back
+          </button>
+
+          <div
+            style={{
+              padding: 18,
+              border: "1px solid #e2e8f0",
+              borderRadius: 12,
+              background: "#f8fafc",
+              textAlign: "center",
+            }}
+          >
+            <h2 style={{ marginBottom: 10 }}>ICT MCQ Practice</h2>
+            <p style={{ color: "#334155", fontWeight: 700, marginBottom: 10 }}>
+              {ictMcqEngineItems.length} Questions
+            </p>
+            <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 16 }}>
+              Real ICT board MCQ questions from the 2023 set.
+            </p>
+            <button
+              onClick={() => {
+                setAnswers({});
+                setChecked(false);
+                setIctMcqExamStage("running");
+              }}
+              style={{
+                width: "100%",
+                padding: "12px 20px",
+                border: "none",
+                borderRadius: 12,
+                background: "#6366f1",
+                color: "#fff",
+                fontSize: 15,
+                fontWeight: 700,
+                fontFamily: "inherit",
+                cursor: "pointer",
+              }}
+            >
+              Start ICT MCQ Exam
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div style={{ padding: "10px 0" }}>
         <button
@@ -2332,7 +2384,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
 
         {!checked ? (
           <button
-            onClick={() =>
+            onClick={() => {
               checkPractice(
                 {
                   id: "ict-mcq",
@@ -2344,8 +2396,9 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
                   id: "ict-mcq",
                   title: "ICT Board Practice - MCQ Section",
                 })
-              )
-            }
+              );
+              setIctMcqExamStage("done");
+            }}
             style={{
               marginTop: 16,
               width: "100%",
@@ -2364,7 +2417,11 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
           </button>
         ) : (
           <button
-            onClick={resetPractice}
+            onClick={() => {
+              setAnswers({});
+              setChecked(false);
+              setIctMcqExamStage("start");
+            }}
             style={{
               marginTop: 16,
               width: "100%",
@@ -4016,7 +4073,7 @@ function WritingPractice({ title, subtitle, tasks, progressInfo }) {
               25 Minutes
             </p>
             <p style={{ color: "#64748b", lineHeight: 1.6, marginBottom: 16 }}>
-              Board MCQ set: {ictMcqEngineItems.length} questions. The exam engine is ready for 25.
+              Board MCQ set: {ictMcqEngineItems.length} questions loaded.
             </p>
             <button
               onClick={startICTFullExam}
