@@ -461,10 +461,10 @@ export default function BoardPracticePage() {
   }
 
   function updateAnswer(id, value) {
-    setAnswers({
-      ...answers,
+    setAnswers((prev) => ({
+      ...prev,
       [id]: value,
-    });
+    }));
   }
 
   function resetPractice() {
@@ -5585,265 +5585,249 @@ function WordBoxPractice({ title, subtitle, items, wordBox, progressInfo }) {
 }
 
   if (task === "prepositions") {
-    return (
-      <FillPractice
-        title="Q1 Prepositions"
-        subtitle="Board pattern: 10 gaps × 0.5 = 5 marks. এখানে বাক্যের অর্থ ও fixed expression দেখে preposition বসাতে হবে।"
-        items={prepositionItems}
-        progressInfo={{
-          id: "english2-prepositions",
-          title: "English 2nd Paper - Q1 Prepositions",
-        }}
-      />
-    );
+    return FillPractice({
+      title: "Q1 Prepositions",
+      subtitle:
+        "Board pattern: 10 gaps × 0.5 = 5 marks. এখানে বাক্যের অর্থ ও fixed expression দেখে preposition বসাতে হবে।",
+      items: prepositionItems,
+      progressInfo: {
+        id: "english2-prepositions",
+        title: "English 2nd Paper - Q1 Prepositions",
+      },
+    });
   }
 
   if (task === "rightForm") {
-    return (
-      <FillPractice
-        title="Q4 Right Form of Verbs"
-        subtitle="Board pattern: 14 gaps × 0.5 = 7 marks. এখানে আগে signal word চিনবে, তারপর verb-এর সঠিক form বসাবে।"
-        items={rightFormItems}
-        progressInfo={{
-          id: "english2-right-form",
-          title: "English 2nd Paper - Q4 Right Form",
-        }}
-      />
-    );
+    return FillPractice({
+      title: "Q4 Right Form of Verbs",
+      subtitle:
+        "Board pattern: 14 gaps × 0.5 = 7 marks. এখানে আগে signal word চিনবে, তারপর verb-এর সঠিক form বসাবে।",
+      items: rightFormItems,
+      progressInfo: {
+        id: "english2-right-form",
+        title: "English 2nd Paper - Q4 Right Form",
+      },
+    });
   }
 
   if (task === "modifiers") {
-  return (
-    <FillPractice
-      title="Q6 Modifiers"
-      subtitle="Board pattern: 10 gaps × 0.5 = 5 marks. এখানে noun, verb বা adjective-কে describe/modify করার সঠিক word বা phrase বসাতে হবে।"
-      items={modifierItems}
-      progressInfo={{
+    return FillPractice({
+      title: "Q6 Modifiers",
+      subtitle:
+        "Board pattern: 10 gaps × 0.5 = 5 marks. এখানে noun, verb বা adjective-কে describe/modify করার সঠিক word বা phrase বসাতে হবে।",
+      items: modifierItems,
+      progressInfo: {
         id: "english2-modifiers",
         title: "English 2nd Paper - Q6 Modifiers",
-      }}
-    />
-  );
-}
+      },
+    });
+  }
 
-if (task === "narration") {
-  return (
-    <NarrationPractice
-      title="Q5 Narration / Indirect Speech"
-      subtitle="Board pattern: 7 marks. এখানে direct speech থেকে indirect speech করতে হবে। Tense, pronoun, reporting verb এবং sentence order ঠিক রাখতে হবে।"
-      items={narrationItems}
-    />
-  );
-}
+  if (task === "narration") {
+    return NarrationPractice({
+      title: "Q5 Narration / Indirect Speech",
+      subtitle:
+        "Board pattern: 7 marks. এখানে direct speech থেকে indirect speech করতে হবে। Tense, pronoun, reporting verb এবং sentence order ঠিক রাখতে হবে।",
+      items: narrationItems,
+    });
+  }
 
-if (task === "application") {
-  return (
-    <WritingPractice
-      title="Q10 Application / Formal Letter"
-      subtitle="Board pattern: 10 marks. এখানে formal format, subject line, polite request এবং proper closing ঠিক রাখতে হবে।"
-      tasks={applicationTasks}
-      progressInfo={{
+  if (task === "application") {
+    return WritingPractice({
+      title: "Q10 Application / Formal Letter",
+      subtitle:
+        "Board pattern: 10 marks. এখানে formal format, subject line, polite request এবং proper closing ঠিক রাখতে হবে।",
+      tasks: applicationTasks,
+      progressInfo: {
         id: "english2-application",
         title: "English 2nd Paper - Q10 Application",
-      }}
-    />
-  );
-}
+      },
+    });
+  }
 
-if (task === "paragraph") {
-  return (
-    <WritingPractice
-      title="Q11 Paragraph Writing"
-      subtitle="Board pattern: 15 marks. Topic sentence, supporting details এবং clear conclusion ঠিক রাখতে হবে।"
-      tasks={paragraphTasks}
-      progressInfo={{
+  if (task === "paragraph") {
+    return WritingPractice({
+      title: "Q11 Paragraph Writing",
+      subtitle:
+        "Board pattern: 15 marks. Topic sentence, supporting details এবং clear conclusion ঠিক রাখতে হবে।",
+      tasks: paragraphTasks,
+      progressInfo: {
         id: "english2-paragraph",
         title: "English 2nd Paper - Q11 Paragraph",
-      }}
-    />
-  );
-}
+      },
+    });
+  }
 
-if (task === "composition") {
-  return (
-    <WritingPractice
-      title="Q12 Paragraph / Composition"
-      subtitle="Board pattern: 15 marks. Clear introduction, simple points এবং short conclusion ঠিক রাখতে হবে।"
-      tasks={compositionTasks}
-    />
-  );
-}
+  if (task === "composition") {
+    return WritingPractice({
+      title: "Q12 Paragraph / Composition",
+      subtitle:
+        "Board pattern: 15 marks. Clear introduction, simple points এবং short conclusion ঠিক রাখতে হবে।",
+      tasks: compositionTasks,
+    });
+  }
 
-if (task === "summary") {
-  return (
-    <WritingPractice
-      title="Q3 Summary Writing"
-      subtitle="Board pattern: 10 marks. Main ideas নিজের ভাষায় ছোট করে লিখতে হবে।"
-      tasks={summaryTasks}
-      progressInfo={{
+  if (task === "summary") {
+    return WritingPractice({
+      title: "Q3 Summary Writing",
+      subtitle:
+        "Board pattern: 10 marks. Main ideas নিজের ভাষায় ছোট করে লিখতে হবে।",
+      tasks: summaryTasks,
+      progressInfo: {
         id: "english1-summary",
         title: "English 1st Paper - Q3 Summary Writing",
-      }}
-    />
-  );
-}
+      },
+    });
+  }
 
-if (task === "passageMCQ") {
-  return <PassageMCQPractice taskData={passageMCQTask} />;
-}
+  if (task === "passageMCQ") {
+    return PassageMCQPractice({ taskData: passageMCQTask });
+  }
 
-if (task === "ictMCQ") {
-  return <ICTMCQPractice />;
-}
+  if (task === "ictMCQ") {
+    return ICTMCQPractice();
+  }
 
-if (task === "ictFullMCQExam") {
-  return <ICTFullMCQExamPage />;
-}
+  if (task === "ictFullMCQExam") {
+    return ICTFullMCQExamPage();
+  }
 
-if (task === "ictCreative") {
-  return <ICTCreativePractice />;
-}
+  if (task === "ictCreative") {
+    return ICTCreativePractice();
+  }
 
-if (task === "eng2FullExam") {
-  return <English2FullExamPage />;
-}
+  if (task === "eng2FullExam") {
+    return English2FullExamPage();
+  }
 
-if (task === "fullMock") {
-  return <FullMockTestPage />;
-}
+  if (task === "fullMock") {
+    return FullMockTestPage();
+  }
 
-if (task === "reviewMistakes") {
-  return <ReviewMistakesPage />;
-}
+  if (task === "reviewMistakes") {
+    return ReviewMistakesPage();
+  }
 
-if (task === "timedMiniMock") {
-  return <TimedMiniMockPage />;
-}
+  if (task === "timedMiniMock") {
+    return TimedMiniMockPage();
+  }
 
-if (task === "eng1ReadingFull") {
-  return <English1ReadingTestPage />;
-}
+  if (task === "eng1ReadingFull") {
+    return English1ReadingTestPage();
+  }
 
-if (task === "passageBroadQuestions") {
-  return <BroadQuestionPractice taskData={passageBroadQuestionTask} />;
-}
+  if (task === "passageBroadQuestions") {
+    return BroadQuestionPractice({ taskData: passageBroadQuestionTask });
+  }
 
-if (task === "flowChart") {
-  return <FlowChartPractice taskData={flowChartTask} />;
-}
+  if (task === "flowChart") {
+    return FlowChartPractice({ taskData: flowChartTask });
+  }
 
-if (task === "clozeWithClues") {
-  return <ClozeWithCluesPractice taskData={clozeWithCluesTask} />;
-}
+  if (task === "clozeWithClues") {
+    return ClozeWithCluesPractice({ taskData: clozeWithCluesTask });
+  }
 
-if (task === "clozeWithoutClues") {
-  return <ClozeWithoutCluesPractice taskData={clozeWithoutCluesTask} />;
-}
+  if (task === "clozeWithoutClues") {
+    return ClozeWithoutCluesPractice({ taskData: clozeWithoutCluesTask });
+  }
 
-if (task === "rearranging") {
-  return <RearrangingPractice taskData={rearrangingTask} />;
-}
+  if (task === "rearranging") {
+    return RearrangingPractice({ taskData: rearrangingTask });
+  }
 
-if (task === "graphAnalysis") {
-  return (
-    <WritingPractice
-      title="Q7 Graph / Chart Analysis"
-      subtitle="Board pattern: 15 marks. Data দেখে introduction, trend, comparison এবং conclusion লিখতে হবে।"
-      tasks={graphAnalysisTasks}
-    />
-  );
-}
+  if (task === "graphAnalysis") {
+    return WritingPractice({
+      title: "Q7 Graph / Chart Analysis",
+      subtitle:
+        "Board pattern: 15 marks. Data দেখে introduction, trend, comparison এবং conclusion লিখতে হবে।",
+      tasks: graphAnalysisTasks,
+    });
+  }
 
-if (task === "storyCompletion") {
-  return (
-    <WritingPractice
-      title="Q8 Story Completion"
-      subtitle="Board pattern: 15 marks. Given beginning থেকে logical story complete করতে হবে।"
-      tasks={storyCompletionTasks}
-      progressInfo={{
+  if (task === "storyCompletion") {
+    return WritingPractice({
+      title: "Q8 Story Completion",
+      subtitle:
+        "Board pattern: 15 marks. Given beginning থেকে logical story complete করতে হবে।",
+      tasks: storyCompletionTasks,
+      progressInfo: {
         id: "english1-story-completion",
         title: "English 1st Paper - Q8 Story Completion",
-      }}
-    />
-  );
-}
+      },
+    });
+  }
 
-if (task === "informalLetter") {
-  return (
-    <WritingPractice
-      title="Q9 Informal Letter / Email"
-      subtitle="Board pattern: 10 marks. Friendly tone, clear message এবং proper closing ঠিক রাখতে হবে।"
-      tasks={informalLetterTasks}
-    />
-  );
-}
+  if (task === "informalLetter") {
+    return WritingPractice({
+      title: "Q9 Informal Letter / Email",
+      subtitle:
+        "Board pattern: 10 marks. Friendly tone, clear message এবং proper closing ঠিক রাখতে হবে।",
+      tasks: informalLetterTasks,
+    });
+  }
 
   if (task === "connectors") {
-  return (
-    <FillPractice
-      title="Q7 Sentence Connectors"
-      subtitle="Board pattern: 14 gaps × 0.5 = 7 marks. এখানে বাক্যের সম্পর্ক বুঝে connector বসাতে হবে।"
-      items={connectorItems}
-      progressInfo={{
+    return FillPractice({
+      title: "Q7 Sentence Connectors",
+      subtitle:
+        "Board pattern: 14 gaps × 0.5 = 7 marks. এখানে বাক্যের সম্পর্ক বুঝে connector বসাতে হবে।",
+      items: connectorItems,
+      progressInfo: {
         id: "english2-connectors",
         title: "English 2nd Paper - Q7 Connectors",
-      }}
-    />
-  );
-}
+      },
+    });
+  }
 
-if (task === "synonymAntonym") {
-  return (
-    <OptionPractice
-      title="Q8 Synonym / Antonym"
-      subtitle="Board pattern: 14 items × 0.5 = 7 marks. এখানে word meaning বুঝে synonym বা antonym বেছে নিতে হবে।"
-      items={synonymAntonymItems}
-      progressInfo={{
+  if (task === "synonymAntonym") {
+    return OptionPractice({
+      title: "Q8 Synonym / Antonym",
+      subtitle:
+        "Board pattern: 14 items × 0.5 = 7 marks. এখানে word meaning বুঝে synonym বা antonym বেছে নিতে হবে।",
+      items: synonymAntonymItems,
+      progressInfo: {
         id: "english2-synonym-antonym",
         title: "English 2nd Paper - Q8 Synonym/Antonym",
-      }}
-    />
-  );
-}
+      },
+    });
+  }
 
-if (task === "punctuation") {
-  return (
-    <TextCorrectionPractice
-      title="Q9 Punctuation and Capitalization"
-      subtitle="Board pattern: 14 corrections × 0.5 = 7 marks. এখানে comma, full stop, question mark, quotation mark এবং capital letter ঠিক করতে হবে।"
-      items={punctuationItems}
-      progressInfo={{
+  if (task === "punctuation") {
+    return TextCorrectionPractice({
+      title: "Q9 Punctuation and Capitalization",
+      subtitle:
+        "Board pattern: 14 corrections × 0.5 = 7 marks. এখানে comma, full stop, question mark, quotation mark এবং capital letter ঠিক করতে হবে।",
+      items: punctuationItems,
+      progressInfo: {
         id: "english2-punctuation",
         title: "English 2nd Paper - Q9 Punctuation",
-      }}
-    />
-  );
-}
+      },
+    });
+  }
 
-if (task === "completingSentences") {
-  return (
-    <FlexibleCompletionPractice
-      title="Q3 Completing Sentences"
-      subtitle="Board pattern: 10 sentences × 1 = 10 marks. এখানে grammar structure বুঝে বাক্য সম্পূর্ণ করতে হবে।"
-      items={completingSentenceItems}
-    />
-  );
-}
+  if (task === "completingSentences") {
+    return FlexibleCompletionPractice({
+      title: "Q3 Completing Sentences",
+      subtitle:
+        "Board pattern: 10 sentences × 1 = 10 marks. এখানে grammar structure বুঝে বাক্য সম্পূর্ণ করতে হবে।",
+      items: completingSentenceItems,
+    });
+  }
 
-if (task === "wordsPhrases") {
-  return (
-    <WordBoxPractice
-      title="Q2 Words/Phrases from Box"
-      subtitle="Board pattern: 10 gaps × 0.5 = 5 marks. এখানে box থেকে সঠিক word/phrase বেছে gap পূরণ করতে হবে।"
-      items={wordsPhrasesItems}
-      wordBox={wordsPhrasesBox}
-      progressInfo={{
+  if (task === "wordsPhrases") {
+    return WordBoxPractice({
+      title: "Q2 Words/Phrases from Box",
+      subtitle:
+        "Board pattern: 10 gaps × 0.5 = 5 marks. এখানে box থেকে সঠিক word/phrase বেছে gap পূরণ করতে হবে।",
+      items: wordsPhrasesItems,
+      wordBox: wordsPhrasesBox,
+      progressInfo: {
         id: "english2-words-phrases",
         title: "English 2nd Paper - Q2 Words/Phrases",
-      }}
-    />
-  );
-}
+      },
+    });
+  }
 
   if (section === "ict") {
     return (
